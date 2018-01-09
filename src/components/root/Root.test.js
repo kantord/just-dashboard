@@ -2,10 +2,12 @@ import sinon from 'sinon'
 import should from 'should'
 import RootComponent from './Root'
 import * as d3 from "d3";
-import { JSDOM } from 'jsdom'
 import assert from 'assert'
+var jsdom = require('mocha-jsdom')
 
-describe("Root component", () => {
+describe("Root component", function() {
+  jsdom()
+
   it("passing empty data should throw", () => {
     (() => {RootComponent({})()()}).should.throw("Title required")
   })
@@ -27,10 +29,11 @@ describe("Root component", () => {
     }).should.throw("A d3 selection is required")
   })
 
-  it("bind function should not throw selection error if selection is supplied", () => {
+  it("bind function should not throw selection error if selection is supplied", function() {
     (() => {
       const bind = RootComponent({"title": "foo bar"})
-      const render = bind(d3.select(new JSDOM(``)))
+      const d3 = require('d3')
+      const render = bind(d3.selection())
       render()
     }).should.not.throw()
   })
@@ -43,19 +46,20 @@ describe("Root component", () => {
     }).should.throw("A d3 selection is required")
   })
 
-  it("bind function should create render function", () => {
+  it("bind function should create render function", function() {
     const bind = RootComponent({"title": "example"})
-	const dom = new JSDOM(`<!DOCTYPE html>`)
-    const render = bind(d3.select(dom.window.document.documentElement))
+    const d3 = require('d3')
+    const render = bind(d3.selection())
     render.should.be.Function()
   })
 
-  it("title text is set", () => {
+  it("title text is set", function() {
+    document.head.innerHTML = "<title>foobar</title>"
     const bind = RootComponent({"title": "My example title"})
-	const dom = new JSDOM(`<!DOCTYPE html>`)
-    const render = bind(d3.select(dom.window.document.documentElement))
+    const d3 = require('d3')
+    const render = bind(d3.selection())
 	render()
-	assert.equal(dom.window.document.title, "My example title")
+    assert.equal(d3.selection().select("title").text(), "My example title")
   })
 
 })

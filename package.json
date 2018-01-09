@@ -22,6 +22,7 @@
     "css-loader": "^0.28.8",
     "mocha": "^4.1.0",
     "mocha-webpack": "^1.0.1",
+    "should": "^13.2.0",
     "style-loader": "^0.19.1",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.10.0"

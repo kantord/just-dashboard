@@ -20,12 +20,17 @@
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "css-loader": "^0.28.8",
+    "d3": "^4.12.2",
+    "jsdom": "^11.5.1",
     "mocha": "^4.1.0",
+    "mocha-jsdom": "^1.1.0",
     "mocha-webpack": "^1.0.1",
     "should": "^13.2.0",
+    "should-sinon": "0.0.6",
     "sinon": "^4.1.4",
     "style-loader": "^0.19.1",
     "webpack": "^3.10.0",
-    "webpack-dev-server": "^2.10.0"
+    "webpack-dev-server": "^2.10.0",
+    "webpack-node-externals": "^1.6.0"
   }
 }

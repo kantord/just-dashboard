@@ -13,15 +13,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "d3": "^4.12.2"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "css-loader": "^0.28.8",
-    "d3": "^4.12.2",
-    "jsdom": "^11.5.1",
+    "jsdom": "^7.0.2",
     "mocha": "^4.1.0",
     "mocha-jsdom": "^1.1.0",
     "mocha-webpack": "^1.0.1",

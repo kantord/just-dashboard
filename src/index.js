@@ -1,14 +1,13 @@
-import _ from 'lodash';
-import './style.css';
+import * as d3 from 'd3'
+import parse from './parser/parser.js'
+import loader from './loader/loader.js'
+import RootComponent from './components/root'
 
-const component = () => {
-  var element = document.createElement('div');
-
-  // Lodash, now imported by this script
-  element.innerHTML = _.join(['Hello', 'webpack'], ' ');
-  element.classList.add('hello');
-
-  return element;
-}
-
-document.body.appendChild(component());
+parse((component) => ({
+    "root": RootComponent
+}[component]))({
+    "component": "root",
+    "args": {
+        "title": "Hello World from RootComponent"
+    }
+})(d3.selection())

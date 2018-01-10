@@ -1,4 +1,3 @@
-import sinon from 'sinon'
 import should from 'should'
 import RootComponent from './Root'
 import * as d3 from "d3";

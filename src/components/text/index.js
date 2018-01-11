@@ -1,0 +1,1 @@
+import TextComponent from './Text'

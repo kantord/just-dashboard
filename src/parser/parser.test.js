@@ -1,7 +1,7 @@
 import should from 'should'
 import parse from './parser'
 import sinon from 'sinon'
-import RootComponent from '../components/root'
+import RootComponent from '../components/root/Root.js'
 var jsdom = require('mocha-jsdom')
 require('should-sinon')
 import assert from 'assert'
@@ -100,14 +100,15 @@ describe("Parser", function() {
 
 	it("integration with RootComponent", () => {
 		document.head.innerHTML = "<title>foobar</title>"
-		const fake_component_loader = sinon.stub().returns(RootComponent)
+        const fake_component_loader = sinon.stub().returns(RootComponent)
 		const bind = parse(fake_component_loader)({
 			"component": "root",
 			"args": {
 				"title": "Another example title"
-			}
+			},
+            "data": []
 		})
-    const render = bind(d3.selection())
-    assert.equal(d3.selection().select("title").text(), "Another example title")
+        const render = bind(d3.selection())
+        assert.equal(d3.selection().select("title").text(), "Another example title")
 	})
 })

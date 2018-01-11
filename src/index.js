@@ -1,13 +1,21 @@
 import * as d3 from 'd3'
-import parse from './parser/parser.js'
-import loader from './loader/loader.js'
-import RootComponent from './components/root'
+import default_parser from './default_parser'
 
-parse((component) => ({
-    "root": RootComponent
-}[component]))({
+default_parser({
     "component": "root",
     "args": {
         "title": "Hello World from RootComponent"
-    }
+    },
+    "data": [
+        {
+            "component": "text",
+            "args": {"tagName": "h1"},
+            "data": "Example dashboard"
+        },
+        {
+            "component": "text",
+            "args": {"tagName": "p"},
+            "data": "Lorem ipsum dolor sit amet"
+        }
+    ]
 })(d3.selection())

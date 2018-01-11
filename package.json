@@ -21,6 +21,7 @@
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "css-loader": "^0.28.8",
+    "inject-loader": "^3.0.1",
     "jsdom": "^7.0.2",
     "mocha": "^4.1.0",
     "mocha-jsdom": "^1.1.0",

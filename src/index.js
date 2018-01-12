@@ -1,5 +1,6 @@
 import * as d3 from 'd3'
 import default_parser from './default_parser'
+import '../node_modules/billboard.js/dist/billboard.css'
 
 default_parser({
     "component": "root",
@@ -16,7 +17,25 @@ default_parser({
             "component": "text",
             "args": {"tagName": "p"},
             "data": "Lorem ipsum dolor sit amet"
-        }
+        },
+		{
+			"component": "chart",
+			"args": {"type": "pie"},
+			"data": {"columns": [
+				["alma", 3],
+				["korte", 1],
+				["barack", 0.5]
+			]}
+		},
+		{
+			"component": "chart",
+			"args": {"type": "bar"},
+			"data": {"columns": [
+				["alma", 3.3],
+				["korte", 3],
+				["barack", 0.5]
+			]}
+		}
     ]
 })(d3.selection())
 

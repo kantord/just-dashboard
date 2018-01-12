@@ -135,8 +135,8 @@ describe("Root component", function() {
 
   it("integration test", () => {
     document.head.innerHTML = "<title>foobar</title>"
-    const default_parser = require("../../default_parser.js").default
-    const bind = default_parser({
+    const test_parser = require("../../test_parser.js").default
+    const bind = test_parser({
         "component": "root",
         "args": {
             "title": "Another example title"

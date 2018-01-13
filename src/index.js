@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
 import default_parser from './default_parser'
-import '../node_modules/billboard.js/dist/billboard.css'
+import './style.scss'
 
 default_parser({
   'component': 'root',

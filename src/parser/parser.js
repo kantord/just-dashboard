@@ -1,9 +1,11 @@
+import * as validators from '../validators.js'
+
 /** Creates a function that parses a JSON component and compiles it into a Javascript component
   * @param {Function} component_loader - A function that can load components*/
 const parse = (component_loader) => (input) => {
   if (!(typeof input === 'object')) throw new Error('An object is required')
-  if (!(input.hasOwnProperty('component'))) throw new Error('Component name required')
-  if (!input.component.match(/^[A-z]\w*$/)) throw new Error('Invalid component name')
+  validators.required("component")(input)
+  validators.regexp("component", /^[A-z]\w*$/)(input)
 
   const component = component_loader(input.component)
   const bind = component(input.args)

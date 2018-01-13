@@ -12,7 +12,7 @@ describe('Parser', function() {
   jsdom()
 
   it('should throw when called with empty object', () => {
-    (() => {parse()({})}).should.throw('Component name required')
+    (() => {parse()({})}).should.throw('Argument \'component\' is required but not supplied.')
   })
 
   it('should throw error when argument is not an object', () => {
@@ -20,7 +20,7 @@ describe('Parser', function() {
   })
 
   it('should throw when component name is invalid', () => {
-    (() => {parse()({'component': 'bullshit component name'})}).should.throw('Invalid component name')
+    (() => {parse()({'component': 'bullshit component name'})}).should.throw('Argument \'component\' is invalid')
   })
 
   it('should throw when component does not exist', () => {

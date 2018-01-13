@@ -1,9 +1,8 @@
 import Component from '../base_component.js'
+import { required } from '../../validators'
 
 const ChartComponent = Component({
-  'validators': [
-    (args) => {if (!args.hasOwnProperty('type')) throw new Error('Type required')}
-  ],
+  'validators': [required('type')],
   'render': (args, selection, data) => {
     const {bb} = require('billboard.js')
     const element = selection.append('div')

@@ -8,7 +8,7 @@ describe('Text component', function() {
 
   it('should throw on invalid tag name', () => {
     (() => {TextComponent({'tagName': 'foo bar'})()()})
-      .should.throw('Invalid tag name')
+      .should.throw('Argument \'tagName\' is invalid')
   })
 
   it('text is rendered', function() {

@@ -1,1 +1,3 @@
 /dist/bundle.js
+coverage/
+.nyc_output/

@@ -1,0 +1,15 @@
+{
+    "opts": {
+        "template": "node_modules/docdash",
+        "encoding": "utf8",
+        "destination": "./out/",
+        "recurse": true
+    },
+    "plugins": ["plugins/markdown", "node_modules/jsdoc-babel"],
+    "source": {
+        "include": ["src"],
+        "exclude": [],
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    }
+}

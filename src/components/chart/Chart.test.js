@@ -7,44 +7,6 @@ var jsdom = require('mocha-jsdom')
 describe('ChartComponent', function() {
   jsdom({'useEach': true})
 
-  it('passing empty data should throw', () => {
-    (() => {
-      const ChartComponent = ChartComponentInjector({'billboard.js': () => 0}).default
-      ChartComponent({})()()
-    }).should.throw('Type required')
-  })
-
-  it('passing chart type should not throw missing type error', () => {
-    (() => {
-      const ChartComponent = ChartComponentInjector({'billboard.js': () => 0}).default
-      ChartComponent({'type': 'spline'})()()
-    }).should.not.throw('Type required')
-  })
-
-  it('passing args should return a function', () => {
-    const ChartComponent = ChartComponentInjector({'billboard.js': () => 0}).default
-    ChartComponent({'type': 'spline'}).should.be.a.Function()
-  })
-
-  it('bind function should throw when called without arguments', () => {
-    (() => {
-      const ChartComponent = ChartComponentInjector({'billboard.js': () => 0}).default
-      const bind = ChartComponent({'type': 'donut'})
-      const render = bind()
-      render()
-    }).should.throw('A d3 selection is required')
-  })
-
-  it('bind function should not throw selection error if selection is supplied', function() {
-    (() => {
-      const ChartComponent = ChartComponentInjector({'billboard.js': {'bb': {'generate': sinon.stub()}}}).default
-      const bind = ChartComponent({'type': 'spline'})
-      const d3 = require('d3')
-      const render = bind(d3.selection())
-      render({'columns': []})
-    }).should.not.throw()
-  })
-
   it('billboard called', function() {
     const fake_generate = sinon.spy()
     const ChartComponent = ChartComponentInjector({'billboard.js': {'bb': {'generate': fake_generate}}}).default

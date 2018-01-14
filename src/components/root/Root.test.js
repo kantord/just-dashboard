@@ -7,88 +7,75 @@ var jsdom = require('mocha-jsdom')
 describe('Root component', function() {
   jsdom({'useEach': true})
 
-  it('title text is set', function() {
+  beforeEach(function () {
     document.head.innerHTML = '<title>foobar</title>'
-    const bind = RootComponent({'title': 'My example title'})
+  })
+
+  const RootComponentInjector = (args) => {
+    const injector = require('inject-loader!./Root')
+    return injector(args)
+  }
+
+  const get_component_with_parser = (parser) => {
+    return RootComponentInjector({
+      '../../default_parser.js': parser
+    }).default
+  }
+
+  const call_render_with = (args) => {
+    const RootComponent = get_component_with_parser(args.parser)
+    const bind = RootComponent(args.component_args)
     const d3 = require('d3')
     const render = bind(d3.selection())
-    render()
+    render(args.render_args)
+  }
+
+  it('title text is set', function() {
+    call_render_with({
+      "component_args": {'title': 'My example title'}
+    })
     assert.equal(d3.selection().select('title').text(), 'My example title')
   })
 
   it('render child element', function() {
-    document.head.innerHTML = '<title>foobar</title>'
-    const RootComponentInjector = require('inject-loader!./Root')
-    const RootComponent = RootComponentInjector({
-      '../../default_parser.js': () => (selection) => selection.append('h1').text('My title')
-    }).default
-    const bind = RootComponent({'title': 'I don\'t care'})
-    const d3 = require('d3')
-    const render = bind(d3.selection())
-    render([
-      {
-        'component': 'text',
-        'args': {'tagName': 'h1'},
-        'data': 'My title'
-      }
-    ])
+    call_render_with({
+      "component_args": {'title': 'I don\'t care'},
+      "parser": () => (selection) => selection.append('h1').text('My title'),
+      "render_args": [{'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title'}]
+    })
     assert.equal(d3.selection().select('h1').text(), 'My title')
   })
 
   it('render child element only if there is a child', function() {
-    document.head.innerHTML = '<title>foobar</title>'
-    const bind = RootComponent({'title': 'I don\'t care'})
-    const d3 = require('d3')
-    const render = bind(d3.selection())
-    render([])
+    call_render_with({
+      "component_args": {'title': 'I don\'t care'},
+      "render_args": []
+    })
     assert.equal(d3.selection().selectAll('h1').size(), 0)
   })
 
   it('render each child', function() {
-    document.head.innerHTML = '<title>foobar</title>'
-    const RootComponentInjector = require('inject-loader!./Root')
-    const RootComponent = RootComponentInjector({
-      '../../default_parser.js': () => (selection) => selection.append('h1').text('My title')
-    }).default
-    const bind = RootComponent({'title': 'I don\'t care'})
-    const d3 = require('d3')
-    const render = bind(d3.selection())
-    render([
-      {
-        'component': 'text',
-        'args': {'tagName': 'h1'},
-        'data': 'My title'
-      },
-      {
-        'component': 'text',
-        'args': {'tagName': 'h2'},
-        'data': 'My secondary header'
-      }
-    ])
+    call_render_with({
+      "component_args": {'title': 'I don\'t care'},
+      "parser": () => (selection) => selection.append('h1').text('My title'),
+      "render_args": [
+        { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
+        { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
+      ]
+    })
     assert.equal(d3.selection().selectAll('h1').size(), 2)
   })
 
   it('renders parsed component', function() {
-    document.head.innerHTML = '<title>foobar</title>'
-    const RootComponentInjector = require('inject-loader!./Root.js')
-    const RootComponent = RootComponentInjector({
-      '../../default_parser.js': () => (selection) => selection.append('b').text('')
-    }).default
-    const bind = RootComponent({'title': ''})
-    const d3 = require('d3')
-    const render = bind(d3.selection())
-    render([
-      {
-        'component': 'text',
-        'args': {'tagName': 'h1'},
-        'data': 'My title'
-      }
-    ])
+    call_render_with({
+      "component_args": {'title': ''},
+      "parser": () => (selection) => selection.append('b').text(''),
+      "render_args": [ { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' } ]
+    })
     assert.equal(d3.selection().selectAll('b').size(), 1)
   })
 
   it('integration test', () => {
-    document.head.innerHTML = '<title>foobar</title>'
     const test_parser = require('../../test_parser.js').default
     const bind = test_parser({
       'component': 'root',

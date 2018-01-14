@@ -59,8 +59,6 @@ describe('Component', function() {
       })
 
       my_component({'title': 42})
-      my_validator.should.be.calledWith({'title': 42})
-      my_validator2.should.be.calledWith({'title': 42})
     }).should.throw('Foo bar')
   })
 

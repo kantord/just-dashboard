@@ -22,8 +22,8 @@ describe('ChartComponent', function() {
 
   it('billboard called', function() {
     const { fake_generate } = call_render_with({
-      "component_args": {'type': 'spline'},
-      "render_args": {'columns': [
+      'component_args': {'type': 'spline'},
+      'render_args': {'columns': [
         ['x', 1, 2, 3],
         ['y', 1, 2, 3],
       ]}
@@ -33,8 +33,8 @@ describe('ChartComponent', function() {
 
   it('billboard called with correct arguments', function() {
     const { fake_generate, selection } = call_render_with({
-      "component_args": {'type': 'spline'},
-      "render_args": {'columns': [
+      'component_args': {'type': 'spline'},
+      'render_args': {'columns': [
         ['x', 1, 2, 3],
         ['y', 1, 2, 3],
       ]}
@@ -53,8 +53,8 @@ describe('ChartComponent', function() {
 
   it('billboard called with correct arguments 2', function() {
     const { fake_generate, selection } = call_render_with({
-      "component_args": {'type': 'pie'},
-      "render_args": {'columns': [
+      'component_args': {'type': 'pie'},
+      'render_args': {'columns': [
         ['a', 1, 2, 3],
         ['b', 1, 2, 3],
       ]}
@@ -73,8 +73,8 @@ describe('ChartComponent', function() {
 
   it('should take rows as well', function() {
     const { fake_generate, selection } = call_render_with({
-      "component_args": {'type': 'bar'},
-      "render_args": {'rows': [
+      'component_args': {'type': 'bar'},
+      'render_args': {'rows': [
         [1, 2, 3],
         [1, 2, 3],
       ]}

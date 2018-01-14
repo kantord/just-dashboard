@@ -1,0 +1,7 @@
+.ds--columns {
+  display: flex;
+
+  >* {
+    width: 50%;
+  }
+}

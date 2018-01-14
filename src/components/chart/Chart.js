@@ -8,10 +8,7 @@ const ChartComponent = Component({
     const element = selection.append('div')
     bb.generate({
       'bindto': element.node(),
-      'data': {
-        'type': args.type,
-        'columns': data.columns
-      }
+      'data': Object.assign(data, {'type': args.type})
     })
   }
 })

@@ -71,4 +71,24 @@ describe('ChartComponent', function() {
     })
   })
 
+  it('should take rows as well', function() {
+    const { fake_generate, selection } = call_render_with({
+      "component_args": {'type': 'bar'},
+      "render_args": {'rows': [
+        [1, 2, 3],
+        [1, 2, 3],
+      ]}
+    })
+    fake_generate.should.be.calledWith({
+      'bindto': selection.append().node(),
+      'data': {
+        'type': 'bar',
+        'rows': [
+          [1, 2, 3],
+          [1, 2, 3],
+        ]
+      }
+    })
+  })
+
 })

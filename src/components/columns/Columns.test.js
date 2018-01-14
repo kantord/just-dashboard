@@ -62,6 +62,29 @@ describe('Columns component', function() {
     assert.equal(d3.selection().selectAll('.ds--columns>h1').size(), 2)
   })
 
+  it('group wrapper has columns property', function() {
+    call_render_with({
+      'parser': () => (selection) => selection.append('h1').text('My title'),
+      'render_args': [
+        { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
+        { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
+      ]
+    })
+    assert.equal(d3.selection().selectAll('[data-ds--columns="2"] >h1').size(), 2)
+  })
+
+  it('non-default column count', function() {
+    call_render_with({
+      'component_args': {'columns': 3},
+      'parser': () => (selection) => selection.append('h1').text('My title'),
+      'render_args': [
+        { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
+        { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
+      ]
+    })
+    assert.equal(d3.selection().selectAll('[data-ds--columns="3"] >h1').size(), 2)
+  })
+
   it('renders parsed component', function() {
     call_render_with({
       'component_args': {},

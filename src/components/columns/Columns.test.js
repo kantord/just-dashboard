@@ -71,24 +71,5 @@ describe('Columns component', function() {
     assert.equal(d3.selection().selectAll('b').size(), 1)
   })
 
-  it('integration test', () => {
-    const test_parser = require('../../test_parser.js').default
-    const bind = test_parser({
-      'component': 'columns',
-      'args': {
-        'title': 'Another example title'
-      },
-      'data': [
-        {
-          'component': 'text',
-          'args': {'tagName': 'p'},
-          'data': 'Almafa'
-        }
-      ]
-    })
-    bind(d3.selection())
-    assert.equal(d3.selection().select('p').text(), 'Almafa')
-  })
-
 
 })

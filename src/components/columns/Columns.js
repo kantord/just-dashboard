@@ -3,7 +3,7 @@ import default_parser from '../../default_parser.js'
 import Wrapped from '../wrapped'
 import './Columns.scss'
 
-const ColumnsComponent = Wrapped((selection) =>
+const ColumnsComponent = Wrapped((args, selection) =>
   selection.append('div').attr('class', 'ds--columns')
 )(Component({
   'validators': [],

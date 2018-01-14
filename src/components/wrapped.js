@@ -3,7 +3,7 @@ const Wrapped = (wrapper) => (component) => {
   if (!(typeof component === 'function')) throw new Error('A component is required')
 
   return (args) => (selection) => {
-    return component(args)(wrapper(selection))
+    return component(args)(wrapper(args, selection))
   }
 }
 

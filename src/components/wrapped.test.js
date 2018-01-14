@@ -50,8 +50,8 @@ describe('Wrapped', function() {
   })
 
   it('wrapper function called with selection', function() {
-    const { wrapper, selection } = call_render_with()
-    wrapper.should.be.calledWith(selection)
+    const { wrapper, selection, args } = call_render_with()
+    wrapper.should.be.calledWith(args, selection)
   })
 
   it('bind is called with wrapped selection', function() {

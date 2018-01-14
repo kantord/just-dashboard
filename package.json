@@ -31,6 +31,7 @@
     "docdash": "^0.4.0",
     "eslint": "^4.15.0",
     "eslint-loader": "^1.9.0",
+    "fake-style-loader": "^1.0.1",
     "inject-loader": "^3.0.1",
     "jsdoc": "^3.5.5",
     "jsdoc-babel": "^0.3.0",

@@ -1,10 +1,20 @@
 @import "~billboard.js/dist/billboard.css";
 
 
-html {
-  font-family: 'Libre Baskerville', serif;
-}
+$bodytype: (
+  font-family: 'Libre Baskerville, serif',
+  regular: 400,
+  bold: 700,
+  italic: italic,
+  cap-height: 0.775
+);
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Merriweather', serif;
-}
+$headingtype: (
+  font-family: 'Merriweather, serif',
+  regular: 400,
+  bold: 700,
+  cap-height: 0.75
+);
+
+@import "~sassline/assets/sass/_sassline-base.scss";
+@import "~sassline/assets/sass/modules/_show-grid.scss";

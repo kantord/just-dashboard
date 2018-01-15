@@ -15,9 +15,13 @@ default_parser({
       'data': 'Example dashboard'
     },
     {
-      'component': 'text',
-      'args': {'tagName': 'p'},
-      'data': 'Lorem ipsum dolor sit amet'
+      'component': 'columns',
+      'args': {'columns': 3},
+      'data': [
+        {'component': 'text', 'args': {'tagName': 'p'}, 'data': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in fringilla risus. Aliquam ac efficitur risus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; '},
+        {'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'Lorem ipsum dolor sit amet'},
+        {'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'Lorem ipsum dolor sit amet'}
+      ]
     },
     {
       'component': 'columns',

@@ -90,7 +90,7 @@ describe('Root component', function() {
       ]
     })
     bind(d3.selection())
-    assert.equal(d3.selection().select('p').text(), 'Almafa')
+    assert.equal(d3.selection().select('body p').text(), 'Almafa')
   })
 
 

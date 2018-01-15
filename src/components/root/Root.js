@@ -6,7 +6,8 @@ const RootComponent = Component({
   'validators': [required('title')],
   'init': (args, selection) => selection.select('title').text(args.title),
   'render': (args, selection, data) => {
-    if (data instanceof Array) data.map((definition) => default_parser(definition)(selection))
+    const body = selection.select('body')
+    if (data instanceof Array) data.map((definition) => default_parser(definition)(body))
   }
 })
 

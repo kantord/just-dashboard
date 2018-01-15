@@ -1,7 +1,7 @@
 import * as d3 from 'd3'
-import default_parser from './default_parser'
 import './style.scss'
 import '../dist/fonts.css'
+import default_parser from './default_parser'
 
 default_parser({
   'component': 'root',

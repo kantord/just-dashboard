@@ -1,9 +1,44 @@
+@import "~sassline/assets/sass/_sassline-base.scss";
+
 .ds--columns {
   display: flex;
+  flex-wrap: wrap;
 
-  &[data-ds--columns="2"] >* {width: (100%/2);}
-  &[data-ds--columns="3"] >* {width: (100%/3);}
-  &[data-ds--columns="4"] >* {width: (100%/4);}
-  &[data-ds--columns="5"] >* {width: (100%/5);}
-  &[data-ds--columns="6"] >* {width: (100%/6);}
+  &[data-ds--columns="1"] >* {width: (100%/1);}
+  &[data-ds--columns="2"] >* {width: (100%/1);}
+  &[data-ds--columns="3"] >* {width: (100%/1);}
+  &[data-ds--columns="4"] >* {width: (100%/1);}
+  &[data-ds--columns="5"] >* {width: (100%/1);}
+  &[data-ds--columns="6"] >* {width: (100%/1);}
+
+  @include breakpoint(break-1) {
+    &[data-ds--columns="1"] >* {width: (100%/1);}
+    &[data-ds--columns="2"] >* {width: (100%/2);}
+    &[data-ds--columns="3"] >* {width: (100%/3);}
+    &[data-ds--columns="4"] >* {width: (100%/3);}
+    &[data-ds--columns="5"] >* {width: (100%/3);}
+    &[data-ds--columns="6"] >* {width: (100%/3);}
+  }
+
+  @include breakpoint(break-2) {
+    &[data-ds--columns="1"] >* {width: (100%/1);}
+    &[data-ds--columns="2"] >* {width: (100%/2);}
+    &[data-ds--columns="3"] >* {width: (100%/3);}
+    &[data-ds--columns="4"] >* {width: (100%/4);}
+    &[data-ds--columns="5"] >* {width: (100%/5);}
+    &[data-ds--columns="6"] >* {width: (100%/5);}
+  }
+
+  @include breakpoint(break-3) {
+    &[data-ds--columns="1"] >* {width: (100%/1);}
+    &[data-ds--columns="2"] >* {width: (100%/2);}
+    &[data-ds--columns="3"] >* {width: (100%/3);}
+    &[data-ds--columns="4"] >* {width: (100%/4);}
+    &[data-ds--columns="5"] >* {width: (100%/5);}
+    &[data-ds--columns="6"] >* {width: (100%/6);}
+  }
 }
+
+
+
+

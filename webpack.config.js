@@ -1,3 +1,4 @@
+const GoogleFontsPlugin = require("google-fonts-webpack-plugin")
 const path = require('path');
 
 module.exports = {
@@ -11,10 +12,26 @@ module.exports = {
   devServer: {
     contentBase: './dist'
   },
+  plugins: [
+    new GoogleFontsPlugin({
+      fonts: [
+        { family: "Libre Baskerville", variants: ["400", "400i", "700"] },
+        { family: "Merriweather", variants: ["300", "300i", "400", "400i", "700", "700i", "900", "900i"] },
+      ],
+      local: true
+    })
+  ],
   module: {
     rules: [
       {
-		test: /\.scss$/,
+        test: /\.(ttf|eot|woff|woff2|svg)$/,
+        loader: "file-loader",
+        options: {
+          name: "fonts/[name].[ext]",
+        },
+      },
+      {
+		test: /\.s?css$/,
 		use: [{
 			loader: "style-loader" // creates style nodes from JS strings
 		}, {

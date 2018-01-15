@@ -1,6 +1,7 @@
 import * as d3 from 'd3'
 import default_parser from './default_parser'
 import './style.scss'
+import '../dist/fonts.css'
 
 default_parser({
   'component': 'root',
@@ -20,7 +21,26 @@ default_parser({
     },
     {
       'component': 'columns',
+      'args': {'columns': 4},
       'data': [
+        {
+          'component': 'chart',
+          'args': {'type': 'pie'},
+          'data': {'columns': [
+            ['alma', 3],
+            ['korte', 1],
+            ['barack', 0.5]
+          ]}
+        },
+        {
+          'component': 'chart',
+          'args': {'type': 'pie'},
+          'data': {'columns': [
+            ['alma', 3],
+            ['korte', 1],
+            ['barack', 0.5]
+          ]}
+        },
         {
           'component': 'chart',
           'args': {'type': 'pie'},

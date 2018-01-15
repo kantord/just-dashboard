@@ -1,4 +1,5 @@
-@import "~sassline/assets/sass/_sassline-base.scss";
+@import "~sassline/assets/sass/sassline-base/_variables.scss";
+@import "~sassline/assets/sass/sassline-base/_mixins.scss";
 
 .ds--columns {
   display: flex;

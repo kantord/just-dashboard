@@ -5,6 +5,9 @@ module.exports = {
   entry: './src/index.js',
   target: 'web',
   devtool: 'source-map',
+  node: {
+    fs: 'empty'
+  },
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')

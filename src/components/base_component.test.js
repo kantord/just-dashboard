@@ -181,4 +181,65 @@ describe('Component', function() {
     my_init.should.be.calledWith({'bull': 'shit'}, my_selection)
   })
 
+  const call_test_component_with = (args) => {
+    const injector = require('inject-loader!./base_component.js')
+    const jq = sinon.stub().returns(args.jq_return_value)
+    const Component = injector({
+      'jq-web': jq
+    }).default
+    const component = Component({
+        "validators": [],
+        "render": args.render_func,
+    })
+    const bind = component(args.instance_args)
+    const d3 = require('d3')
+    const my_selection = d3.selection()
+    const render = bind(my_selection)
+    render(args.data)
+
+    return { jq, render, my_selection }
+  }
+
+  it('if query is supplied, jq should be called', () => {
+    const { jq } = call_test_component_with({"instance_args": {"query": ""}, "render_func": () => null})
+    jq.should.be.called()
+  })
+
+  it('jq should be called only if query is supplied', () => {
+    const { jq } = call_test_component_with({"instance_args": {}, "render_func": () => null})
+    jq.should.not.be.called()
+  })
+
+  it('if query is supplied, jq should be called with data and query', () => {
+    const { jq } = call_test_component_with({
+      "instance_args": {"query": "foo"}, "data": "bar", "render_func": () => null})
+    jq.should.be.calledWith("bar", "foo")
+  })
+
+  it('if query is supplied, jq should be called with data and query 2', () => {
+    const { jq } = call_test_component_with({
+      "instance_args": {"query": ". | foo"}, "data": 4, "render_func": () => null})
+    jq.should.be.calledWith(4, ". | foo")
+  })
+
+  it('render should be called with query return value', () => {
+    const jq_return_value = 42
+    const render_func = sinon.spy()
+    const { render, my_selection } = call_test_component_with({
+      "instance_args": {"query": ". | foo"}, "data": 4, jq_return_value,
+      "render_func": render_func})
+    render_func.should.be.calledWith({"query": ". | foo"}, my_selection, jq_return_value)
+  })
+
+  it('render should be called with query return value', () => {
+    const jq_return_value = "foo"
+    const render_func = sinon.spy()
+    const { render, my_selection } = call_test_component_with({
+      "instance_args": {"query": ". | asd"}, "data": 4, jq_return_value,
+      "render_func": render_func})
+    render_func.should.be.calledWith({"query": ". | asd"}, my_selection, jq_return_value)
+  })
+
+
+
 })

@@ -1,3 +1,7 @@
+@import "~sassline/assets/sass/sassline-base/reset";
+@import "~sassline/assets/sass/sassline-base/variables";
+@import "~sassline/assets/sass/sassline-base/modular-scale";
+@import "~sassline/assets/sass/sassline-base/mixins";
 @import "~billboard.js/dist/billboard.css";
 
 
@@ -6,15 +10,17 @@ $bodytype: (
   regular: 400,
   bold: 700,
   italic: italic,
-  cap-height: 0.775
+  cap-height: 0.77
 );
 
 $headingtype: (
   font-family: 'Merriweather, serif',
   regular: 400,
   bold: 700,
-  cap-height: 0.75
+  cap-height: 0.72
 );
 
-@import "~sassline/assets/sass/_sassline-base.scss";
+
+@import "~sassline/assets/sass/sassline-base/typography";
+@import "~sassline/assets/sass/sassline-base/layouts";
 @import "~sassline/assets/sass/modules/_show-grid.scss";

@@ -29,12 +29,12 @@ default_parser({
       'data': [
         {
           'component': 'chart',
-          'args': {'type': 'pie'},
-          'data': {'columns': [
+          'args': {'type': 'pie', 'query': '.foo' },
+          'data': {'foo': {'columns': [
             ['alma', 3],
             ['korte', 1],
             ['barack', 0.5]
-          ]}
+          ]}}
         },
         {
           'component': 'chart',

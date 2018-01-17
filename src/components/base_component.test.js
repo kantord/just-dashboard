@@ -5,6 +5,28 @@ var jsdom = require('mocha-jsdom')
 describe('Component', function() {
   jsdom({'useEach': true})
 
+  const call_test_component_with = (args) => {
+    const injector = require('inject-loader!./base_component.js')
+    const jq = sinon.stub().returns(args.jq_return_value)
+    const Component = injector({
+      'jq-web': jq
+    }).default
+
+    const my_init = sinon.spy()
+    const my_render = (args.render_func === undefined ) ? sinon.spy() : args.render_func
+    const my_component = (args.has_init === true) ? Component({
+      'render': my_render, 'validators': [], 'init': my_init
+    }) : Component({
+      'render': my_render, 'validators': []
+    })
+    const bind = my_component(args.instance_args)
+    const d3 = require('d3')
+    const my_selection = d3.selection()
+    const render = bind(my_selection)
+    render(args.data)
+    return { my_init, my_component, my_render, my_selection, render, jq }
+  }
+
   it('should require a render function', () => {
     (() => {Component({})}).should.throw('A render() function is required')
   })
@@ -104,101 +126,35 @@ describe('Component', function() {
   })
 
   it('render() is called when the component is rendered', () => {
-    const my_render = sinon.spy()
-    const my_component = Component({
-      'render': my_render, 'validators': []
-    })
-    const bind = my_component({'title': 42})
-    const d3 = require('d3')
-    const render = bind(d3.selection())
-    render()
+    const { my_render } = call_test_component_with({'instance_args': {}})
     my_render.should.be.called()
   })
 
   it('render() is called with correct arguments', () => {
-    const my_render = sinon.spy()
-    const my_component = Component({
-      'render': my_render, 'validators': []
-    })
-    const bind = my_component({'title': 42})
-    const d3 = require('d3')
-    const my_selection = d3.selection()
-    const render = bind(my_selection)
-    render('almafa')
+    const { my_render, my_selection } = call_test_component_with({'instance_args': {'title': 42}, 'data': 'almafa'})
     my_render.should.be.calledWith({'title': 42}, my_selection, 'almafa')
   })
 
-
   it('render() is called with correct arguments 2', () => {
-    const my_render = sinon.spy()
-    const my_component = Component({
-      'render': my_render, 'validators': []
-    })
-    const bind = my_component({})
-    const d3 = require('d3')
-    const my_selection = d3.selection()
-    const render = bind(my_selection)
-    render([1])
+    const { my_render, my_selection } = call_test_component_with({'instance_args': {}, 'data': [1]})
     my_render.should.be.calledWith({}, my_selection, [1])
   })
 
   it('if there is an init() function, it should be called', () => {
-    const my_init = sinon.spy()
-    const my_component = Component({
-      'render': () => null, 'validators': [], 'init': my_init
-    })
-    const bind = my_component({})
-    const d3 = require('d3')
-    const my_selection = d3.selection()
-    const render = bind(my_selection)
-    render([1])
+    const { my_init } = call_test_component_with({'instance_args': {}, 'has_init': true})
     my_init.should.be.called()
   })
 
   it('if there is an init() function, it should be called with the correct arguments', () => {
-    const my_init = sinon.spy()
-    const my_component = Component({
-      'render': () => null, 'validators': [], 'init': my_init
-    })
-    const bind = my_component({'shit': 'happens'})
-    const d3 = require('d3')
-    const my_selection = d3.selection()
-    const render = bind(my_selection)
-    render([1])
+    const { my_init, my_selection } = call_test_component_with({'instance_args': {'shit': 'happens'}, 'has_init': true})
     my_init.should.be.calledWith({'shit': 'happens'}, my_selection)
   })
 
+
   it('if there is an init() function, it should be called with the correct arguments 2', () => {
-    const my_init = sinon.spy()
-    const my_component = Component({
-      'render': () => null, 'validators': [], 'init': my_init
-    })
-    const bind = my_component({'bull': 'shit'})
-    const d3 = require('d3')
-    const my_selection = d3.selection()
-    const render = bind(my_selection)
-    render([1])
-    my_init.should.be.calledWith({'bull': 'shit'}, my_selection)
+      const { my_init, my_selection } = call_test_component_with({'instance_args': {'bull': 'shit'}, 'has_init': true})
+      my_init.should.be.calledWith({'bull': 'shit'}, my_selection)
   })
-
-  const call_test_component_with = (args) => {
-    const injector = require('inject-loader!./base_component.js')
-    const jq = sinon.stub().returns(args.jq_return_value)
-    const Component = injector({
-      'jq-web': jq
-    }).default
-    const component = Component({
-        "validators": [],
-        "render": args.render_func,
-    })
-    const bind = component(args.instance_args)
-    const d3 = require('d3')
-    const my_selection = d3.selection()
-    const render = bind(my_selection)
-    render(args.data)
-
-    return { jq, render, my_selection }
-  }
 
   it('if query is supplied, jq should be called', () => {
     const { jq } = call_test_component_with({"instance_args": {"query": ""}, "render_func": () => null})
@@ -239,7 +195,5 @@ describe('Component', function() {
       "render_func": render_func})
     render_func.should.be.calledWith({"query": ". | asd"}, my_selection, jq_return_value)
   })
-
-
 
 })

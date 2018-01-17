@@ -9,7 +9,9 @@
     "build": "webpack",
     "start": "webpack-dev-server --open",
     "html-coverage": "cross-env NODE_ENV=test nyc --reporter=html mocha-webpack \"src/**/*.test.js\" --webpack-config webpack.test.config.js",
-    "generate-doc": "jsdoc -c jsdoc.conf.json"
+    "generate-doc": "jsdoc -c jsdoc.conf.json",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
   },
   "keywords": [],
   "author": "",

@@ -152,48 +152,48 @@ describe('Component', function() {
 
 
   it('if there is an init() function, it should be called with the correct arguments 2', () => {
-      const { my_init, my_selection } = call_test_component_with({'instance_args': {'bull': 'shit'}, 'has_init': true})
-      my_init.should.be.calledWith({'bull': 'shit'}, my_selection)
+    const { my_init, my_selection } = call_test_component_with({'instance_args': {'bull': 'shit'}, 'has_init': true})
+    my_init.should.be.calledWith({'bull': 'shit'}, my_selection)
   })
 
   it('if query is supplied, jq should be called', () => {
-    const { jq } = call_test_component_with({"instance_args": {"query": ""}, "render_func": () => null})
+    const { jq } = call_test_component_with({'instance_args': {'query': ''}, 'render_func': () => null})
     jq.should.be.called()
   })
 
   it('jq should be called only if query is supplied', () => {
-    const { jq } = call_test_component_with({"instance_args": {}, "render_func": () => null})
+    const { jq } = call_test_component_with({'instance_args': {}, 'render_func': () => null})
     jq.should.not.be.called()
   })
 
   it('if query is supplied, jq should be called with data and query', () => {
     const { jq } = call_test_component_with({
-      "instance_args": {"query": "foo"}, "data": "bar", "render_func": () => null})
-    jq.should.be.calledWith("bar", "foo")
+      'instance_args': {'query': 'foo'}, 'data': 'bar', 'render_func': () => null})
+    jq.should.be.calledWith('bar', 'foo')
   })
 
   it('if query is supplied, jq should be called with data and query 2', () => {
     const { jq } = call_test_component_with({
-      "instance_args": {"query": ". | foo"}, "data": 4, "render_func": () => null})
-    jq.should.be.calledWith(4, ". | foo")
+      'instance_args': {'query': '. | foo'}, 'data': 4, 'render_func': () => null})
+    jq.should.be.calledWith(4, '. | foo')
   })
 
   it('render should be called with query return value', () => {
     const jq_return_value = 42
     const render_func = sinon.spy()
-    const { render, my_selection } = call_test_component_with({
-      "instance_args": {"query": ". | foo"}, "data": 4, jq_return_value,
-      "render_func": render_func})
-    render_func.should.be.calledWith({"query": ". | foo"}, my_selection, jq_return_value)
+    const { my_selection } = call_test_component_with({
+      'instance_args': {'query': '. | foo'}, 'data': 4, jq_return_value,
+      'render_func': render_func})
+    render_func.should.be.calledWith({'query': '. | foo'}, my_selection, jq_return_value)
   })
 
   it('render should be called with query return value', () => {
-    const jq_return_value = "foo"
+    const jq_return_value = 'foo'
     const render_func = sinon.spy()
-    const { render, my_selection } = call_test_component_with({
-      "instance_args": {"query": ". | asd"}, "data": 4, jq_return_value,
-      "render_func": render_func})
-    render_func.should.be.calledWith({"query": ". | asd"}, my_selection, jq_return_value)
+    const { my_selection } = call_test_component_with({
+      'instance_args': {'query': '. | asd'}, 'data': 4, jq_return_value,
+      'render_func': render_func})
+    render_func.should.be.calledWith({'query': '. | asd'}, my_selection, jq_return_value)
   })
 
 })

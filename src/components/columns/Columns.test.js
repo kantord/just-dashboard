@@ -59,7 +59,18 @@ describe('Columns component', function() {
         { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
       ]
     })
-    assert.equal(d3.selection().selectAll('.ds--columns>h1').size(), 2)
+    assert.equal(d3.selection().selectAll('.ds--columns h1').size(), 2)
+  })
+
+  it('children are wrapped in child wrapper', function() {
+    call_render_with({
+      'parser': () => (selection) => selection.append('h1').text('My title'),
+      'render_args': [
+        { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
+        { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
+      ]
+    })
+    assert.equal(d3.selection().selectAll('.ds--columns>.ds--column>h1').size(), 2)
   })
 
   it('group wrapper has columns property', function() {
@@ -70,7 +81,7 @@ describe('Columns component', function() {
         { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
       ]
     })
-    assert.equal(d3.selection().selectAll('[data-ds--columns="2"] >h1').size(), 2)
+    assert.equal(d3.selection().selectAll('[data-ds--columns="2"] h1').size(), 2)
   })
 
   it('non-default column count', function() {
@@ -82,7 +93,7 @@ describe('Columns component', function() {
         { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
       ]
     })
-    assert.equal(d3.selection().selectAll('[data-ds--columns="3"] >h1').size(), 2)
+    assert.equal(d3.selection().selectAll('[data-ds--columns="3"] h1').size(), 2)
   })
 
   it('renders parsed component', function() {

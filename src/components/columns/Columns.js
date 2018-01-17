@@ -11,7 +11,12 @@ const ColumnsComponent = Wrapped((args, selection) => selection
 )(Component({
   'validators': [],
   'render': (args, selection, data) => {
-    if (data instanceof Array) data.map((definition) => default_parser(definition)(selection))
+    if (data instanceof Array) data.map((definition) => {
+      const wrapper = selection
+        .append('div')
+        .attr('class', 'ds--column')
+      default_parser(definition)(wrapper)
+    })
   }
 
 }))

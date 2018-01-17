@@ -20,6 +20,9 @@ $headingtype: (
   cap-height: 0.72
 );
 
+body {
+  padding: map-get($gutterwidths, medium);
+}
 
 @import "~sassline/assets/sass/sassline-base/typography";
 @import "~sassline/assets/sass/sassline-base/layouts";

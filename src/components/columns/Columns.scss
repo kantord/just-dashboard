@@ -4,13 +4,16 @@
 .ds--columns {
   display: flex;
   flex-wrap: wrap;
+  margin-left: -(map-get($gutterwidths, medium) / 2);
+  margin-right: -(map-get($gutterwidths, medium) / 2);
+  box-sizing: border-box;
 
   &[data-ds--columns="1"] >* {width: (100%/1);}
-  &[data-ds--columns="2"] >* {width: (100%/1);}
-  &[data-ds--columns="3"] >* {width: (100%/1);}
-  &[data-ds--columns="4"] >* {width: (100%/1);}
-  &[data-ds--columns="5"] >* {width: (100%/1);}
-  &[data-ds--columns="6"] >* {width: (100%/1);}
+  &[data-ds--columns="2"] >* {width: (100%/2);}
+  &[data-ds--columns="3"] >* {width: (100%/2);}
+  &[data-ds--columns="4"] >* {width: (100%/2);}
+  &[data-ds--columns="5"] >* {width: (100%/2);}
+  &[data-ds--columns="6"] >* {width: (100%/2);}
 
   @include breakpoint(break-1) {
     &[data-ds--columns="1"] >* {width: (100%/1);}
@@ -37,6 +40,11 @@
     &[data-ds--columns="4"] >* {width: (100%/4);}
     &[data-ds--columns="5"] >* {width: (100%/5);}
     &[data-ds--columns="6"] >* {width: (100%/6);}
+  }
+
+  .ds--column {
+    box-sizing: border-box;
+    padding: 0 (map-get($gutterwidths, medium) / 2) map-get($gutterwidths, medium);
   }
 }
 

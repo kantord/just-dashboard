@@ -64,6 +64,19 @@ default_parser({
           ]}
         }
       ]
+    },
+    {
+      'component': 'columns',
+      'args': {
+        'columns': 4,
+        'query': '.[] | {"component": "chart", "args": {"type": "pie"}, "data": {"columns": [["carbs", .[1]], ["protein", .[2]], ["fat", .[3]]]}}',
+      },
+      'data': [
+        ['tofu', 3, 10, 6],
+        ['fried eggs', .8, 14, 15],
+        ['black beans', 16, 5, .3],
+        ['tomatoes', 4, 1, .2],
+      ]
     }
   ]
 })(d3.selection())

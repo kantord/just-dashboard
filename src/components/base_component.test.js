@@ -196,4 +196,71 @@ describe('Component', function() {
     render_func.should.be.calledWith({'query': '. | asd'}, my_selection, jq_return_value)
   })
 
+  const loader_test = (args) => {
+    const injector = require('inject-loader!./base_component.js')
+    const jq = sinon.stub().returns(args.jq_return_value)
+    const my_loader = sinon.spy(function(url, callback) {
+        callback(args.fetched_value)
+    })
+    const d3 = require('d3')
+    const Component = injector({
+      'jq-web': jq,
+      'd3': {'json': my_loader, 'selection': d3.selection, 'csv': () => null}
+    }).default
+    const my_render = (args.render_func === undefined ) ? sinon.spy() : args.render_func
+    const my_component = Component({
+        'validators': [],
+        'render': my_render,
+    })
+    if (args.instance_args === undefined) args.instance_args = {}
+    args.instance_args.loader = args.loader
+    const bind = my_component(args.instance_args)
+    const my_selection = d3.selection()
+    const render = bind(my_selection)
+    render(args.data)
+    return { my_loader, my_render, my_selection, 'instance_args': args.instance_args }
+  }
+
+  it('throws if invalid loader supplied', function() {
+    (() => {
+      loader_test({'loader': 'asdasdasd'})
+    }).should.throw('Invalid loader')
+  })
+
+  it('doesnt throw if valid loader is supplied', function() {
+    (() => {
+      loader_test({'loader': 'csv'})
+    }).should.not.throw('Invalid loader')
+  })
+
+  it('doesnt throw if valid loader is supplied 2', function() {
+    (() => {
+      loader_test({'loader': 'json'})
+    }).should.not.throw('Invalid loader')
+  })
+
+  it('loader is called', function() {
+    const { my_loader } = loader_test({'loader': 'json'})
+    my_loader.should.be.called()
+  })
+
+  it('loader is called with render args', function() {
+    const data = "foo"
+    const { my_loader } = loader_test({'loader': 'json', data})
+    my_loader.should.be.calledWith(data)
+  })
+
+  it('loader is called with render args 2', function() {
+    const data = ["bar"]
+    const { my_loader } = loader_test({'loader': 'json', data})
+    my_loader.should.be.calledWith(data)
+  })
+
+  it('render is called with fetched data', function() {
+    const data = ["http://example.com"]
+    const fetched_value = {"hello": "world"}
+    const { my_render, instance_args, my_selection } = loader_test({'loader': 'json', fetched_value})
+    my_render.should.be.calledWith(instance_args, my_selection, fetched_value)
+  })
+
 })

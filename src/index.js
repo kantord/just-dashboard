@@ -26,8 +26,8 @@ default_parser({
         'query': '.[] | { \
           "component": "rows", \
           "data": [\
-            {"component": "text", "args": {"tagName": "h3"}, "data": .[0]}, \
-            {"component": "chart", "args": {"type": "pie"}, "data": {"columns": [["carbs", .[1]], ["protein", .[2]], ["fat", .[3]]]}} \
+            {"component": "text", "args": {"tagName": "h3", "align": "center"}, "data": .[0]}, \
+            {"component": "chart", "args": {"type": "bar"}, "data": {"columns": [["carbs", .[1]], ["protein", .[2]], ["fat", .[3]]]}} \
           ]\
         }',
       },
@@ -37,6 +37,11 @@ default_parser({
         ['black beans', 16, 5, .3],
         ['tomatoes', 4, 1, .2],
       ]
+    },
+    {
+      'component': 'chart',
+      'args': {'type': 'bar', 'query': '[.ticker.markets[] | [.market, .price]] | {"columns": .}', 'loader': 'json'},
+      'data': 'https://api.cryptonator.com/api/full/btc-usd'
     }
   ]
 })(d3.selection())

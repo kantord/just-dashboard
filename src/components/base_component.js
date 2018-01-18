@@ -8,6 +8,26 @@ const validate_selection = (selection) => {
   if (!(selection instanceof d3.selection)) throw new Error('A d3 selection is required')
 }
 
+const loader = (loader_name) => (source) => (callback) => {
+  const loaders = {
+    'csv': d3.csv,
+    'tsv': d3.tsv,
+    'text': d3.text,
+    'json': d3.json
+  }
+
+  if (loaders[loader_name] === undefined) throw new Error('Invalid loader')
+  loaders[loader_name](source, callback)
+}
+
+const render_component = (args, instance_args, selection) => (data) => {
+  if (instance_args !== undefined && instance_args.hasOwnProperty('query')) {
+    args.render(instance_args, selection, jq(data, instance_args.query))
+  } else {
+    args.render(instance_args, selection, data)
+  }
+}
+
 const Component = (args) => {
   if (!args.hasOwnProperty('render')) throw new Error('A render() function is required')
 
@@ -17,10 +37,10 @@ const Component = (args) => {
       validate_selection(selection)
       if (typeof args.init === 'function') args.init(instance_args, selection)
       return (data) => {
-        if (instance_args !== undefined && instance_args.hasOwnProperty('query')) {
-          args.render(instance_args, selection, jq(data, instance_args.query))
+        if (instance_args !== undefined && instance_args.hasOwnProperty('loader')) {
+          loader(instance_args.loader)(data)(render_component(args, instance_args, selection))
         } else {
-          args.render(instance_args, selection, data)
+          render_component(args, instance_args, selection)(data)
         }
       }
     }

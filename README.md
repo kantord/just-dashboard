@@ -1,2 +1,2 @@
 # dashboard
-[![Travis](https://img.shields.io/travis/rust-lang/rust.svg)]() [![Codecov](https://img.shields.io/codecov/c/github/codecov/example-python.svg)]()
+[![Travis](https://img.shields.io/travis/kantord/dashboard.svg)]() [![Codecov](https://img.shields.io/codecov/c/github/kantord/dashboard.svg)]()

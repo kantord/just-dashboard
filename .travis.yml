@@ -9,5 +9,6 @@ install:
   - npm install
 script:
   - npm run test
+  - npm run lint
   - npm run coverage
   - cat ./coverage/lcov.info | codecov

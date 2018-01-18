@@ -12,7 +12,7 @@
     "generate-doc": "jsdoc -c jsdoc.conf.json",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text npm run test" 
+    "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text npm run test"
   },
   "keywords": [],
   "author": "",

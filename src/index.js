@@ -15,61 +15,21 @@ default_parser({
       'data': 'Example dashboard'
     },
     {
-      'component': 'columns',
-      'args': {'columns': 3},
-      'data': [
-        {'component': 'text', 'args': {'tagName': 'p'}, 'data': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in fringilla risus. Aliquam ac efficitur risus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; '},
-        {'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'Lorem ipsum dolor sit amet'},
-        {'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'Lorem ipsum dolor sit amet'}
-      ]
-    },
-    {
-      'component': 'columns',
-      'args': {'columns': 4},
-      'data': [
-        {
-          'component': 'chart',
-          'args': {'type': 'pie', 'query': '.foo' },
-          'data': {'foo': {'columns': [
-            ['alma', 3],
-            ['korte', 1],
-            ['barack', 0.5]
-          ]}}
-        },
-        {
-          'component': 'chart',
-          'args': {'type': 'pie'},
-          'data': {'columns': [
-            ['alma', 3],
-            ['korte', 1],
-            ['barack', 0.5]
-          ]}
-        },
-        {
-          'component': 'chart',
-          'args': {'type': 'pie'},
-          'data': {'columns': [
-            ['alma', 3],
-            ['korte', 1],
-            ['barack', 0.5]
-          ]}
-        },
-        {
-          'component': 'chart',
-          'args': {'type': 'bar'},
-          'data': {'columns': [
-            ['alma', 3.3],
-            ['korte', 3],
-            ['barack', 0.5]
-          ]}
-        }
-      ]
+      'component': 'text',
+      'args': {'tagName': 'h2'},
+      'data': 'Nutritional facts'
     },
     {
       'component': 'columns',
       'args': {
         'columns': 4,
-        'query': '.[] | {"component": "chart", "args": {"type": "pie"}, "data": {"columns": [["carbs", .[1]], ["protein", .[2]], ["fat", .[3]]]}}',
+        'query': '.[] | { \
+          "component": "rows", \
+          "data": [\
+            {"component": "text", "args": {"tagName": "h3"}, "data": .[0]}, \
+            {"component": "chart", "args": {"type": "pie"}, "data": {"columns": [["carbs", .[1]], ["protein", .[2]], ["fat", .[3]]]}} \
+          ]\
+        }',
       },
       'data': [
         ['tofu', 3, 10, 6],

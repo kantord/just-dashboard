@@ -200,7 +200,7 @@ describe('Component', function() {
     const injector = require('inject-loader!./base_component.js')
     const jq = sinon.stub().returns(args.jq_return_value)
     const my_loader = sinon.spy(function(url, callback) {
-        callback(args.fetched_value)
+      callback(args.fetched_value)
     })
     const d3 = require('d3')
     const Component = injector({
@@ -209,8 +209,8 @@ describe('Component', function() {
     }).default
     const my_render = (args.render_func === undefined ) ? sinon.spy() : args.render_func
     const my_component = Component({
-        'validators': [],
-        'render': my_render,
+      'validators': [],
+      'render': my_render,
     })
     if (args.instance_args === undefined) args.instance_args = {}
     args.instance_args.loader = args.loader
@@ -245,20 +245,19 @@ describe('Component', function() {
   })
 
   it('loader is called with render args', function() {
-    const data = "foo"
+    const data = 'foo'
     const { my_loader } = loader_test({'loader': 'json', data})
     my_loader.should.be.calledWith(data)
   })
 
   it('loader is called with render args 2', function() {
-    const data = ["bar"]
+    const data = ['bar']
     const { my_loader } = loader_test({'loader': 'json', data})
     my_loader.should.be.calledWith(data)
   })
 
   it('render is called with fetched data', function() {
-    const data = ["http://example.com"]
-    const fetched_value = {"hello": "world"}
+    const fetched_value = {'hello': 'world'}
     const { my_render, instance_args, my_selection } = loader_test({'loader': 'json', fetched_value})
     my_render.should.be.calledWith(instance_args, my_selection, fetched_value)
   })

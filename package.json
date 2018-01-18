@@ -2,7 +2,8 @@
   "name": "dashboard",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/dashboard.js",
+  "module": "src/index.js",
   "scripts": {
     "test": "mocha-webpack \"src/**/*.test.js\" --webpack-config webpack.test.config.js",
     "test:watch": "mocha-webpack --watch \"src/**/*.test.js\" --webpack-config webpack.test.config.js",

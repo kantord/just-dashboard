@@ -31,5 +31,29 @@ describe('Text component', function() {
     assert.equal(d3.selection().select('span').text(), 'Second version')
   })
 
+  it('text align center', function() {
+    const { render, d3 } = get_render_function({'tagName': 'span', 'align': 'center'})
+    render('Second version')
+    assert.equal(d3.selection().select('[data-align="center"]').text(), 'Second version')
+  })
+
+  it('align only if attr is supplied', function() {
+    const { render, d3 } = get_render_function({'tagName': 'span'})
+    render('Second version')
+    assert.equal(d3.selection().select('[data-align]').size(), 0)
+  })
+
+  it('text align right', function() {
+    const { render, d3 } = get_render_function({'tagName': 'span', 'align': 'right'})
+    render('Second version')
+    assert.equal(d3.selection().select('[data-align="right"]').text(), 'Second version')
+  })
+
+  it('proper class attached', function() {
+    const { render, d3 } = get_render_function({'tagName': 'span'})
+    render('Second version')
+    assert.equal(d3.selection().select('.ds--text').size(), 1)
+  })
+
 })
 

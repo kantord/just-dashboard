@@ -1,3 +1,13 @@
 language: node_js
+sudo: true
 node_js:
   - "7"
+install:
+  - npm install -g codecov
+  - npm install -g cross-env
+  - npm install -g nyc
+  - npm install
+script:
+  - npm run test
+  - npm run coverage
+  - cat ./coverage/lcov.info | codecov

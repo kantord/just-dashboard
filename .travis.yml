@@ -4,6 +4,10 @@ node_js:
   - "7"
 install:
   - npm install -g codecov
+  - npm install -g cross-env
+  - npm install -g nyc
+  - npm install
 script:
-  - istanbul cover ./node_modules/mocha/bin/_mocha --reporter lcovonly -- -R src
-  - codecov
+  - npm run test
+  - npm run coverage
+  - cat ./coverage/lcov.info | codecov

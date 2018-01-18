@@ -1,3 +1,8 @@
 language: node_js
 node_js:
   - "7"
+install:
+  - npm install -g codecov
+script:
+  - istanbul cover ./node_modules/mocha/bin/_mocha --reporter lcovonly -- -R src
+  - codecov

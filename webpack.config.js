@@ -9,7 +9,8 @@ module.exports = {
     fs: 'empty'
   },
   output: {
-    filename: 'bundle.js',
+    filename: 'dashboard.js',
+    library: 'dashboard',
     path: path.resolve(__dirname, 'dist')
   },
   devServer: {

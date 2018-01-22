@@ -1,19 +1,10 @@
 const webpack = require('webpack');
-const GoogleFontsPlugin = require("google-fonts-webpack-plugin")
 const path = require('path');
 const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const env = process.env.WEBPACK_ENV;
 const libraryName = 'dashboard';
 
-let plugins = [
-    new GoogleFontsPlugin({
-      fonts: [
-        { family: "Libre Baskerville", variants: ["400", "400i", "700"] },
-        { family: "Merriweather", variants: ["300", "300i", "400", "400i", "700", "700i", "900", "900i"] },
-      ],
-      local: true
-    })
-  ];
+let plugins = [];
 let outputFile;
 
 if (env === 'build') {
@@ -40,13 +31,6 @@ module.exports = {
   plugins: plugins,
   module: {
     rules: [
-      {
-        test: /\.(ttf|eot|woff|woff2|svg)$/,
-        loader: "file-loader",
-        options: {
-          name: "fonts/[name].[ext]",
-        },
-      },
       {
 		test: /\.s?css$/,
 		use: [{

@@ -1,8 +1,21 @@
-const GoogleFontsPlugin = require("google-fonts-webpack-plugin")
+const webpack = require('webpack');
 const path = require('path');
+const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
+const env = process.env.WEBPACK_ENV;
+const libraryName = 'dashboard';
+
+let plugins = [];
+let outputFile;
+
+if (env === 'build') {
+  plugins.push(new UglifyJsPlugin({ minimize: true }));
+  outputFile = libraryName + '.min.js';
+} else {
+  outputFile = libraryName + '.js';
+}
 
 module.exports = {
-  entry: './src/index.js',
+  entry: __dirname + '/src/index.js',
   target: 'web',
   devtool: 'source-map',
   node: {
@@ -11,29 +24,13 @@ module.exports = {
   output: {
     filename: 'dashboard.js',
     library: 'dashboard',
-    path: path.resolve(__dirname, 'dist')
+    libraryTarget: 'umd',
+    umdNamedDefine: true,
+    path: path.resolve(__dirname, 'lib')
   },
-  devServer: {
-    contentBase: './dist'
-  },
-  plugins: [
-    new GoogleFontsPlugin({
-      fonts: [
-        { family: "Libre Baskerville", variants: ["400", "400i", "700"] },
-        { family: "Merriweather", variants: ["300", "300i", "400", "400i", "700", "700i", "900", "900i"] },
-      ],
-      local: true
-    })
-  ],
+  plugins: plugins,
   module: {
     rules: [
-      {
-        test: /\.(ttf|eot|woff|woff2|svg)$/,
-        loader: "file-loader",
-        options: {
-          name: "fonts/[name].[ext]",
-        },
-      },
       {
 		test: /\.s?css$/,
 		use: [{

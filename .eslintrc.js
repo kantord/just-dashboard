@@ -5,9 +5,11 @@ module.exports = {
         "es6": true,
         "mocha": true
     },
+    "parser": "babel-eslint",
     "extends": "eslint:recommended",
     "parserOptions": {
-        "sourceType": "module"
+        "sourceType": "module",
+        "allowImportExportEverywhere": true
     },
     "rules": {
         "indent": [

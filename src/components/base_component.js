@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-var jq = require('jq-web')
+import jq from '../jq-web.js'
 
 const loaders = {
   'csv': d3.csv,
@@ -22,7 +22,8 @@ const loader = (loader_name) => (source) => (callback) => {
 
 const render_component = (args, instance_args, selection) => (data) => {
   if (instance_args !== undefined && instance_args.hasOwnProperty('query')) {
-    args.render(instance_args, selection, jq(data, instance_args.query))
+    jq(data, instance_args.query).then(new_data => {
+      args.render(instance_args, selection, new_data)})
   } else {
     args.render(instance_args, selection, data)
   }

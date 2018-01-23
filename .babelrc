@@ -1,11 +1,22 @@
 {
   "presets": [
-    "env"
+    "env",
+    "es2015"
+  ],
+  "plugins": [
+      "syntax-dynamic-import",
   ],
   "env": {
+    "build": {
+    "plugins": [
+        "syntax-dynamic-import"
+        ]
+    },
     "test": {
       "plugins": [
-        "istanbul"
+        "istanbul",
+        "syntax-dynamic-import",
+        "dynamic-import-node"
       ]
     }
   }

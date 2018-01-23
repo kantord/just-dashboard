@@ -23,6 +23,7 @@ module.exports = {
   },
   output: {
     filename: 'dashboard.js',
+    chunkFilename: '[name].bundle.js',
     library: 'dashboard',
     libraryTarget: 'umd',
     umdNamedDefine: true,

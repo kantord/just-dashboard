@@ -5,3 +5,4 @@ out/
 dist/
 lib/
 /coverage.lcov
+/stats.json

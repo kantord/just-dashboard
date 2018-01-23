@@ -1,5 +1,7 @@
 import Component from './base_component'
 import sinon from 'sinon'
+import assert from 'assert'
+import * as d3 from 'd3'
 var jsdom = require('mocha-jsdom')
 
 describe('Component', function() {
@@ -200,7 +202,8 @@ describe('Component', function() {
     const injector = require('inject-loader!./base_component.js')
     const jq = sinon.stub().resolves(args.jq_return_value)
     const my_loader = sinon.spy(function(url, callback) {
-      callback(args.fetched_value)
+      if (args.no_resolve !== true)
+        callback(args.fetched_value)
     })
     const d3 = require('d3')
     const Component = injector({
@@ -261,5 +264,16 @@ describe('Component', function() {
     const { my_render, instance_args, my_selection } = loader_test({'loader': 'json', fetched_value})
     my_render.should.be.calledWith(instance_args, my_selection, fetched_value)
   })
+
+  it('should show a spinner while data is loading', () => {
+    loader_test({'loader': 'json', 'no_resolve': true})
+    assert.equal(d3.selection().selectAll('.spinner').size(), 1)
+  })
+
+  it('spinner should disappear after resolve', () => {
+    loader_test({'loader': 'json'})
+    assert.equal(d3.selection().selectAll('.spinner').size(), 0)
+  })
+
 
 })

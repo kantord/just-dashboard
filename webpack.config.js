@@ -15,6 +15,11 @@ if (env === 'build') {
 }
 
 module.exports = {
+  devServer: {
+    contentBase: path.join(__dirname, "lib"),
+    compress: true,
+    port: 9000
+  },
   entry: __dirname + '/src/index.js',
   target: 'web',
   devtool: 'source-map',

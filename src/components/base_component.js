@@ -39,7 +39,12 @@ const Component = (args) => {
       if (typeof args.init === 'function') args.init(instance_args, selection)
       return (data) => {
         if (instance_args !== undefined && instance_args.hasOwnProperty('loader')) {
-          loader(instance_args.loader)(data)(render_component(args, instance_args, selection))
+          const spinner = selection.append('div')
+          spinner.attr('class', 'spinner sk-spinner sk-spinner-pulse')
+          loader(instance_args.loader)(data)((data) => {
+            render_component(args, instance_args, selection)(data)
+            spinner.remove()
+          })
         } else {
           render_component(args, instance_args, selection)(data)
         }

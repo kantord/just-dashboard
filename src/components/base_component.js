@@ -34,10 +34,8 @@ const create_spinner = (selection) =>
 
 const render_component = (args, instance_args, selection) => (data) => {
   if (instance_args !== undefined && instance_args.hasOwnProperty('query')) {
-    const spinner = create_spinner(selection)
-    jq(data, instance_args.query).then(new_data => {
-      spinner.remove()
-      args.render(instance_args, selection, new_data)})
+    with_spinner(selection)((new_data => {
+      args.render(instance_args, selection, new_data)}))(jq(data, instance_args.query).then)
   } else {
     args.render(instance_args, selection, data)
   }

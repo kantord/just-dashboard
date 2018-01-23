@@ -7,7 +7,7 @@ describe('Component', function() {
 
   const call_test_component_with = (args) => {
     const injector = require('inject-loader!./base_component.js')
-    const jq = sinon.stub().returns({"then": (x) => x(args.jq_return_value)})
+    const jq = sinon.stub().returns({'then': (x) => x(args.jq_return_value)})
     const Component = injector({
       '../jq-web.js': jq
     }).default
@@ -181,7 +181,7 @@ describe('Component', function() {
   it('render should be called with query return value', () => {
     const jq_return_value = 42
     const render_func = sinon.spy()
-    const { my_selection } = call_test_component_with({
+    call_test_component_with({
       'instance_args': {'query': '. | foo'}, 'data': 4, jq_return_value,
       'render_func': render_func})
     render_func.should.be.calledWith(sinon.match.any, sinon.match.any, jq_return_value)
@@ -190,7 +190,7 @@ describe('Component', function() {
   it('render should be called with query return value 2', () => {
     const jq_return_value = 'foo'
     const render_func = sinon.spy()
-    const { my_selection } = call_test_component_with({
+    call_test_component_with({
       'instance_args': {'query': '. | asd'}, 'data': 4, jq_return_value,
       'render_func': render_func})
     render_func.should.be.calledWith(sinon.match.any, sinon.match.any, jq_return_value)

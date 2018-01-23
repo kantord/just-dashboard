@@ -22,7 +22,10 @@ const loader = (loader_name) => (source) => (callback) => {
 
 const render_component = (args, instance_args, selection) => (data) => {
   if (instance_args !== undefined && instance_args.hasOwnProperty('query')) {
+    const spinner = selection.append('div')
+    spinner.attr('class', 'spinner sk-spinner sk-spinner-pulse')
     jq(data, instance_args.query).then(new_data => {
+      spinner.remove()
       args.render(instance_args, selection, new_data)})
   } else {
     args.render(instance_args, selection, data)

@@ -20,10 +20,13 @@ const loader = (loader_name) => (source) => (callback) => {
   loaders[loader_name](source, callback)
 }
 
+const create_spinner = (selection) =>
+    selection.append('div')
+      .attr('class', 'spinner sk-spinner sk-spinner-pulse')
+
 const render_component = (args, instance_args, selection) => (data) => {
   if (instance_args !== undefined && instance_args.hasOwnProperty('query')) {
-    const spinner = selection.append('div')
-    spinner.attr('class', 'spinner sk-spinner sk-spinner-pulse')
+    const spinner = create_spinner(selection)
     jq(data, instance_args.query).then(new_data => {
       spinner.remove()
       args.render(instance_args, selection, new_data)})
@@ -42,8 +45,7 @@ const Component = (args) => {
       if (typeof args.init === 'function') args.init(instance_args, selection)
       return (data) => {
         if (instance_args !== undefined && instance_args.hasOwnProperty('loader')) {
-          const spinner = selection.append('div')
-          spinner.attr('class', 'spinner sk-spinner sk-spinner-pulse')
+          const spinner = create_spinner(selection)
           loader(instance_args.loader)(data)((data) => {
             render_component(args, instance_args, selection)(data)
             spinner.remove()

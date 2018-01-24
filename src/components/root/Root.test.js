@@ -93,5 +93,16 @@ describe('Root component', function() {
     assert.equal(d3.selection().select('body p').text(), 'Almafa')
   })
 
+  it('children are wrapped in child wrapper', function() {
+    call_render_with({
+      'parser': () => (selection) => selection.append('h1').text('My title'),
+      'component_args': {'title': ''},
+      'render_args': [
+        { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
+        { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
+      ]
+    })
+    assert.equal(d3.selection().selectAll('.ds--wrapper').size(), 2)
+  })
 
 })

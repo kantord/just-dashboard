@@ -9,8 +9,10 @@ const TextComponent = Component({
     const item = selection.append(args.tagName).attr('class', 'ds--text')
     if (args.hasOwnProperty('align'))
       item.attr('data-align', args.align)
+
+    return item
   },
-  'render': (args, selection, data) => selection.select(args.tagName).text(data)
+  'render': (args, selection, data, item) => item.text(data)
 })
 
 export default TextComponent

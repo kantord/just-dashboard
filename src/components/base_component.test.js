@@ -1,5 +1,7 @@
 import Component from './base_component'
 import sinon from 'sinon'
+import assert from 'assert'
+import * as d3 from 'd3'
 var jsdom = require('mocha-jsdom')
 
 describe('Component', function() {
@@ -7,12 +9,15 @@ describe('Component', function() {
 
   const call_test_component_with = (args) => {
     const injector = require('inject-loader!./base_component.js')
-    const jq = sinon.stub().returns({'then': (x) => x(args.jq_return_value)})
+    const jq = sinon.stub().returns(
+      (args.dont_execute_query === true) ? {'then': () => null}
+        : {'then': (x) => x(args.jq_return_value)}
+    )
     const Component = injector({
       '../jq-web.js': jq
     }).default
 
-    const my_init = sinon.spy()
+    const my_init = sinon.stub().returns(args.init_return_value)
     const my_render = (args.render_func === undefined ) ? sinon.spy() : args.render_func
     const my_component = (args.has_init === true) ? Component({
       'render': my_render, 'validators': [], 'init': my_init
@@ -200,7 +205,8 @@ describe('Component', function() {
     const injector = require('inject-loader!./base_component.js')
     const jq = sinon.stub().resolves(args.jq_return_value)
     const my_loader = sinon.spy(function(url, callback) {
-      callback(args.fetched_value)
+      if (args.no_resolve !== true)
+        callback(null, args.fetched_value)
     })
     const d3 = require('d3')
     const Component = injector({
@@ -260,6 +266,32 @@ describe('Component', function() {
     const fetched_value = {'hello': 'world'}
     const { my_render, instance_args, my_selection } = loader_test({'loader': 'json', fetched_value})
     my_render.should.be.calledWith(instance_args, my_selection, fetched_value)
+  })
+
+  it('should show a spinner while data is loading', () => {
+    loader_test({'loader': 'json', 'no_resolve': true})
+    assert.equal(d3.selection().selectAll('.spinner').size(), 1)
+  })
+
+  it('spinner should disappear after resolve', () => {
+    loader_test({'loader': 'json'})
+    assert.equal(d3.selection().selectAll('.spinner').size(), 0)
+  })
+
+  it('while jq is being loaded, a spinner should be displayed', () => {
+    call_test_component_with({'instance_args': {'query': ''}, 'render_func': () => null, 'dont_execute_query': true})
+    assert.equal(d3.selection().selectAll('.spinner').size(), 1)
+  })
+
+  it('spinner should disappear when query is finished', () => {
+    call_test_component_with({'instance_args': {'query': ''}, 'render_func': () => null})
+    assert.equal(d3.selection().selectAll('.spinner').size(), 0)
+  })
+
+  it('render is called with init return value', () => {
+    const my_init_return_value = 11
+    const { my_render } = call_test_component_with({'init_return_value': my_init_return_value, 'has_init': true})
+    my_render.should.be.calledWith(sinon.match.any, sinon.match.any, sinon.match.any, my_init_return_value)
   })
 
 })

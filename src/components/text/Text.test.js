@@ -55,5 +55,15 @@ describe('Text component', function() {
     assert.equal(d3.selection().select('.ds--text').size(), 1)
   })
 
+  it('proper item is updated', () => {
+    const d3 = require('d3')
+    const render1 = TextComponent({'tagName': 'h4'})(d3.selection())
+    const render2 = TextComponent({'tagName': 'h4'})(d3.selection())
+    render1('a')
+    render2('b')
+    assert.equal(d3.select(d3.selection().selectAll('.ds--text').nodes()[0]).text(), 'a')
+    assert.equal(d3.select(d3.selection().selectAll('.ds--text').nodes()[1]).text(), 'b')
+  })
+
 })
 

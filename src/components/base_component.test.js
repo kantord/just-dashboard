@@ -10,8 +10,8 @@ describe('Component', function() {
   const call_test_component_with = (args) => {
     const injector = require('inject-loader!./base_component.js')
     const jq = sinon.stub().returns(
-      (args.dont_execute_query === true) ? {'then': (x) => null}
-      : {'then': (x) => x(args.jq_return_value)}
+      (args.dont_execute_query === true) ? {'then': () => null}
+        : {'then': (x) => x(args.jq_return_value)}
     )
     const Component = injector({
       '../jq-web.js': jq

@@ -29,8 +29,8 @@ const with_spinner = (selection) => (callback) => (func) => {
 }
 
 const create_spinner = (selection) =>
-    selection.append('div')
-      .attr('class', 'spinner sk-spinner sk-spinner-pulse')
+  selection.append('div')
+    .attr('class', 'spinner sk-spinner sk-spinner-pulse')
 
 const render_component = (args, instance_args, selection) => (data) => {
   if (instance_args !== undefined && instance_args.hasOwnProperty('query')) {

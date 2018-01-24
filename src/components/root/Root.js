@@ -7,7 +7,8 @@ const RootComponent = Component({
   'init': (args, selection) => selection.select('title').text(args.title),
   'render': (args, selection, data) => {
     const body = selection.select('body')
-    if (data instanceof Array) data.map((definition) => default_parser(definition)(body))
+    if (data instanceof Array) data.map((definition) => default_parser(definition)(
+      body.append('div').attr('class', 'ds--wrapper')))
   }
 })
 

@@ -7,19 +7,27 @@ const render_dashboard = (data) =>
 render_dashboard(
   {
     'component': 'root',
-    'args': {'title': 'Hello World'},
+    'args': {'title': 'Cereals'},
     'data': [
       {'component': 'text',
         'args': {'tagName': 'h1'},
-        'data': 'Hello World!'
+        'data': 'Cereals'
       },
       {'component': 'text',
         'args': {'tagName': 'h2'},
-        'data': 'Lorem ipsum dolor sit amet'
+        'data': 'By calories'
+      },
+      {'component': 'chart',
+        'args': {'type': 'bar', 'loader': 'csv', 'query': '{"columns": [(sort_by(-(.calories | tonumber)) | .[] | [.name, .calories])]}'},
+        'data': 'https://gist.githubusercontent.com/ZeningQu/6184eaf8faa533e320abc938c4738c3e/raw/40f237de825061faa8721c2293b79c46979780b4/cereals.csv'
       },
       {'component': 'text',
-        'args': {'tagName': 'p', 'loader': 'json'},
-        'data': 'http://www.vizgr.org/historical-events/search.php?format=json&begin_date=-3000000&end_date=20151231&lang=pt'
+        'args': {'tagName': 'h2'},
+        'data': 'By nutritional profile'
+      },
+      {'component': 'columns',
+        'args': {'loader': 'csv', 'columns': 4, 'query': '.[] | {"component": "rows", "data": [{"component": "text", "args": {"tagName": "h3"}, "data": .name}, {"component": "chart", "args": {"type": "pie"}, "data": {"columns": [["protein", .protein], ["carbo", .carbo], ["sugars", .sugars], ["fat", .fat]]}}]}'},
+        'data': 'https://gist.githubusercontent.com/ZeningQu/6184eaf8faa533e320abc938c4738c3e/raw/40f237de825061faa8721c2293b79c46979780b4/cereals.csv'
       }
     ]
   })

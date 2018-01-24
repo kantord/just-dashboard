@@ -1,7 +1,7 @@
 
-const jq = async (a, b) => {
+const jq = async (...args) => {
   const jq_ = await import(/* webpackChunkName: "jq" */ 'jq-web')
-  return jq_(a, b)
+  return jq_(...args)
 }
 
 export default jq

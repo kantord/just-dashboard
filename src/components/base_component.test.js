@@ -17,7 +17,7 @@ describe('Component', function() {
       '../jq-web.js': jq
     }).default
 
-    const my_init = sinon.spy()
+    const my_init = sinon.stub().returns(args.init_return_value)
     const my_render = (args.render_func === undefined ) ? sinon.spy() : args.render_func
     const my_component = (args.has_init === true) ? Component({
       'render': my_render, 'validators': [], 'init': my_init
@@ -206,7 +206,7 @@ describe('Component', function() {
     const jq = sinon.stub().resolves(args.jq_return_value)
     const my_loader = sinon.spy(function(url, callback) {
       if (args.no_resolve !== true)
-        callback(args.fetched_value)
+        callback(null, args.fetched_value)
     })
     const d3 = require('d3')
     const Component = injector({
@@ -286,6 +286,12 @@ describe('Component', function() {
   it('spinner should disappear when query is finished', () => {
     call_test_component_with({'instance_args': {'query': ''}, 'render_func': () => null})
     assert.equal(d3.selection().selectAll('.spinner').size(), 0)
+  })
+
+  it('render is called with init return value', () => {
+    const my_init_return_value = 11
+    const { my_render } = call_test_component_with({'init_return_value': my_init_return_value, 'has_init': true})
+    my_render.should.be.calledWith(sinon.match.any, sinon.match.any, sinon.match.any, my_init_return_value)
   })
 
 })

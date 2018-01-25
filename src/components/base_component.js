@@ -16,7 +16,7 @@ const validate_selection = (selection) => {
 }
 
 const loader_exists = (loader_name) =>
-    loaders[loader_name] !== undefined
+  loaders[loader_name] !== undefined
 
 const with_loader = (loader_name) => (source) => (callback) => {
   if (!loader_exists(loader_name)) throw new Error('Invalid loader')
@@ -46,9 +46,9 @@ const execute_query = (query, data) =>
     jq(data, query).then((data) => callback(data))
 
 const render_component_with_query = (args, instance_args, selection, element) => (data) =>
-  with_spinner(selection)
-    (execute_query(instance_args.query, data))
-    (call_render_function(args, instance_args, selection, element))
+  with_spinner(selection)(
+    execute_query(instance_args.query, data))(
+    call_render_function(args, instance_args, selection, element))
 
 const render_component = (args, instance_args, ...rest) => 
   has_query(instance_args)
@@ -67,18 +67,18 @@ const has_loader = (instance_args) =>
 
 const handle_external_data = (instance_args, selection, raw_data) => (resolve) =>
   has_loader(instance_args)
-    ? load_external_data(raw_data)
-      (with_loader(instance_args.loader),
-       with_spinner(selection))
-      ((_, data) => resolve(data))
+    ? load_external_data(raw_data)(
+      with_loader(instance_args.loader),
+      with_spinner(selection))(
+      (_, data) => resolve(data))
     : resolve(raw_data)
 
 const create_bind_function = (args, instance_args) => (selection) => {
   validate_selection(selection)
   const element = create_element(args.init, instance_args, selection)
   return (raw_data) => {
-    handle_external_data(instance_args, selection, raw_data)
-      (render_component(args, instance_args, selection, element))
+    handle_external_data(instance_args, selection, raw_data)(
+      render_component(args, instance_args, selection, element))
   }
 }
 

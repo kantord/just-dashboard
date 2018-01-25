@@ -15,10 +15,17 @@ const validate_selection = (selection) => {
   if (!(selection instanceof d3.selection)) throw new Error('A d3 selection is required')
 }
 
-const loader = (loader_name) => (source) => (callback) => {
-  if (loaders[loader_name] === undefined) throw new Error('Invalid loader')
+const loader_exists = (loader_name) =>
+    loaders[loader_name] !== undefined
+
+const with_loader = (loader_name) => (source) => (callback) => {
+  if (!loader_exists(loader_name)) throw new Error('Invalid loader')
   loaders[loader_name](source, callback)
 }
+
+const create_spinner = (selection) =>
+  selection.append('div')
+    .attr('class', 'spinner sk-spinner sk-spinner-pulse')
 
 const with_spinner = (selection) => (func) => (callback) => {
   const spinner = create_spinner(selection)
@@ -28,40 +35,61 @@ const with_spinner = (selection) => (func) => (callback) => {
   })
 }
 
-const create_spinner = (selection) =>
-  selection.append('div')
-    .attr('class', 'spinner sk-spinner sk-spinner-pulse')
+const has_query = (instance_args) =>
+  instance_args !== undefined && instance_args.hasOwnProperty('query')
 
-const render_component = (args, instance_args, selection, init_return_value) => (data) => {
-  if (instance_args !== undefined && instance_args.hasOwnProperty('query')) {
-    with_spinner(selection)((callback) =>
-      jq(data, instance_args.query).then((data) => callback(data))
-    )((new_data => {
-      args.render(instance_args, selection, new_data, init_return_value)}))
-  } else {
-    args.render(instance_args, selection, data, init_return_value)
+const call_render_function = (args, instance_args, selection, element) => (data) =>
+  args.render(instance_args, selection, data, element)
+
+const execute_query = (query, data) =>
+  (callback) =>
+    jq(data, query).then((data) => callback(data))
+
+const render_component_with_query = (args, instance_args, selection, element) => (data) =>
+  with_spinner(selection)
+    (execute_query(instance_args.query, data))
+    (call_render_function(args, instance_args, selection, element))
+
+const render_component = (args, instance_args, ...rest) => 
+  has_query(instance_args)
+    ? render_component_with_query(args, instance_args, ...rest)
+    : call_render_function(args, instance_args, ...rest)
+
+
+const create_element = (init_func, instance_args, selection) =>
+  (typeof init_func === 'function') ? init_func(instance_args, selection) : null 
+
+const load_external_data = (raw_data) => (loader_func, spinner_func) =>
+  spinner_func(loader_func(raw_data))
+
+const has_loader = (instance_args) =>
+  instance_args !== undefined && instance_args.hasOwnProperty('loader')
+
+const handle_external_data = (instance_args, selection, raw_data) => (resolve) =>
+  has_loader(instance_args)
+    ? load_external_data(raw_data)
+      (with_loader(instance_args.loader),
+       with_spinner(selection))
+      ((_, data) => resolve(data))
+    : resolve(raw_data)
+
+const create_bind_function = (args, instance_args) => (selection) => {
+  validate_selection(selection)
+  const element = create_element(args.init, instance_args, selection)
+  return (raw_data) => {
+    handle_external_data(instance_args, selection, raw_data)
+      (render_component(args, instance_args, selection, element))
   }
+}
+
+const create_component_function = (args) => (instance_args) => {
+  execute_validations(args.validators)(instance_args)
+  return create_bind_function(args, instance_args)
 }
 
 const Component = (args) => {
   if (!args.hasOwnProperty('render')) throw new Error('A render() function is required')
-
-  return (instance_args) => {
-    execute_validations(args.validators)(instance_args)
-    return (selection) => {
-      validate_selection(selection)
-      const init_return_value = (typeof args.init === 'function') ? args.init(instance_args, selection) : null
-      return (data) => {
-        if (instance_args !== undefined && instance_args.hasOwnProperty('loader')) {
-          with_spinner(selection)(loader(instance_args.loader)(data))(function(_, data) {
-            render_component(args, instance_args, selection, init_return_value)(data)
-          })
-        } else {
-          render_component(args, instance_args, selection, init_return_value)(data)
-        }
-      }
-    }
-  }
+  return create_component_function(args)
 }
 
 export default Component

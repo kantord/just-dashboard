@@ -20,7 +20,7 @@ module.exports = {
     compress: true,
     port: 9000
   },
-  entry: __dirname + '/src/index.js',
+  entry: ['babel-polyfill', __dirname + '/src/index.js'],
   target: 'web',
   devtool: 'source-map',
   node: {

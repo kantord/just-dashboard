@@ -17,7 +17,7 @@ describe('Component', function() {
       '../jq-web.js': jq
     }).default
 
-    const my_init = sinon.stub().returns(args.init_return_value)
+    const my_init = sinon.stub().returns(args.element)
     const my_render = (args.render_func === undefined ) ? sinon.spy() : args.render_func
     const my_component = (args.has_init === true) ? Component({
       'render': my_render, 'validators': [], 'init': my_init
@@ -289,9 +289,9 @@ describe('Component', function() {
   })
 
   it('render is called with init return value', () => {
-    const my_init_return_value = 11
-    const { my_render } = call_test_component_with({'init_return_value': my_init_return_value, 'has_init': true})
-    my_render.should.be.calledWith(sinon.match.any, sinon.match.any, sinon.match.any, my_init_return_value)
+    const my_element = 11
+    const { my_render } = call_test_component_with({'element': my_element, 'has_init': true})
+    my_render.should.be.calledWith(sinon.match.any, sinon.match.any, sinon.match.any, my_element)
   })
 
 })

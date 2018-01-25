@@ -1,4 +1,3 @@
-import 'babel-polyfill'
 import './style.scss'
 import default_parser from './default_parser'
 

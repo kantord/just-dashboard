@@ -10,8 +10,8 @@ const ContainerComponent = ({ wrapper_tag, wrapper_class, validators, init }) =>
       default_parser(definition)(wrapper)
     })
   },
-  "init": init,
-  "validators": validators || [],
+  'init': init,
+  'validators': validators || [],
 })
 
 export default ContainerComponent

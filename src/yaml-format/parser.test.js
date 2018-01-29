@@ -28,6 +28,12 @@ describe('yaml format - parser', function() {
     }).should.not.throw('A non-empty input file is required')
   })
 
+  it('yaml is only parsed if input is a string', function() {
+    const { parser, safeLoadSpy } = set_up({'safeLoadSpyReturns': []})
+    parser({'h1 text': ''})
+    safeLoadSpy.should.not.be.called()
+  })
+
   const inputs = ['foo', 'bar']
 
   inputs.forEach((arg) =>
@@ -40,7 +46,7 @@ describe('yaml format - parser', function() {
 })
 
 describe('yaml format - root component', function() {
-  const set_up = function(safeLoadSpyReturns) {
+  const set_up = function() {
     const injector = require('inject-loader!./parser.js')
     const safeLoadSpy = sinon.spy(x => x)
     const parser = injector({
@@ -167,7 +173,7 @@ describe('yaml format - text component', function() {
   tests.forEach(function({input, output}) {
     it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]]}`, function() {
       const { parser } = set_up(input)
-      assert.deepEqual(parser(), output)
+      assert.deepEqual(parser(''), output)
     })
   })
 })
@@ -175,7 +181,7 @@ describe('yaml format - text component', function() {
 
 
 describe('yaml format - rows component', function() {
-  const set_up = function(safeLoadSpyReturns) {
+  const set_up = function() {
     const injector = require('inject-loader!./parser.js')
     const safeLoadSpy = sinon.spy(x => x)
     const parser = injector({
@@ -215,7 +221,7 @@ describe('yaml format - rows component', function() {
 })
 
 describe('yaml format - columns component', function() {
-  const set_up = function(safeLoadSpyReturns) {
+  const set_up = function() {
     const injector = require('inject-loader!./parser.js')
     const safeLoadSpy = sinon.spy(x => x)
     const parser = injector({
@@ -276,9 +282,9 @@ describe('yaml format - columns component', function() {
             'data': []
           },
           {
-          'component': 'columns',
-          'data': []
-        }]
+            'component': 'columns',
+            'data': []
+          }]
       }
     },
   ]
@@ -293,7 +299,7 @@ describe('yaml format - columns component', function() {
 })
 
 describe('yaml format - chart component', function() {
-  const set_up = function(safeLoadSpyReturns) {
+  const set_up = function() {
     const injector = require('inject-loader!./parser.js')
     const safeLoadSpy = sinon.spy(x => x)
     const parser = injector({
@@ -308,7 +314,7 @@ describe('yaml format - chart component', function() {
       'input': {'pie chart': []},
       'output': {
         'component': 'chart',
-        'type': {'type': 'pie'},
+        'args': {'type': 'pie'},
         'data': []
       }
     },
@@ -316,7 +322,7 @@ describe('yaml format - chart component', function() {
       'input': {'bar chart': []},
       'output': {
         'component': 'chart',
-        'type': {'type': 'bar'},
+        'args': {'type': 'bar'},
         'data': []
       }
     },
@@ -324,7 +330,7 @@ describe('yaml format - chart component', function() {
       'input': {'bar chart': 'foo'},
       'output': {
         'component': 'chart',
-        'type': {'type': 'bar'},
+        'args': {'type': 'bar'},
         'data': 'foo'
       }
     },
@@ -336,5 +342,178 @@ describe('yaml format - chart component', function() {
       const { parser } = set_up(input)
       assert.deepEqual(parser(input), output)
     })
+  })
+})
+
+describe('yaml format - handling URL', function() {
+  const set_up = function() {
+    const injector = require('inject-loader!./parser.js')
+    const safeLoadSpy = sinon.spy(x => x)
+    const parser = injector({
+      'js-yaml': {'safeLoad': safeLoadSpy},
+    }).default
+
+    return { parser }
+  }
+
+  const tests = [
+    {
+      'input': {'h1 text': 'https://example.com/text.csv'},
+      'output': {
+        'component': 'text',
+        'args': {'loader': 'csv', 'tagName': 'h1'},
+        'data': 'https://example.com/text.csv'
+      }
+    },
+    {
+      'input': {'h1 text': 'https://example.com/text.json'},
+      'output': {
+        'component': 'text',
+        'args': {'loader': 'json', 'tagName': 'h1'},
+        'data': 'https://example.com/text.json'
+      }
+    },
+    {
+      'input': {'h1 text': [
+        {'attr:loader': 'csv'},
+        {'data': 'https://example.com/text.json'}
+      ]},
+      'output': {
+        'component': 'text',
+        'args': {'loader': 'csv', 'tagName': 'h1'},
+        'data': 'https://example.com/text.json'
+      }
+    }
+  ]
+
+
+  tests.forEach(function({input, output}) {
+    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]]}`, function() {
+      const { parser } = set_up(input)
+      assert.deepEqual(parser(input), output)
+    })
+  })
+})
+
+
+describe('yaml format - attr: syntax', function() {
+  const set_up = function() {
+    const injector = require('inject-loader!./parser.js')
+    const safeLoadSpy = sinon.spy(x => x)
+    const parser = injector({
+      'js-yaml': {'safeLoad': safeLoadSpy},
+    }).default
+
+    return { parser }
+  }
+
+  const tests = [
+    {
+      'input': {'h1 text': [
+        {'attr:foo': 'bar'},
+        {'data': 'https://example.com/text.csv'}
+      ]},
+      'output': {
+        'component': 'text',
+        'args': {'loader': 'csv', 'tagName': 'h1', 'foo': 'bar'},
+        'data': 'https://example.com/text.csv'
+      }
+    },
+    {
+      'input': {'h1 text': [
+        {'attr:foo': 'bar'},
+        {'data': 'https://example.com/text.json'}
+      ]},
+      'output': {
+        'component': 'text',
+        'args': {'loader': 'json', 'tagName': 'h1', 'foo': 'bar'},
+        'data': 'https://example.com/text.json'
+      }
+    },
+    {
+      'input': {'pie chart': [
+        {'attr:foo': 'bar'},
+        {'data': 'https://example.com/text.json'}
+      ]},
+      'output': {
+        'component': 'chart',
+        'args': {'loader': 'json', 'type': 'pie', 'foo': 'bar'},
+        'data': 'https://example.com/text.json'
+      }
+    },
+    {
+      'input': {'pie chart': [
+        {'attr:bar': 'foo'},
+        {'data': 'https://example.com/text.json'}
+      ]},
+      'output': {
+        'component': 'chart',
+        'args': {'loader': 'json', 'type': 'pie', 'bar': 'foo'},
+        'data': 'https://example.com/text.json'
+      }
+    },
+    {
+      'input': {'pie chart': [
+        {'attr:title': 'Hello World'},
+        {'attr:pi': 3.14},
+        {'data': 'https://example.com/text.json'}
+      ]},
+      'output': {
+        'component': 'chart',
+        'args': {'loader': 'json', 'type': 'pie', 'title': 'Hello World',
+          'pi': 3.14},
+        'data': 'https://example.com/text.json'
+      }
+    },
+  ]
+
+
+  tests.forEach(function({input, output}) {
+    it(`${Object.keys(input)[0]} - ${Object.values(input)[0].map(Object.keys)}`, function() {
+      const { parser } = set_up(input)
+      assert.deepEqual(parser(input), output)
+    })
+  })
+})
+
+describe('integration tests', () => {
+  it('integration test', () => {
+    const parser = require('./parser.js').default
+    const text = `dashboard "asd":
+    - h1 text: asd
+    - 3 columns:
+      - p text: lorem ipsum
+      - p text:
+        - attr:foo: bar
+        - data: x`
+    const value = {
+      'component': 'root',
+      'args': {'title': 'asd'},
+      'data': [
+        {'component': 'text',
+          'args': {'tagName': 'h1'},
+          'data': 'asd'},
+        {
+          'component': 'columns',
+          'args': {'columns': 3},
+          'data': [
+            {
+              'component': 'text',
+              'args': {'tagName': 'p'},
+              'data': 'lorem ipsum'
+            },
+            {
+              'component': 'text',
+              'args': {'tagName': 'p', 'foo': 'bar'},
+              'data': 'x'
+            }
+
+          ]
+        }
+
+      ],
+    }
+
+    assert.deepEqual(parser(text), value)
   })
 })

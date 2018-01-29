@@ -209,6 +209,17 @@ describe('yaml format - rows component', function() {
         }]
       }
     },
+    {
+      'input': {'rows': [
+        {'attr:query': 'asd'},
+        {'data': 'xxxxx'},
+      ]},
+      'output': {
+        'component': 'rows',
+        'args': {'query': 'asd'},
+        'data': 'xxxxx'
+      }
+    },
   ]
 
 

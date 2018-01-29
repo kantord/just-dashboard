@@ -75,6 +75,8 @@ const parser = (input) => {
       if (key.match(pattern)) return handle_urls(handle_attr_syntax(func(key.match(pattern), value)))
     }
   }
+
+  return yaml_contents
 }
 
 export default parser

@@ -1,4 +1,5 @@
 import './style.scss'
-import default_parser from './default_parser'
+import json_parser from './default_parser'
+import yaml_parser from './yaml-format/parser'
 
-export default default_parser
+export { json_parser, yaml_parser }

@@ -171,3 +171,123 @@ describe('yaml format - text component', function() {
     })
   })
 })
+
+
+
+describe('yaml format - rows component', function() {
+  const set_up = function(safeLoadSpyReturns) {
+    const injector = require('inject-loader!./parser.js')
+    const safeLoadSpy = sinon.spy(x => x)
+    const parser = injector({
+      'js-yaml': {'safeLoad': safeLoadSpy},
+    }).default
+
+    return { parser }
+  }
+
+  const tests = [
+    {
+      'input': {'rows': []},
+      'output': {
+        'component': 'rows',
+        'data': []
+      }
+    },
+    {
+      'input': {'rows': [{'rows': []}]},
+      'output': {
+        'component': 'rows',
+        'data': [{
+          'component': 'rows',
+          'data': []
+        }]
+      }
+    },
+  ]
+
+
+  tests.forEach(function({input, output}) {
+    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]].length}`, function() {
+      const { parser } = set_up(input)
+      assert.deepEqual(parser(input), output)
+    })
+  })
+})
+
+describe('yaml format - columns component', function() {
+  const set_up = function(safeLoadSpyReturns) {
+    const injector = require('inject-loader!./parser.js')
+    const safeLoadSpy = sinon.spy(x => x)
+    const parser = injector({
+      'js-yaml': {'safeLoad': safeLoadSpy},
+    }).default
+
+    return { parser }
+  }
+
+  const tests = [
+    {
+      'input': {'columns': []},
+      'output': {
+        'component': 'columns',
+        'data': []
+      }
+    },
+    {
+      'input': {'columns': [{'columns': []}]},
+      'output': {
+        'component': 'columns',
+        'data': [{
+          'component': 'columns',
+          'data': []
+        }]
+      }
+    },
+    {
+      'input': {'3 columns': [{'columns': []}]},
+      'output': {
+        'component': 'columns',
+        'args': {'columns': 3},
+        'data': [{
+          'component': 'columns',
+          'data': []
+        }]
+      }
+    },
+    {
+      'input': {'5 columns': [{'columns': []}]},
+      'output': {
+        'component': 'columns',
+        'args': {'columns': 5},
+        'data': [{
+          'component': 'columns',
+          'data': []
+        }]
+      }
+    },
+    {
+      'input': {'5 columns': [{'rows': []}, {'columns': []}]},
+      'output': {
+        'component': 'columns',
+        'args': {'columns': 5},
+        'data': [
+          {
+            'component': 'rows',
+            'data': []
+          },
+          {
+          'component': 'columns',
+          'data': []
+        }]
+      }
+    },
+  ]
+
+
+  tests.forEach(function({input, output}) {
+    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]].length}`, function() {
+      const { parser } = set_up(input)
+      assert.deepEqual(parser(input), output)
+    })
+  })
+})

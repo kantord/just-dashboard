@@ -10,7 +10,20 @@ const rules = [
     'component': 'text',
     'args': {'tagName': match[1]},
     'data': value
-  })]
+  })],
+  [[/rows/], (match, value) => ({
+      'component': 'rows',
+      'data': value.map(parser)
+  })],
+  [[/([1-9]+) columns/], (match, value) => ({
+    'component': 'columns',
+    'args': {'columns': match[1] * 1},
+    'data': value.map(parser)
+  })],
+  [[/columns/], (match, value) => ({
+      'component': 'columns',
+      'data': value.map(parser)
+  })],
 ]
 
 

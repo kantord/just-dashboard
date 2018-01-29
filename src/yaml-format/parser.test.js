@@ -291,3 +291,50 @@ describe('yaml format - columns component', function() {
     })
   })
 })
+
+describe('yaml format - chart component', function() {
+  const set_up = function(safeLoadSpyReturns) {
+    const injector = require('inject-loader!./parser.js')
+    const safeLoadSpy = sinon.spy(x => x)
+    const parser = injector({
+      'js-yaml': {'safeLoad': safeLoadSpy},
+    }).default
+
+    return { parser }
+  }
+
+  const tests = [
+    {
+      'input': {'pie chart': []},
+      'output': {
+        'component': 'chart',
+        'type': {'type': 'pie'},
+        'data': []
+      }
+    },
+    {
+      'input': {'bar chart': []},
+      'output': {
+        'component': 'chart',
+        'type': {'type': 'bar'},
+        'data': []
+      }
+    },
+    {
+      'input': {'bar chart': 'foo'},
+      'output': {
+        'component': 'chart',
+        'type': {'type': 'bar'},
+        'data': 'foo'
+      }
+    },
+  ]
+
+
+  tests.forEach(function({input, output}) {
+    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]]}`, function() {
+      const { parser } = set_up(input)
+      assert.deepEqual(parser(input), output)
+    })
+  })
+})

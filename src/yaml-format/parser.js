@@ -24,6 +24,11 @@ const rules = [
       'component': 'columns',
       'data': value.map(parser)
   })],
+  [[/([a-z]+) chart/], (match, value) => ({
+    'component': 'chart',
+    'type': {'type': match[1]},
+    'data': value
+  })]
 ]
 
 

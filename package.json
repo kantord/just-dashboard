@@ -1,6 +1,6 @@
 {
   "name": "just-dashboard",
-  "version": "0.0.1",
+  "version": "0.0.0-development",
   "description": "",
   "main": "dist/dashboard.js",
   "module": "src/index.js",
@@ -15,7 +15,8 @@
     "lint:fix": "eslint src --fix",
     "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text npm run test",
     "analyze": "webpack --profile --json > stats.json",
-    "manual-test": "webpack-dev-server './src/manual_test.js' --hot --inline --output-filename 'manual_test.js'"
+    "manual-test": "webpack-dev-server './src/manual_test.js' --hot --inline --output-filename 'manual_test.js'",
+    "semantic-release": "semantic-release"
   },
   "keywords": [],
   "author": "",
@@ -78,5 +79,9 @@
     ],
     "sourceMap": false,
     "instrument": false
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kantord/dashboard.git"
   }
 }

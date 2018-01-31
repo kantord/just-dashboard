@@ -42,7 +42,7 @@
     "babel-register": "^6.26.0",
     "css-loader": "^0.28.8",
     "docdash": "^0.4.0",
-    "eslint": "^4.15.0",
+    "eslint": "^4.16.0",
     "eslint-loader": "^1.9.0",
     "fake-style-loader": "^1.0.1",
     "file-loader": "^1.1.6",

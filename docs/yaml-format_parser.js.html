@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>yaml-format/parser.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-components_chart.html">components/chart</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-components_columns.html">components/columns</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-components_root.html">components/root</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-components_rows.html">components/rows</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-components_text.html">components/text</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#parse">parse</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#parser">parser</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">yaml-format/parser.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import yaml from 'js-yaml'
+
+const rules = [
+  [[/dashboard ["]([^"]*)["]/, /dashboard [']([^']*)[']/], (match, value) => ({
+    'component': 'root',
+    'args': {'title': match[1]},
+    'data': value.map(parser)
+  })],
+  [[/(.*) text/], (match, value) => ({
+    'component': 'text',
+    'args': {'tagName': match[1]},
+    'data': value
+  })],
+  [[/rows/], (match, value) => ({
+    'component': 'rows',
+    'data': value.map(parser)
+  })],
+  [[/([1-9]+) columns/], (match, value) => ({
+    'component': 'columns',
+    'args': {'columns': match[1] * 1},
+    'data': value.map(parser)
+  })],
+  [[/columns/], (match, value) => ({
+    'component': 'columns',
+    'data': value.map(parser)
+  })],
+  [[/([a-z]+) chart/], (match, value) => ({
+    'component': 'chart',
+    'args': {'type': match[1]},
+    'data': value
+  })]
+]
+
+const handle_urls = (component) => {
+  if (typeof component.data === 'string' &amp;&amp; component.data.match(/https?:/))
+    return {
+      'component': component.component,
+      'args': Object.assign({
+        'loader': component.data.match(/https?.*\.(.*)$/)[1]
+      }, component.args),
+      'data': component.data
+    }
+
+  return component
+}
+
+const handle_attr_syntax = (component) => {
+  if (component.data.map === undefined) return component
+  const attrs = component.data.filter((x) => Object.keys(x)[0].match(/attr:.*/))
+  if (attrs.length === 0) return component
+
+  const mapped_attrs = attrs.map((x) => [Object.keys(x)[0], Object.values(x)[0]])
+  let parsed_args = {}
+  mapped_attrs.map((value) => parsed_args[value[0].match(/attr:(.*)/)[1]] = value[1])
+
+  return {
+    'component': component.component,
+    'args': Object.assign(parsed_args, component.args ? component.args : {}),
+    'data': component.data.filter((x) => Object.keys(x)[0] === 'data')[0].data
+  }
+}
+
+
+
+/**
+ * Compiles a YAML dashboard file into a JSON dashboard file
+ * @param {string} input - YAML input
+ * @returns {object}
+ */
+const parser = (input) => {
+  const yaml_contents = (typeof input === 'string') ? yaml.safeLoad(input) : input
+  if (yaml_contents === undefined)
+    throw new Error('A non-empty input file is required')
+
+  const key = Object.keys(yaml_contents)[0]
+  const value = Object.values(yaml_contents)[0]
+
+  for (const rule of rules) {
+    const [ patterns, func ] = rule
+    for (const pattern of patterns) {
+      if (key.match(pattern)) return handle_urls(handle_attr_syntax(func(key.match(pattern), value)))
+    }
+  }
+
+  return yaml_contents
+}
+
+export default parser
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 31 2018 19:46:51 GMT+0100 (CET) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

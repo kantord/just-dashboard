@@ -1,4 +1,4 @@
-# dashboard [![Travis](https://img.shields.io/travis/kantord/dashboard.svg)]() [![Codecov](https://img.shields.io/codecov/c/github/kantord/dashboard.svg)]()
+# just-dashboard [![Travis](https://img.shields.io/travis/kantord/just-dashboard.svg)]() [![Codecov](https://img.shields.io/codecov/c/github/kantord/just-dashboard.svg)]()
 
 
 Turn this:

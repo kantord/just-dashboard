@@ -1,10 +1,15 @@
 import should from 'should' // eslint-disable-line no-unused-vars
 import TextComponent from './Text'
 import assert from 'assert'
-var jsdom = require('mocha-jsdom')
 
 describe('Text component', function() {
-  jsdom({'useEach': true})
+  beforeEach(function () {
+    this.jsdom = require('jsdom-global')()
+  })
+
+  afterEach(function () {
+    this.jsdom()
+  })
 
   const get_render_function = (component_args) => {
     const bind = TextComponent(component_args)

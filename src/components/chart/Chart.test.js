@@ -1,11 +1,16 @@
 import should from 'should' // eslint-disable-line no-unused-vars
 import sinon from 'sinon'
 const ChartComponentInjector = require('inject-loader!./Chart')
-var jsdom = require('mocha-jsdom')
 
 
 describe('ChartComponent', function() {
-  jsdom({'useEach': true})
+  beforeEach(function () {
+    this.jsdom = require('jsdom-global')()
+  })
+
+  afterEach(function () {
+    this.jsdom()
+  })
 
   const call_render_with = (args) => {
     const fake_generate = sinon.spy()

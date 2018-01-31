@@ -61,6 +61,12 @@ const handle_attr_syntax = (component) => {
 }
 
 
+
+/**
+ * Compiles a YAML dashboard file into a JSON dashboard file
+ * @param {string} input - YAML input
+ * @returns {object}
+ */
 const parser = (input) => {
   const yaml_contents = (typeof input === 'string') ? yaml.safeLoad(input) : input
   if (yaml_contents === undefined)

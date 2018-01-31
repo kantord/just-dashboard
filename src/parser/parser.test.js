@@ -2,14 +2,20 @@ import should from 'should' // eslint-disable-line no-unused-vars
 import parse from './parser'
 import sinon from 'sinon'
 import RootComponent from '../components/root/Root.js'
-var jsdom = require('mocha-jsdom')
 require('should-sinon')
 import assert from 'assert'
 import * as d3 from 'd3'
 
 
 describe('Parser', function() {
-  jsdom()
+  beforeEach(function () {
+    this.jsdom = require('jsdom-global')()
+  })
+
+  afterEach(function () {
+    this.jsdom()
+  })
+
 
   it('should throw when called with empty object', () => {
     (() => {parse()({})}).should.throw('Argument \'component\' is required but not supplied.')

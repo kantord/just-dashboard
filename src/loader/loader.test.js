@@ -1,12 +1,9 @@
 import should from 'should' // eslint-disable-line no-unused-vars
 import loader from './loader'
 import sinon from 'sinon'
-var jsdom = require('mocha-jsdom')
 
 
 describe('Loader', function() {
-  jsdom()
-
   it('calls require with correct argument', () => {
     const fake_require = sinon.spy()
     loader(fake_require)('root')

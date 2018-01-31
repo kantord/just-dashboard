@@ -1,11 +1,16 @@
 import should from 'should' // eslint-disable-line no-unused-vars
 import sinon from 'sinon'
-var jsdom = require('mocha-jsdom')
 import Wrapped from './wrapped'
 import assert from 'assert'
 
 describe('Wrapped', function() {
-  jsdom({'useEach': true})
+  beforeEach(function () {
+    this.jsdom = require('jsdom-global')()
+  })
+
+  afterEach(function () {
+    this.jsdom()
+  })
 
   const call_render_with = () => {
     const d3 = require('d3')

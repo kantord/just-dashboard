@@ -1,10 +1,15 @@
 import should from 'should' // eslint-disable-line no-unused-vars
 import * as d3 from 'd3'
 import assert from 'assert'
-var jsdom = require('mocha-jsdom')
 
 describe('Rows component', function() {
-  jsdom({'useEach': true})
+  beforeEach(function () {
+    this.jsdom = require('jsdom-global')()
+  })
+
+  afterEach(function () {
+    this.jsdom()
+  })
 
   it('integration test', () => {
     const test_parser = require('../../test_parser.js').default

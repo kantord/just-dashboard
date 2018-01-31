@@ -2,7 +2,7 @@
     "opts": {
         "template": "node_modules/minami",
         "encoding": "utf8",
-        "destination": "./out/",
+        "destination": "./docs/",
         "recurse": true
     },
     "plugins": ["plugins/markdown", "node_modules/jsdoc-babel"],

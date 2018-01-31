@@ -2,10 +2,16 @@ import Component from './base_component'
 import sinon from 'sinon'
 import assert from 'assert'
 import * as d3 from 'd3'
-var jsdom = require('mocha-jsdom')
 
 describe('Component', function() {
-  jsdom({'useEach': true})
+
+  beforeEach(function () {
+    this.jsdom = require('jsdom-global')()
+  })
+
+  afterEach(function () {
+    this.jsdom()
+  })
 
   const call_test_component_with = (args) => {
     const injector = require('inject-loader!./base_component.js')

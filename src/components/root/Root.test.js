@@ -1,10 +1,15 @@
 import should from 'should' // eslint-disable-line no-unused-vars
 import * as d3 from 'd3'
 import assert from 'assert'
-var jsdom = require('mocha-jsdom')
 
 describe('Root component', function() {
-  jsdom({'useEach': true})
+  beforeEach(function () {
+    this.jsdom = require('jsdom-global')()
+  })
+
+  afterEach(function () {
+    this.jsdom()
+  })
 
   beforeEach(function () {
     document.head.innerHTML = '<title>foobar</title>'

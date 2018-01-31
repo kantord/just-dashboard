@@ -3,10 +3,15 @@ import * as d3 from 'd3'
 import assert from 'assert'
 import Component from '../components/base_component.js'
 import sinon from 'sinon'
-var jsdom = require('mocha-jsdom')
 
 describe('base container component', function() {
-  jsdom({'useEach': true})
+  beforeEach(function () {
+    this.jsdom = require('jsdom-global')()
+  })
+
+  afterEach(function () {
+    this.jsdom()
+  })
 
   beforeEach(function () {
     document.head.innerHTML = '<title>foobar</title>'

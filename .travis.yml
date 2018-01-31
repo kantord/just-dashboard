@@ -12,3 +12,9 @@ script:
   - npm run lint
   - npm run coverage
   - cat ./coverage/lcov.info | codecov
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script:
+    - npx semantic-release

@@ -1,7 +1,7 @@
 language: node_js
 sudo: true
 node_js:
-  - "7"
+  - "8"
 install:
   - npm install -g codecov
   - npm install -g cross-env
@@ -17,4 +17,4 @@ deploy:
   provider: script
   skip_cleanup: true
   script:
-    - npx semantic-release
+    - npm run semantic-release

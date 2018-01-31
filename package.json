@@ -58,6 +58,7 @@
     "node-sass": "^4.7.2",
     "nyc": "^11.4.1",
     "sass-loader": "^6.0.6",
+    "semantic-release": "^12.4.1",
     "should": "^13.2.1",
     "should-sinon": "0.0.6",
     "sinon": "^4.2.2",

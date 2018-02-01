@@ -8,13 +8,13 @@ const set_values = (selection) => selection
 
 const enter = (selection) => selection
   .enter()
-    .append('option')
-    .attr('class', 'ds--select-option')
-    .call(set_values)
+  .append('option')
+  .attr('class', 'ds--select-option')
+  .call(set_values)
 
 const exit = (selection) => selection
   .exit()
-    .remove()
+  .remove()
 
 const update = (selection) => selection
   .call(set_values)

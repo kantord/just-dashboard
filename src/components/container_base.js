@@ -3,6 +3,7 @@ import Component from './base_component.js'
 
 const ContainerComponent = ({ wrapper_tag, wrapper_class, validators, init }) => Component({
   'render': (args, selection, data) => {
+    selection.selectAll(wrapper_tag).remove()
     if (data instanceof Array) data.map((definition) => {
       const wrapper = selection
         .append(wrapper_tag)

@@ -44,7 +44,7 @@ describe('base container component', function() {
     const render = bind(d3.selection())
     render(args.render_args)
 
-    return { my_component_func }
+    return { my_component_func, render }
   }
 
   it('render child element', function() {
@@ -166,6 +166,24 @@ describe('base container component', function() {
       'init': my_init,
       'validators': sinon.match.any
     })
+  })
+
+  it('only new component is visible after second render', () => {
+    const { render } = call_render_with({
+      'parser': (component) => (selection) => selection.append(component.component),
+      'component_args': {'title': ''},
+      'wrapper_tag': 'span', 'wrapper_class': 'bar',
+      'render_args': [
+        { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
+        { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
+      ]
+    })
+    assert.equal(d3.selection().selectAll('text').size(), 2)
+    render([
+      {'component': 'text2', 'args': {}, 'data': null}
+    ])
+    assert.equal(d3.selection().selectAll('text2').size(), 1)
+    assert.equal(d3.selection().selectAll('text').size(), 0)
   })
 
 

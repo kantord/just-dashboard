@@ -24,7 +24,7 @@
   "dependencies": {
     "billboard.js": "^1.2.0",
     "d3": "^4.13.0",
-    "jq-web": "^0.1.3",
+    "jq-in-the-browser": "^0.7.0",
     "sassline": "^2.1.2",
     "spinkit": "^1.2.5"
   },

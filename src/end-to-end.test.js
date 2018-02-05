@@ -21,9 +21,9 @@ describe('End-to-end test', function() {
     - data: ["Hello", "World!"]`)
     json_parser(parsed_yaml)(selection)
     setTimeout(function() {
-        assert.equal(selection.select("h1").text(), "Hello")
-        assert.equal(selection.select("h2").text(), "Hello World!")
-        done();
-    }, 200);
+      assert.equal(selection.select('h1').text(), 'Hello')
+      assert.equal(selection.select('h2').text(), 'Hello World!')
+      done()
+    }, 200)
   })
 })

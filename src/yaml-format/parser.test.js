@@ -528,3 +528,61 @@ describe('integration tests', () => {
     assert.deepEqual(parser(text), value)
   })
 })
+
+describe('yaml format - dropdown component', function() {
+  const set_up = function(safeLoadSpyReturns) {
+    const injector = require('inject-loader!./parser.js')
+    const safeLoadSpy = sinon.stub().returns(safeLoadSpyReturns)
+    const parser = injector({
+      'js-yaml': {'safeLoad': safeLoadSpy},
+    }).default
+
+    return { parser }
+  }
+
+  const tests = [
+    {
+      'input': {'dropdown foo=bar': []},
+      'output': {
+        'component': 'dropdown',
+        'args': {'variable': 'foo', 'default': 'bar'},
+        'data': []
+      }
+    },
+    {
+      'input': {'dropdown foo=3.14': []},
+      'output': {
+        'component': 'dropdown',
+        'args': {'variable': 'foo', 'default': '3.14'},
+        'data': []
+      }
+    },
+    {
+      'input': {'dropdown name3=3.14': []},
+      'output': {
+        'component': 'dropdown',
+        'args': {'variable': 'name3', 'default': '3.14'},
+        'data': []
+      }
+    },
+    {
+      'input': {'dropdown name3=3.14': 42},
+      'output': {
+        'component': 'dropdown',
+        'args': {'variable': 'name3', 'default': '3.14'},
+        'data': 42
+      }
+    },
+  ]
+
+
+  tests.forEach(function({input, output}) {
+    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]]}`, function() {
+      const { parser } = set_up(input)
+      assert.deepEqual(parser(''), output)
+    })
+  })
+})
+
+
+

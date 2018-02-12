@@ -28,6 +28,11 @@ const rules = [
     'component': 'chart',
     'args': {'type': match[1]},
     'data': value
+  })],
+  [[/dropdown ([^=]+)=(.*)/], (match, value) => ({
+    'component': 'dropdown',
+    'args': {'variable': match[1], 'default': match[2]},
+    'data': value
   })]
 ]
 

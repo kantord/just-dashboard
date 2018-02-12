@@ -31,4 +31,4 @@ dashboard "Food":
 ```
 
 Into this:
-http://bottoml.in/e/kantord/2973bdd4ad689642562018bb4091ffbd
+<http://bottoml.in/e/kantord/2973bdd4ad689642562018bb4091ffbd>

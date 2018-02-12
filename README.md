@@ -2,7 +2,7 @@
 
 
 Turn this:
-```
+```yaml
 dashboard "Food":
   - h1 text: Food
   - h2 text: By caloric content
@@ -60,7 +60,7 @@ And one with a dashboard that contains a component that can fetch the data from
 other other gist and turn it into 3 different charts, just like in the manually
 created example above:
 
-```
+```yaml
 dashboard "Food":
   - h1 text: Food
   - h2 text: By caloric content

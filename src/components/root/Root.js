@@ -32,8 +32,14 @@ const RootComponent = Component({
   'init': (args, selection) => selection.select('title').text(args.title),
   'render': (args, selection, data) => {
     const body = selection.select('body')
-    if (data instanceof Array) data.map((definition) => default_parser(definition)(
-      body.append('div').attr('class', 'ds--wrapper')))
+    if (data instanceof Array) data.map((definition) => {
+      const updated_definition = Object.assign({}, definition)
+      if (args.state_handler !== undefined) {
+        updated_definition.args.init_variable = args.state_handler.init_variable
+        updated_definition.args.set_variable = args.state_handler.set_variable
+      }
+      default_parser(updated_definition)(body.append('div').attr('class', 'ds--wrapper'))
+    })
   }
 })
 

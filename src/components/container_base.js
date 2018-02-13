@@ -8,7 +8,10 @@ const ContainerComponent = ({ wrapper_tag, wrapper_class, validators, init }) =>
       const wrapper = selection
         .append(wrapper_tag)
         .attr('class', wrapper_class)
-      default_parser(definition)(wrapper)
+      const updated_definition = Object.assign({}, definition)
+      if (args !== undefined) updated_definition.args.init_variable = args.init_variable
+      if (args !== undefined) updated_definition.args.set_variable = args.set_variable
+      default_parser(updated_definition)(wrapper)
     })
   },
   'init': init,

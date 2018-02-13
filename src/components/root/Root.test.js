@@ -1,6 +1,7 @@
 import should from 'should' // eslint-disable-line no-unused-vars
 import * as d3 from 'd3'
 import assert from 'assert'
+import sinon from 'sinon'
 
 describe('Root component', function() {
   beforeEach(function () {
@@ -108,6 +109,38 @@ describe('Root component', function() {
       ]
     })
     assert.equal(d3.selection().selectAll('.ds--wrapper').size(), 2)
+  })
+
+  it('variables are initialized in state', function() {
+    const state_handler = {'init_variable': sinon.spy()}
+    const my_default = sinon.spy()
+    call_render_with({
+      'parser': (component) => () => component.args.init_variable(
+        component.args.variable, component.args.default),
+      'component_args': {'title': 'x', 'state_handler': state_handler},
+      'render_args': [
+        { 'component': 'dropdown', 'args': {
+          'default': my_default, 'variable': 'foo',
+        }, 'data': [] }
+      ]
+    })
+    state_handler.init_variable.should.be.calledWith('foo', my_default)
+  })
+
+  it('variables are updated in state', function() {
+    const state_handler = {'set_variable': sinon.spy()}
+    const my_default = sinon.spy()
+    call_render_with({
+      'parser': (component) => () => component.args.set_variable(
+        component.args.variable, component.args.default),
+      'component_args': {'title': 'x', 'state_handler': state_handler},
+      'render_args': [
+        { 'component': 'dropdown', 'args': {
+          'default': my_default, 'variable': 'foo',
+        }, 'data': [] }
+      ]
+    })
+    state_handler.set_variable.should.be.calledWith('foo', my_default)
   })
 
 })

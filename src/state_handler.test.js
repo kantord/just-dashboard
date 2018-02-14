@@ -37,6 +37,17 @@ describe('state handler', () => {
     })
   })
 
+  it('init_variable does not update state if variable is defined', () => {
+    const state_handler = create_state_handler()
+    state_handler.init_variable('bar', false)
+    state_handler.init_variable('pi', 3.14)
+    state_handler.init_variable('pi', -3.14)
+    state_handler.get_state().should.deepEqual({
+      'bar': false,
+      'pi': 3.14
+    })
+  })
+
   it('set_variable should update state', () => {
     const state_handler = create_state_handler()
     state_handler.set_variable('foo', 42)
@@ -87,6 +98,15 @@ describe('state handler', () => {
     state_handler.subscribe(my_callback)
     state_handler.set_variable('foo', 42)
     state_handler.set_variable('foo', 42)
+    my_callback.should.be.calledOnce()
+  })
+
+  it('no state change if init_variable is called twice on the same variable', () => {
+    const my_callback = sinon.spy(function() {state_handler.subscribe(my_callback)})
+    const state_handler = create_state_handler()
+    state_handler.subscribe(my_callback)
+    state_handler.init_variable('foo', 42)
+    state_handler.init_variable('foo', 42)
     my_callback.should.be.calledOnce()
   })
 

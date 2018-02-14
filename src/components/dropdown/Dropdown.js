@@ -35,7 +35,8 @@ const DropdownComponent = Component({
   'render': (args, selection, data, item) => {
     item
       .selectAll('option').data(data).call(update_pattern)
-
+    item
+      .property('value', args.state_handler.get_state()[args.variable])
     item
       .on('change', function() {
         args.state_handler.set_variable(args.variable, d3.select(this).property('value'))

@@ -26,7 +26,9 @@ describe('Text component', function() {
     const d3 = require('d3')
     const init_variable = sinon.spy()
     const set_variable = sinon.spy()
-    const state_handler = { init_variable, set_variable }
+    const get_state = sinon.stub().returns(args.state || {})
+    const subscribe = sinon.spy()
+    const state_handler = { init_variable, set_variable, get_state, subscribe }
     const component_args = Object.assign(args.args, {
       state_handler
     })
@@ -137,6 +139,18 @@ describe('Text component', function() {
     d3.select('select').property('value', 'baz')
     d3.select('select').dispatch('change')
     set_variable.should.be.calledWith('my_var', 'baz')
+  })
+
+  it('correct value should be selected based on state', () => {
+    const d3 = require('d3')
+    const { set_variable } = call_render_with({
+      'args': {'variable': 'my_var', 'default': '0'},
+      'state': {'my_var': 1},
+      'data': [
+        { 'text': 'foo', 'value': '0' },
+        { 'text': 'bar', 'value': '1' },
+      ]})
+    assert.equal(d3.select('select').node().value, '1')
   })
 
 })

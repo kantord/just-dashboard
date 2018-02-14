@@ -26,9 +26,9 @@ describe('Text component', function() {
     const d3 = require('d3')
     const init_variable = sinon.spy()
     const set_variable = sinon.spy()
+    const state_handler = { init_variable, set_variable }
     const component_args = Object.assign(args.args, {
-      'init_variable': init_variable,
-      'set_variable': set_variable,
+      state_handler
     })
     const render = DropdownComponent(component_args)(d3.selection())
     render(args.data)

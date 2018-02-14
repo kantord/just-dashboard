@@ -28,7 +28,7 @@ const DropdownComponent = Component({
     required('variable'), regexp('variable', /^[A-Za-z]([_A-Za-z0-9-]*[_A-Za-z0-9])?$/),
     required('default')],
   'init': (args, selection) => {
-    args.init_variable(args.variable, args.default)
+    args.state_handler.init_variable(args.variable, args.default)
     return selection
       .append('select').attr('class', 'ds--select')
   },
@@ -38,7 +38,7 @@ const DropdownComponent = Component({
 
     item
       .on('change', function() {
-        args.set_variable(args.variable, d3.select(this).property('value'))
+        args.state_handler.set_variable(args.variable, d3.select(this).property('value'))
       })
   }
 })

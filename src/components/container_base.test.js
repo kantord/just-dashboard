@@ -186,22 +186,19 @@ describe('base container component', function() {
     assert.equal(d3.selection().selectAll('text').size(), 0)
   })
 
-  it('passes on init_variable and set_variable', () => {
+  it('passes on state_handler', () => {
     const fake_parser = sinon.stub().returns(sinon.spy())
-    const init_variable = sinon.spy()
-    const set_variable = sinon.spy()
+    const state_handler = sinon.spy()
     call_render_with({
       'parser': fake_parser,
-      'component_args': {'title': '', 'init_variable': init_variable,
-        'set_variable': set_variable},
+      'component_args': {'title': '', 'state_handler': state_handler,},
       'render_args': [
-        { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
+        { 'component': 'text', 'data': 'My title' },
       ]
     })
     fake_parser.should.be.calledWith({
       'component': sinon.match.any,
-      'args': {'tagName': 'h1', 'init_variable': init_variable,
-        'set_variable': set_variable},
+      'args': {'state_handler': state_handler},
       'data': sinon.match.any,
     })
   })

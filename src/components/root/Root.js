@@ -34,10 +34,7 @@ const RootComponent = Component({
     const body = selection.select('body')
     if (data instanceof Array) data.map((definition) => {
       const updated_definition = Object.assign({}, definition)
-      if (args.state_handler !== undefined) {
-        updated_definition.args.init_variable = args.state_handler.init_variable
-        updated_definition.args.set_variable = args.state_handler.set_variable
-      }
+      updated_definition.args.state_handler = args.state_handler
       default_parser(updated_definition)(body.append('div').attr('class', 'ds--wrapper'))
     })
   }

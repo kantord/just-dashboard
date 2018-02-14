@@ -1,5 +1,6 @@
 import * as d3 from 'd3'
 import jq from '../jq-web.js'
+import { format_value } from '../interpolation.js'
 
 const loaders = {
   'csv': d3.csv,
@@ -75,11 +76,33 @@ const handle_external_data = (instance_args, selection, raw_data) => (resolve) =
 
 const create_bind_function = (args, instance_args) => (selection) => {
   validate_selection(selection)
-  const element = create_element(args.init, instance_args, selection)
+  const element = create_element(args.init, format_arguments(instance_args), selection)
+
   return (raw_data) => {
-    handle_external_data(instance_args, selection, raw_data)(
-      render_component(args, instance_args, selection, element))
+    const render_ = () => handle_external_data(instance_args, selection, raw_data)(
+      render_component(args, format_arguments(instance_args), selection, element))
+    if (has_state_handler(instance_args)) {
+      instance_args.state_handler.subscribe((state_handler, me) => {
+        element.remove()
+        create_element(args.init, format_arguments(instance_args), selection)
+        state_handler.subscribe(me)
+        render_()
+      })
+    }
+    render_()
   }
+}
+
+const has_state_handler = (args) => {
+  if (args === undefined) return false
+  if (args.state_handler === undefined) return false
+  if (args.state_handler.get_state === undefined) return false
+  return true
+}
+
+const format_arguments = (args) => {
+  if (!has_state_handler(args)) return args
+  return format_value(args, args.state_handler.get_state())
 }
 
 const create_component_function = (args) => (instance_args) => {

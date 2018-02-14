@@ -14,9 +14,10 @@ describe('Columns component', function() {
   it('integration test', () => {
     const test_parser = require('../../test_parser.js').default
     const bind = test_parser({
-      'component': 'root', 'args': { 'title': '' },
+      'component': 'root', 'args': { 'title': '', 'state_handler': {} },
       'data': [
         {'component': 'columns',
+          'args': {'state_handler': {}},
           'data': [
             {'component': 'text', 'args': {'tagName': 'h4'}, 'data': 'random'}
           ]
@@ -30,7 +31,7 @@ describe('Columns component', function() {
   it('integration test - non default column count', () => {
     const test_parser = require('../../test_parser.js').default
     const bind = test_parser({
-      'component': 'root', 'args': { 'title': '' },
+      'component': 'root', 'args': { 'title': '', 'state_handler': {} },
       'data': [
         {'component': 'columns',
           'args': {'columns': 3},

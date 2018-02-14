@@ -115,7 +115,7 @@ describe('Root component', function() {
     const state_handler = {'init_variable': sinon.spy()}
     const my_default = sinon.spy()
     call_render_with({
-      'parser': (component) => () => component.args.init_variable(
+      'parser': (component) => () => component.args.state_handler.init_variable(
         component.args.variable, component.args.default),
       'component_args': {'title': 'x', 'state_handler': state_handler},
       'render_args': [
@@ -131,7 +131,7 @@ describe('Root component', function() {
     const state_handler = {'set_variable': sinon.spy()}
     const my_default = sinon.spy()
     call_render_with({
-      'parser': (component) => () => component.args.set_variable(
+      'parser': (component) => () => component.args.state_handler.set_variable(
         component.args.variable, component.args.default),
       'component_args': {'title': 'x', 'state_handler': state_handler},
       'render_args': [

@@ -19,8 +19,12 @@ describe('Component', function() {
       (args.dont_execute_query === true) ? {'then': () => null}
         : {'then': (x) => x(args.jq_return_value)}
     )
+    const format_value = sinon.stub()
+      .onCall(0).returns(args.format_value_return)
+      .returns(args.format_value_return2)
     const Component = injector({
-      '../jq-web.js': jq
+      '../jq-web.js': jq,
+      '../interpolation.js': {'format_value': format_value}
     }).default
 
     const my_init = sinon.stub().returns(args.element)
@@ -35,7 +39,7 @@ describe('Component', function() {
     const my_selection = d3.selection()
     const render = bind(my_selection)
     render(args.data)
-    return { my_init, my_component, my_render, my_selection, render, jq }
+    return { my_init, my_component, my_render, my_selection, render, jq, format_value }
   }
 
   it('should require a render function', () => {
@@ -298,6 +302,175 @@ describe('Component', function() {
     const my_element = 11
     const { my_render } = call_test_component_with({'element': my_element, 'has_init': true})
     my_render.should.be.calledWith(sinon.match.any, sinon.match.any, sinon.match.any, my_element)
+  })
+
+  it('calls format_value with proper arguments', () => {
+    const state_handler = {
+      'subscribe': sinon.spy(),
+      'get_state': sinon.stub().returns({'x': '2'})}
+    const { format_value } = call_test_component_with({
+      'instance_args': {
+        '${x}2': ['${y}'],
+        'state_handler': state_handler
+      }
+    })
+    format_value.should.be.calledWith({
+      '${x}2': ['${y}'],
+      'state_handler': state_handler
+    }, {'x': '2'})
+  })
+
+  it('init should receive correct args', () => {
+    const state_handler = {
+      'subscribe': sinon.spy(),
+      'get_state': sinon.stub().returns({'x': '2', 'y': 'foo'})}
+    const { my_init } = call_test_component_with({
+      'instance_args': {
+        '${x}2': ['${y}'],
+        'state_handler': state_handler
+      },
+      'has_init': true,
+      'format_value_return': {
+        '22': ['foo'],
+        'state_handler': state_handler
+      }
+    })
+    my_init.should.be.called()
+    my_init.should.be.calledWith({
+      '22': ['foo'],
+      'state_handler': sinon.match.any
+    },
+    )
+  })
+
+  it('render should receive correct args', () => {
+    const state_handler = {
+      'subscribe': sinon.spy(),
+      'get_state': sinon.stub().returns({'x': '2', 'y': 'foo'})}
+    const { my_render } = call_test_component_with({
+      'instance_args': {
+        '${x}2': ['${y}'],
+        'state_handler': state_handler
+      },
+      'has_init': true,
+      'format_value_return': {
+        '22': ['foo'],
+        'state_handler': state_handler
+      },
+      'format_value_return2': {
+        '22': ['foo'],
+        'state_handler': state_handler
+      }
+    })
+    my_render.should.be.called()
+    my_render.should.be.calledWith({
+      '22': ['foo'],
+      'state_handler': sinon.match.any
+    },
+    )
+  })
+
+  it('subscribes to state changes', () => {
+    const state_handler = {
+      'get_state': sinon.spy(),
+      'subscribe': sinon.spy()}
+    const { my_render } = call_test_component_with({
+      'instance_args': {
+        'state_handler': state_handler
+      },
+      'has_init': true,
+    })
+    state_handler.subscribe.should.be.called()
+  })
+
+  it('re-subscribes to state changes', () => {
+    let callback
+    const state_handler = {
+      'get_state': sinon.spy(),
+      'subscribe': sinon.spy(function(f) {callback = f})}
+    const { my_render } = call_test_component_with({
+      'instance_args': {
+        'state_handler': state_handler
+      },
+      'element': {'remove': () => null},
+      'has_init': true,
+    })
+    callback(state_handler, callback)
+    state_handler.subscribe.should.be.calledTwice()
+  })
+
+  it('calls init with new arguments when variables change', () => {
+    let callback
+    const state_handler = {
+      'get_state': sinon.spy(),
+      'subscribe': sinon.spy(function(f) {callback = f})}
+    const { my_init } = call_test_component_with({
+      'instance_args': {
+        '${x}': '${y}',
+        'state_handler': state_handler
+      },
+      'has_init': true,
+      'element': {'remove': () => null},
+      'format_value_return2': {
+        'foo': 'bar',
+        'state_handler': sinon.match.any
+      }
+    })
+    state_handler.get_state = () => ({'x': 'foo', 'y': 'bar'})
+    callback(state_handler, callback)
+    my_init.should.be.calledWith(
+      {
+        'foo': 'bar',
+        'state_handler': sinon.match.any
+      },
+      sinon.match.any
+    )
+  })
+
+  it('when re-init happens, old element is deleted', () => {
+    let callback
+    const element = {'remove': sinon.spy()}
+    const state_handler = {
+      'get_state': sinon.spy(),
+      'subscribe': sinon.spy(function(f) {callback = f})}
+    const { my_init } = call_test_component_with({
+      'instance_args': {
+        '${x}': '${y}',
+        'state_handler': state_handler
+      },
+      'has_init': true,
+      'element': element,
+      'format_value_return2': {
+        'foo': 'bar',
+        'state_handler': sinon.match.any
+      }
+    })
+    state_handler.get_state = () => ({'x': 'foo', 'y': 'bar'})
+    callback(state_handler, callback)
+    element.remove.should.be.called()
+  })
+
+  it('when re-init happens, re-render happens', () => {
+    let callback
+    const element = {'remove': sinon.spy()}
+    const state_handler = {
+      'get_state': sinon.spy(),
+      'subscribe': sinon.spy(function(f) {callback = f})}
+    const { my_render } = call_test_component_with({
+      'instance_args': {
+        '${x}': '${y}',
+        'state_handler': state_handler
+      },
+      'has_init': true,
+      'element': element,
+      'format_value_return2': {
+        'foo': 'bar',
+        'state_handler': sinon.match.any
+      }
+    })
+    state_handler.get_state = () => ({'x': 'foo', 'y': 'bar'})
+    callback(state_handler, callback)
+    my_render.should.be.calledTwice()
   })
 
 })

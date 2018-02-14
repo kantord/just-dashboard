@@ -11,8 +11,10 @@ const create_state_handler = () => {
   const state_handler = {
     'get_state': () => state,
     'init_variable': (variable, value) => {
-      state[variable] = value
-      handle_change()
+      if (state[variable] === undefined) {
+        state[variable] = value
+        handle_change()
+      }
     },
     'set_variable': (variable, value) => {
       state[variable] = value

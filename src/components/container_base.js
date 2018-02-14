@@ -9,8 +9,8 @@ const ContainerComponent = ({ wrapper_tag, wrapper_class, validators, init }) =>
         .append(wrapper_tag)
         .attr('class', wrapper_class)
       const updated_definition = Object.assign({}, definition)
-      if (args !== undefined) updated_definition.args.init_variable = args.init_variable
-      if (args !== undefined) updated_definition.args.set_variable = args.set_variable
+      if (updated_definition.args === undefined) updated_definition.args = {}
+      if (args !== undefined) updated_definition.args.state_handler = args.state_handler
       default_parser(updated_definition)(wrapper)
     })
   },

@@ -1,11 +1,16 @@
 import should from 'should' // eslint-disable-line no-unused-vars
-import parse from './parser'
 import sinon from 'sinon'
 import RootComponent from '../components/root/Root.js'
 require('should-sinon')
 import assert from 'assert'
 import * as d3 from 'd3'
 
+
+const parse_injector = require('inject-loader!./parser.js')
+const fake_state_handler = sinon.spy()
+const parse = parse_injector({
+  '../state_handler.js': () => fake_state_handler
+}).default
 
 describe('Parser', function() {
   beforeEach(function () {
@@ -56,7 +61,19 @@ describe('Parser', function() {
     const my_selection = null
     const component = parse(fake_component_loader)({'component': 'foo', 'args': {'magic': 42}})
     component(my_selection)
-    fake_component.should.be.calledWith({'magic': 42})
+    fake_component.should.be.calledWith({'magic': 42, 'state_handler': sinon.match.any})
+  })
+
+  it('passes state handler to root', () => {
+    const fake_component = sinon.stub().returns(sinon.stub().returns(sinon.spy()))
+    const fake_component_loader = sinon.stub().returns(fake_component)
+    const my_selection = null
+    const component = parse(fake_component_loader)({'component': 'root', 'args': {'title': ''}})
+    component(my_selection)
+    fake_component.should.be.calledWith({
+      'title': '',
+      'state_handler': fake_state_handler
+    })
   })
 
   it('loaded component is bound to the selection the wrapper is bound to', () => {

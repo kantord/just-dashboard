@@ -12,6 +12,9 @@ const render_dashboard = (data) => {
 render_dashboard(`
 dashboard "Cereals":
   - h1 text: "Cereals"
+  - dropdown foo=bar:
+    - {"value": "bar", "text": "bar"}
+    - {"value": "baz", "text": "baz"}
   - h2 text: "By calories"
   - bar chart:
     - attr:query: '{"columns": [(sort_by(-(.calories | tonumber)) | .[] | [.name, .calories])]}'

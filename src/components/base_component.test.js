@@ -27,7 +27,9 @@ describe('Component', function() {
       '../interpolation.js': {'format_value': format_value}
     }).default
 
-    const my_init = sinon.stub().returns(args.element)
+    const my_init = sinon.stub()
+      .onCall(1).returns(args.element2)
+      .returns(args.element)
     const my_render = (args.render_func === undefined ) ? sinon.spy() : args.render_func
     const my_component = (args.has_init === true) ? Component({
       'render': my_render, 'validators': [], 'init': my_init
@@ -472,5 +474,31 @@ describe('Component', function() {
     callback(state_handler, callback)
     my_render.should.be.calledTwice()
   })
+
+  it('correct element is passed to render when re-init happens', () => {
+    let callback
+    const element = {'remove': sinon.spy()}
+    const element2 = {'remove': sinon.spy()}
+    const state_handler = {
+      'get_state': sinon.spy(),
+      'subscribe': sinon.spy(function(f) {callback = f})}
+    const { my_render } = call_test_component_with({
+      'instance_args': {
+        '${x}': '${y}',
+        'state_handler': state_handler
+      },
+      'has_init': true,
+      'element': element,
+      'element2': element2,
+      'format_value_return2': {
+        'foo': 'bar',
+        'state_handler': sinon.match.any
+      }
+    })
+    state_handler.get_state = () => ({'x': 'foo', 'y': 'bar'})
+    callback(state_handler, callback)
+    my_render.should.be.calledWith(sinon.match.any, sinon.match.any, sinon.match.any, element2)
+  })
+
 
 })

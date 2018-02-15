@@ -76,7 +76,7 @@ const handle_external_data = (instance_args, selection, raw_data) => (resolve) =
 
 const create_bind_function = (args, instance_args) => (selection) => {
   validate_selection(selection)
-  const element = create_element(args.init, format_arguments(instance_args), selection)
+  let element = create_element(args.init, format_arguments(instance_args), selection)
 
   return (raw_data) => {
     const render_ = () => handle_external_data(instance_args, selection, raw_data)(
@@ -84,7 +84,7 @@ const create_bind_function = (args, instance_args) => (selection) => {
     if (has_state_handler(instance_args)) {
       instance_args.state_handler.subscribe((state_handler, me) => {
         element.remove()
-        create_element(args.init, format_arguments(instance_args), selection)
+        element = create_element(args.init, format_arguments(instance_args), selection)
         state_handler.subscribe(me)
         render_()
       })

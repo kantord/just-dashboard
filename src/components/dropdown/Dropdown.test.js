@@ -27,7 +27,7 @@ describe('Text component', function() {
     const init_variable = sinon.spy()
     const set_variable = sinon.spy()
     const get_state = sinon.stub().returns(args.state || {})
-    const subscribe = sinon.spy()
+    const subscribe = (args.subscribe === undefined) ? sinon.spy() : args.subscribe
     const state_handler = { init_variable, set_variable, get_state, subscribe }
     const component_args = Object.assign(args.args, {
       state_handler
@@ -151,6 +151,22 @@ describe('Text component', function() {
         { 'text': 'bar', 'value': '1' },
       ]})
     assert.equal(d3.select('select').node().value, '1')
+  })
+
+  it('correct number of items after state change', () => {
+    let callback
+    const { d3, set_variable } = call_render_with({
+      'subscribe': (f) => {callback = f},
+      'args': {'variable': 'my_var', 'default': ''},
+      'data': [
+        { 'text': 'foo', 'value': 'fo' },
+        { 'text': 'bar', 'value': 'baz' },
+      ]})
+    assert.equal(d3.selectAll('option.ds--select-option').size(), 2, 'Correct number of items before change')
+    d3.select('select').property('value', 'baz')
+    d3.select('select').dispatch('change')
+    callback({'subscribe': sinon.spy()}, callback)
+    assert.equal(d3.selectAll('option.ds--select-option').size(), 2, 'Correct number of items after change')
   })
 
 })

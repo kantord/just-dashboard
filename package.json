@@ -23,8 +23,8 @@
   "license": "ISC",
   "dependencies": {
     "billboard.js": "^1.2.0",
-    "d3": "^4.13.0",
     "jq-web": "^0.2.0",
+    "d3": "^4.10.0",
     "sassline": "^2.1.2",
     "spinkit": "^1.2.5"
   },

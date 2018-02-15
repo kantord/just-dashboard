@@ -33,6 +33,7 @@ const DropdownComponent = Component({
       .append('select').attr('class', 'ds--select')
   },
   'render': (args, selection, data, item) => {
+    console.log("render", args, selection, data, item, args.state_handler.get_state()) // eslint-disable-line
     item
       .selectAll('option').data(data).call(update_pattern)
     item

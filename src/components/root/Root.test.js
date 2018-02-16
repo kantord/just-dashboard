@@ -143,4 +143,17 @@ describe('Root component', function() {
     state_handler.set_variable.should.be.calledWith('foo', my_default)
   })
 
+  it('superflous elements are removed', function() {
+    d3.select('body').append('div').attr('class', 'ds--wrapper')
+    call_render_with({
+      'parser': () => (selection) => selection.append('h1').text('My title'),
+      'component_args': {'title': ''},
+      'render_args': [
+        { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
+        { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
+      ]
+    })
+    assert.equal(d3.selection().selectAll('.ds--wrapper').size(), 2)
+  })
+
 })

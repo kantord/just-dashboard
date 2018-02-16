@@ -31,17 +31,19 @@ describe('Component', function() {
       .onCall(1).returns(args.element2)
       .returns(args.element)
     const my_render = (args.render_func === undefined ) ? sinon.spy() : args.render_func
+    const my_validator = sinon.spy()
+    const validators = [my_validator]
     const my_component = (args.has_init === true) ? Component({
-      'render': my_render, 'validators': [], 'init': my_init
+      'render': my_render, 'validators': validators, 'init': my_init
     }) : Component({
-      'render': my_render, 'validators': []
+      'render': my_render, 'validators': validators
     })
     const bind = my_component(args.instance_args)
     const d3 = require('d3')
     const my_selection = d3.selection()
     const render = bind(my_selection)
     render(args.data)
-    return { my_init, my_component, my_render, my_selection, render, jq, format_value }
+    return { my_init, my_component, my_render, my_selection, render, jq, format_value, my_validator }
   }
 
   it('should require a render function', () => {
@@ -335,9 +337,12 @@ describe('Component', function() {
       'format_value_return': {
         '22': ['foo'],
         'state_handler': state_handler
+      },
+     'format_value_return2': {
+        '22': ['foo'],
+        'state_handler': state_handler
       }
     })
-    my_init.should.be.called()
     my_init.should.be.calledWith({
       '22': ['foo'],
       'state_handler': sinon.match.any
@@ -492,7 +497,7 @@ describe('Component', function() {
       'element2': element2,
       'format_value_return2': {
         'foo': 'bar',
-        'state_handler': sinon.match.any
+        'state_handler': {}
       }
     })
     state_handler.get_state = () => ({'x': 'foo', 'y': 'bar'})
@@ -500,5 +505,17 @@ describe('Component', function() {
     my_render.should.be.calledWith(sinon.match.any, sinon.match.any, sinon.match.any, element2)
   })
 
+  it('returned component should call args validator with formatted args', () => {
+    const format_value_return = sinon.spy()
+    const { my_validator } = call_test_component_with({
+      'instance_args': {'state_handler': {
+        'get_state': sinon.stub(),
+        'subscribe': sinon.stub(),
+      }},
+      'format_value_return': format_value_return,
+      'format_value_return2': format_value_return
+    })
+    my_validator.should.be.alwaysCalledWith(format_value_return)
+  })
 
 })

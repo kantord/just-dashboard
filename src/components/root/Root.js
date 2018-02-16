@@ -32,6 +32,7 @@ const RootComponent = Component({
   'init': (args, selection) => selection.select('title').text(args.title),
   'render': (args, selection, data) => {
     const body = selection.select('body')
+    body.selectAll('*').remove()
     if (data instanceof Array) data.map((definition) => {
       const updated_definition = Object.assign({}, definition)
       updated_definition.args.state_handler = args.state_handler

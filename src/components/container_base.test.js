@@ -202,4 +202,18 @@ describe('base container component', function() {
       'data': sinon.match.any,
     })
   })
+
+  it('superfluous elements are removed', function() {
+    d3.selection().append('h1')
+    call_render_with({
+      'parser': () => (selection) => selection.append('h1').text('My title'),
+      'component_args': {'title': ''},
+      'wrapper_tag': 'span', 'wrapper_class': 'bar',
+      'render_args': [
+        { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
+        { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
+      ]
+    })
+    assert.equal(d3.selection().selectAll('h1').size(), 2)
+  })
 })

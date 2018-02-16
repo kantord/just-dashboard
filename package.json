@@ -64,7 +64,7 @@
     "should": "^13.2.1",
     "should-sinon": "0.0.6",
     "sinon": "^4.3.0",
-    "style-loader": "^0.20.1",
+    "style-loader": "^0.20.2",
     "stylish": "^1.0.0",
     "webpack": "^3.11.0",
     "webpack-dev-server": "^2.11.1",

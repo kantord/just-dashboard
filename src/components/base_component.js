@@ -75,6 +75,7 @@ const handle_external_data = (instance_args, selection, raw_data) => (resolve) =
     : resolve(raw_data)
 
 const create_bind_function = (args, instance_args) => (selection) => {
+  console.log('create bind functin called', args, instance_args, selection) // eslint-disable-line
   validate_selection(selection)
   let element = create_element(args.init, format_arguments(instance_args), selection)
 
@@ -106,7 +107,7 @@ const format_arguments = (args) => {
 }
 
 const create_component_function = (args) => (instance_args) => {
-  execute_validations(args.validators)(instance_args)
+  execute_validations(args.validators)(format_arguments(instance_args))
   return create_bind_function(args, instance_args)
 }
 

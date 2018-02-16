@@ -55,15 +55,6 @@ describe('Parser', function() {
     component.should.be.a.Function()
   })
 
-  it('passes arguments to component', () => {
-    const fake_component = sinon.stub().returns(sinon.stub().returns(sinon.spy()))
-    const fake_component_loader = sinon.stub().returns(fake_component)
-    const my_selection = null
-    const component = parse(fake_component_loader)({'component': 'foo', 'args': {'magic': 42}})
-    component(my_selection)
-    fake_component.should.be.calledWith({'magic': 42, 'state_handler': sinon.match.any})
-  })
-
   it('passes state handler to root', () => {
     const fake_component = sinon.stub().returns(sinon.stub().returns(sinon.spy()))
     const fake_component_loader = sinon.stub().returns(fake_component)
@@ -73,6 +64,17 @@ describe('Parser', function() {
     fake_component.should.be.calledWith({
       'title': '',
       'state_handler': fake_state_handler
+    })
+  })
+
+  it('only passes state handler to root', () => {
+    const fake_component = sinon.stub().returns(sinon.stub().returns(sinon.spy()))
+    const fake_component_loader = sinon.stub().returns(fake_component)
+    const my_selection = null
+    const component = parse(fake_component_loader)({'component': 'text', 'args': {'tagName': 'p'}})
+    component(my_selection)
+    fake_component.should.be.calledWith({
+      'tagName': 'p',
     })
   })
 

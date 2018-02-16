@@ -10,7 +10,8 @@ const parse = (component_loader) => (input) => {
 
   const component = component_loader(input.component)
   const args = Object.assign({}, input.args)
-  args.state_handler = create_state_handler()
+  if (input.component === 'root')
+    args.state_handler = create_state_handler()
   const bind = component(args)
 
   return (selection) => {

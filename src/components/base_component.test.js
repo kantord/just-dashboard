@@ -518,4 +518,38 @@ describe('Component', function() {
     my_validator.should.be.alwaysCalledWith(format_value_return)
   })
 
+  it('doesnt re-subscribe to state changes if element was deleted by parent component', () => {
+    let callback
+    const state_handler = {
+      'get_state': sinon.spy(),
+      'subscribe': sinon.spy(function(f) {callback = f})}
+    const { my_render } = call_test_component_with({
+      'instance_args': {
+        'state_handler': state_handler
+      },
+      'element': d3.select('body').append('div'),
+      'has_init': true
+    })
+    d3.select('div').remove()
+    callback(state_handler, callback)
+    state_handler.subscribe.should.be.calledOnce()
+  })
+
+  it('doenst re-init if element was deleted by parent component', () => {
+    let callback
+    const state_handler = {
+      'get_state': sinon.spy(),
+      'subscribe': sinon.spy(function(f) {callback = f})}
+    const { my_init } = call_test_component_with({
+      'instance_args': {
+        'state_handler': state_handler
+      },
+      'element': d3.select('body').append('div'),
+      'has_init': true
+    })
+    d3.select('div').remove()
+    callback(state_handler, callback)
+    my_init.should.be.calledOnce()
+  })
+
 })

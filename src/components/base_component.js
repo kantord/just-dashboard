@@ -83,7 +83,7 @@ const create_bind_function = (args, instance_args) => (selection) => {
       render_component(args, format_arguments(instance_args), selection, element))
     if (has_state_handler(instance_args)) {
       instance_args.state_handler.subscribe((state_handler, me) => {
-        if (element && element.node && !document.contains(element.node())) return
+        if (element === null || (element && element.node && !document.contains(element.node()))) return
         state_handler.subscribe(me)
         element.remove()
         element = create_element(args.init, format_arguments(instance_args), selection)

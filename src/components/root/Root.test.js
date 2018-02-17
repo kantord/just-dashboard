@@ -156,4 +156,17 @@ describe('Root component', function() {
     assert.equal(d3.selection().selectAll('.ds--wrapper').size(), 2)
   })
 
+  it('doesnt fail when component has no explicit args', function() {
+    d3.select('body').append('div').attr('class', 'ds--wrapper')
+    call_render_with({
+      'parser': () => (selection) => selection.append('h1').text('My title'),
+      'component_args': {'title': ''},
+      'render_args': [
+        { 'component': 'text', 'data': 'My title' },
+      ]
+    })
+  })
+
+
+
 })

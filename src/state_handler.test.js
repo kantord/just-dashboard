@@ -81,6 +81,17 @@ describe('state handler', () => {
       my_callback.should.be.calledWith(state_handler, my_callback)
     })
 
+    it(`callback should not be called when no actual change happens - ${method}`, () => {
+      const my_callback = sinon.spy()
+      const injector = require('inject-loader!./state_handler.js')
+      const state_handler = injector({
+          'lodash': {'isEqual': () => true}
+      }).default()
+      state_handler.subscribe(my_callback)
+      state_handler[method]('foo', 42)
+      my_callback.should.not.be.called()
+    })
+
     it(`callback should retrieve collect state - ${method}`, () => {
       let retrieved_state = null
       const my_callback = (handler) => {
@@ -112,7 +123,10 @@ describe('state handler', () => {
 
   it('callback should be called again with re-subscribe', () => {
     const my_callback = sinon.spy(function() {state_handler.subscribe(my_callback)})
-    const state_handler = create_state_handler()
+    const injector = require('inject-loader!./state_handler.js')
+    const state_handler = injector({
+        'lodash': {'isEqual': () => false}
+    }).default()
     state_handler.subscribe(my_callback)
     state_handler.set_variable('foo', 42)
     state_handler.set_variable('foo', 42)

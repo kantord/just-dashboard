@@ -22,6 +22,7 @@ const static_tests = [
   [42, 42, {}],
   [false, false, {}],
   [889593.234234, 889593.234234, {}],
+  [[null], [null], {}],
 ]
 
 const object_tests = [

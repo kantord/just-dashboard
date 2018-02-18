@@ -381,7 +381,7 @@ describe('Component', function() {
     const state_handler = {
       'get_state': sinon.spy(),
       'subscribe': sinon.spy()}
-    const { my_render } = call_test_component_with({
+    call_test_component_with({
       'instance_args': {
         'state_handler': state_handler
       },
@@ -395,7 +395,7 @@ describe('Component', function() {
     const state_handler = {
       'get_state': sinon.spy(),
       'subscribe': sinon.spy(function(f) {callback = f})}
-    const { my_render } = call_test_component_with({
+    call_test_component_with({
       'instance_args': {
         'state_handler': state_handler
       },
@@ -440,7 +440,7 @@ describe('Component', function() {
     const state_handler = {
       'get_state': sinon.spy(),
       'subscribe': sinon.spy(function(f) {callback = f})}
-    const { my_init } = call_test_component_with({
+    call_test_component_with({
       'instance_args': {
         '${x}': '${y}',
         'state_handler': state_handler
@@ -523,7 +523,7 @@ describe('Component', function() {
     const state_handler = {
       'get_state': sinon.spy(),
       'subscribe': sinon.spy(function(f) {callback = f})}
-    const { my_render } = call_test_component_with({
+    call_test_component_with({
       'instance_args': {
         'state_handler': state_handler
       },

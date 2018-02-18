@@ -143,7 +143,7 @@ describe('Text component', function() {
 
   it('correct value should be selected based on state', () => {
     const d3 = require('d3')
-    const { set_variable } = call_render_with({
+    call_render_with({
       'args': {'variable': 'my_var', 'default': '0'},
       'state': {'my_var': 1},
       'data': [
@@ -155,7 +155,7 @@ describe('Text component', function() {
 
   it('correct number of items after state change', () => {
     let callback
-    const { d3, set_variable } = call_render_with({
+    const { d3 } = call_render_with({
       'subscribe': (f) => {callback = f},
       'args': {'variable': 'my_var', 'default': ''},
       'data': [

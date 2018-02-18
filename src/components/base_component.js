@@ -40,7 +40,7 @@ const has_query = (instance_args) =>
   instance_args !== undefined && instance_args.hasOwnProperty('query')
 
 const call_render_function = (args, instance_args, selection, element) => (data) =>
-  args.render(instance_args, selection, data, element)
+  args.render(instance_args, selection, format_data(instance_args, data), element)
 
 const execute_query = (query, data) =>
   (callback) =>
@@ -104,6 +104,11 @@ const has_state_handler = (args) => {
 const format_arguments = (args) => {
   if (!has_state_handler(args)) return args
   return format_value(args, args.state_handler.get_state())
+}
+
+const format_data = (args, data) => {
+  if (!has_state_handler(args)) return data
+  return format_value(data, args.state_handler.get_state())
 }
 
 const create_component_function = (args) => (instance_args) => {

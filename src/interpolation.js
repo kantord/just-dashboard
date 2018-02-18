@@ -11,6 +11,7 @@ const format_array = (input, state) => {
 }
 
 const format_value = (input, state) => {
+  if (input === null) return null
   if (input instanceof Array) return format_array(input, state)
   if (typeof input === 'string') return format_string(input, state)
   if (typeof input === 'object') return format_object(input, state)

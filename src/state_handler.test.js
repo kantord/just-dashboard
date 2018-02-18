@@ -85,7 +85,7 @@ describe('state handler', () => {
       const my_callback = sinon.spy()
       const injector = require('inject-loader!./state_handler.js')
       const state_handler = injector({
-          'lodash': {'isEqual': () => true}
+        'lodash': {'isEqual': () => true}
       }).default()
       state_handler.subscribe(my_callback)
       state_handler[method]('foo', 42)
@@ -125,7 +125,7 @@ describe('state handler', () => {
     const my_callback = sinon.spy(function() {state_handler.subscribe(my_callback)})
     const injector = require('inject-loader!./state_handler.js')
     const state_handler = injector({
-        'lodash': {'isEqual': () => false}
+      'lodash': {'isEqual': () => false}
     }).default()
     state_handler.subscribe(my_callback)
     state_handler.set_variable('foo', 42)

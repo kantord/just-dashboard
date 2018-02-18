@@ -338,7 +338,7 @@ describe('Component', function() {
         '22': ['foo'],
         'state_handler': state_handler
       },
-     'format_value_return2': {
+      'format_value_return2': {
         '22': ['foo'],
         'state_handler': state_handler
       }
@@ -550,6 +550,39 @@ describe('Component', function() {
     d3.select('div').remove()
     callback(state_handler, callback)
     my_init.should.be.calledOnce()
+  })
+
+  it('calls format_value with proper data', () => {
+    const state_handler = {
+      'subscribe': sinon.spy(),
+      'get_state': sinon.stub().returns({'x': '2'})}
+    const format_value_return = {
+      'state_handler': state_handler
+    }
+    const my_data = 'this is data that has to be formatted'
+    const { format_value } = call_test_component_with({
+      'instance_args': format_value_return,
+      'format_value_return': format_value_return,
+      'format_value_return2': format_value_return,
+      'data': my_data 
+    })
+    format_value.should.be.calledWith(my_data)
+  })
+    
+  it('calls render with formatted data', () => {
+    const state_handler = {
+      'subscribe': sinon.spy(),
+      'get_state': sinon.stub().returns({'x': '2', 'y': 'foo'})}
+    const format_value_return = {
+      'state_handler': state_handler
+    }
+    const { my_render } = call_test_component_with({
+      'instance_args': format_value_return,
+      'format_value_return': format_value_return,
+      'format_value_return2': format_value_return,
+      'data': 'this is not formatted'
+    })
+    my_render.should.be.calledWith(sinon.match.any, sinon.match.any, format_value_return)
   })
 
 })

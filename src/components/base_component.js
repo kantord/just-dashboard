@@ -39,8 +39,9 @@ const with_spinner = (selection) => (func) => (callback) => {
 const has_query = (instance_args) =>
   instance_args !== undefined && instance_args.hasOwnProperty('query')
 
-const call_render_function = (args, instance_args, selection, element) => (data) =>
-  args.render(instance_args, selection, format_data(instance_args, data), element)
+const call_render_function = (args, instance_args, selection, element) => (data) => {
+  args.render(instance_args, selection, format_data(instance_args, data), element, data)
+}
 
 const execute_query = (query, data) =>
   (callback) =>

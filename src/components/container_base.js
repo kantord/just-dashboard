@@ -2,7 +2,7 @@ import default_parser from '../default_parser.js'
 import Component from './base_component.js'
 
 const ContainerComponent = ({ wrapper_tag, wrapper_class, validators, init }) => Component({
-  'render': (args, selection, data) => {
+  'render': (args, selection, _, __, data) => {
     selection.selectAll('*').remove()
     if (data instanceof Array) data.map((definition) => {
       const wrapper = selection

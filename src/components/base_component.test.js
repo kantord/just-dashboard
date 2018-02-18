@@ -570,6 +570,7 @@ describe('Component', function() {
   })
     
   it('calls render with formatted data', () => {
+    const data = 'this is not formatted'
     const state_handler = {
       'subscribe': sinon.spy(),
       'get_state': sinon.stub().returns({'x': '2', 'y': 'foo'})}
@@ -580,9 +581,9 @@ describe('Component', function() {
       'instance_args': format_value_return,
       'format_value_return': format_value_return,
       'format_value_return2': format_value_return,
-      'data': 'this is not formatted'
+      'data': data
     })
-    my_render.should.be.calledWith(sinon.match.any, sinon.match.any, format_value_return)
+    my_render.should.be.calledWith(sinon.match.any, sinon.match.any, format_value_return, sinon.match.any, data)
   })
 
 })

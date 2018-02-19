@@ -26,7 +26,8 @@ describe('Text component', function() {
   it('text is rendered', function() {
     const { render, d3 } = get_render_function({'tagName': 'span'})
     render('Hello World from TextComponent')
-    assert.equal(d3.selection().select('span').text(), 'Hello World from TextComponent')
+    assert.equal(d3.selection().select('span').text(),
+      'Hello World from TextComponent')
   })
 
   it('update function updates text', function() {
@@ -37,9 +38,11 @@ describe('Text component', function() {
   })
 
   it('text align center', function() {
-    const { render, d3 } = get_render_function({'tagName': 'span', 'align': 'center'})
+    const { render, d3 } = get_render_function(
+      {'tagName': 'span', 'align': 'center'})
     render('Second version')
-    assert.equal(d3.selection().select('[data-align="center"]').text(), 'Second version')
+    assert.equal(d3.selection().select('[data-align="center"]').text(),
+      'Second version')
   })
 
   it('align only if attr is supplied', function() {
@@ -49,9 +52,11 @@ describe('Text component', function() {
   })
 
   it('text align right', function() {
-    const { render, d3 } = get_render_function({'tagName': 'span', 'align': 'right'})
+    const { render, d3 } = get_render_function(
+      {'tagName': 'span', 'align': 'right'})
     render('Second version')
-    assert.equal(d3.selection().select('[data-align="right"]').text(), 'Second version')
+    assert.equal(d3.selection().select('[data-align="right"]').text(),
+      'Second version')
   })
 
   it('proper class attached', function() {
@@ -66,8 +71,10 @@ describe('Text component', function() {
     const render2 = TextComponent({'tagName': 'h4'})(d3.selection())
     render1('a')
     render2('b')
-    assert.equal(d3.select(d3.selection().selectAll('.ds--text').nodes()[0]).text(), 'a')
-    assert.equal(d3.select(d3.selection().selectAll('.ds--text').nodes()[1]).text(), 'b')
+    assert.equal(
+      d3.select(d3.selection().selectAll('.ds--text').nodes()[0]).text(), 'a')
+    assert.equal(
+      d3.select(d3.selection().selectAll('.ds--text').nodes()[1]).text(), 'b')
   })
 
 })

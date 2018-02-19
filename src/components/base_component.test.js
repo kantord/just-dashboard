@@ -30,7 +30,8 @@ describe('Component', function() {
     const my_init = sinon.stub()
       .onCall(1).returns(args.element2)
       .returns(args.element)
-    const my_render = (args.render_func === undefined ) ? sinon.spy() : args.render_func
+    const my_render = (args.render_func === undefined )
+      ? sinon.spy() : args.render_func
     const my_validator = sinon.spy()
     const validators = [my_validator]
     const my_component = (args.has_init === true) ? Component({
@@ -43,7 +44,8 @@ describe('Component', function() {
     const my_selection = d3.selection()
     const render = bind(my_selection)
     render(args.data)
-    return { my_init, my_component, my_render, my_selection, render, jq, format_value, my_validator }
+    return { my_init, my_component, my_render, my_selection, render, jq,
+      format_value, my_validator }
   }
 
   it('should require a render function', () => {
@@ -51,7 +53,8 @@ describe('Component', function() {
   })
 
   it('should not complain about render function if it\'s provided', () => {
-    (() => {Component({'render': () => 0})}).should.not.throw('A render() function is required')
+    (() => {Component({'render': () => 0})})
+      .should.not.throw('A render() function is required')
   })
 
   it('should return a function', () => {
@@ -69,7 +72,7 @@ describe('Component', function() {
     my_validator.should.be.called()
   })
 
-  it('returned component should call args validator with the correct arguments', () => {
+  it('returned component calls args validator with the correct args', () => {
     const my_validator = sinon.spy()
     const my_component = Component({
       'render': () => 0,
@@ -122,7 +125,7 @@ describe('Component', function() {
     }).should.throw('A d3 selection is required')
   })
 
-  it('bind function should not throw selection error if selection is supplied', () => {
+  it('bind function throws selection error if selection is supplied', () => {
     (() => {
       const my_component = Component({
         'render': () => 0, 'validators': []
@@ -133,7 +136,7 @@ describe('Component', function() {
     }).should.not.throw('A d3 selection is required')
   })
 
-  it('bind function should throw selection error if bad selection is supplied', () => {
+  it('bind function throws selection error if bad selection is given', () => {
     (() => {
       const my_component = Component({
         'render': () => 0, 'validators': []
@@ -150,50 +153,59 @@ describe('Component', function() {
   })
 
   it('render() is called with correct arguments', () => {
-    const { my_render, my_selection } = call_test_component_with({'instance_args': {'title': 42}, 'data': 'almafa'})
+    const { my_render, my_selection } = call_test_component_with(
+      {'instance_args': {'title': 42}, 'data': 'almafa'})
     my_render.should.be.calledWith({'title': 42}, my_selection, 'almafa')
   })
 
   it('render() is called with correct arguments 2', () => {
-    const { my_render, my_selection } = call_test_component_with({'instance_args': {}, 'data': [1]})
+    const { my_render, my_selection } = call_test_component_with(
+      {'instance_args': {}, 'data': [1]})
     my_render.should.be.calledWith({}, my_selection, [1])
   })
 
   it('if there is an init() function, it should be called', () => {
-    const { my_init } = call_test_component_with({'instance_args': {}, 'has_init': true})
+    const { my_init } = call_test_component_with(
+      {'instance_args': {}, 'has_init': true})
     my_init.should.be.called()
   })
 
-  it('if there is an init() function, it should be called with the correct arguments', () => {
-    const { my_init, my_selection } = call_test_component_with({'instance_args': {'shit': 'happens'}, 'has_init': true})
+  it('if there is an init(), it is called with the correct arguments', () => {
+    const { my_init, my_selection } = call_test_component_with(
+      {'instance_args': {'shit': 'happens'}, 'has_init': true})
     my_init.should.be.calledWith({'shit': 'happens'}, my_selection)
   })
 
 
-  it('if there is an init() function, it should be called with the correct arguments 2', () => {
-    const { my_init, my_selection } = call_test_component_with({'instance_args': {'bull': 'shit'}, 'has_init': true})
+  it('if there is an init(), it is called with the correct arguments 2', () => {
+    const { my_init, my_selection } = call_test_component_with(
+      {'instance_args': {'bull': 'shit'}, 'has_init': true})
     my_init.should.be.calledWith({'bull': 'shit'}, my_selection)
   })
 
   it('if query is supplied, jq should be called', () => {
-    const { jq } = call_test_component_with({'instance_args': {'query': ''}, 'render_func': () => null})
+    const { jq } = call_test_component_with(
+      {'instance_args': {'query': ''}, 'render_func': () => null})
     jq.should.be.called()
   })
 
   it('jq should be called only if query is supplied', () => {
-    const { jq } = call_test_component_with({'instance_args': {}, 'render_func': () => null})
+    const { jq } = call_test_component_with(
+      {'instance_args': {}, 'render_func': () => null})
     jq.should.not.be.called()
   })
 
   it('if query is supplied, jq should be called with data and query', () => {
     const { jq } = call_test_component_with({
-      'instance_args': {'query': 'foo'}, 'data': 'bar', 'render_func': () => null})
+      'instance_args': {
+        'query': 'foo'}, 'data': 'bar', 'render_func': () => null})
     jq.should.be.calledWith('bar', 'foo')
   })
 
   it('if query is supplied, jq should be called with data and query 2', () => {
     const { jq } = call_test_component_with({
-      'instance_args': {'query': '. | foo'}, 'data': 4, 'render_func': () => null})
+      'instance_args': {'query': '. | foo'},
+      'data': 4, 'render_func': () => null})
     jq.should.be.calledWith(4, '. | foo')
   })
 
@@ -203,7 +215,8 @@ describe('Component', function() {
     call_test_component_with({
       'instance_args': {'query': '. | foo'}, 'data': 4, jq_return_value,
       'render_func': render_func})
-    render_func.should.be.calledWith(sinon.match.any, sinon.match.any, jq_return_value)
+    render_func.should.be.calledWith(sinon.match.any, sinon.match.any,
+      jq_return_value)
   })
 
   it('render should be called with query return value 2', () => {
@@ -212,7 +225,8 @@ describe('Component', function() {
     call_test_component_with({
       'instance_args': {'query': '. | asd'}, 'data': 4, jq_return_value,
       'render_func': render_func})
-    render_func.should.be.calledWith(sinon.match.any, sinon.match.any, jq_return_value)
+    render_func.should.be.calledWith(sinon.match.any, sinon.match.any,
+      jq_return_value)
   })
 
   const loader_test = (args) => {
@@ -227,7 +241,8 @@ describe('Component', function() {
       '../jq-web.js': jq,
       'd3': {'json': my_loader, 'selection': d3.selection, 'csv': () => null}
     }).default
-    const my_render = (args.render_func === undefined ) ? sinon.spy() : args.render_func
+    const my_render = (args.render_func === undefined )
+      ? sinon.spy() : args.render_func
     const my_component = Component({
       'validators': [],
       'render': my_render,
@@ -238,7 +253,8 @@ describe('Component', function() {
     const my_selection = d3.selection()
     const render = bind(my_selection)
     render(args.data)
-    return { my_loader, my_render, my_selection, 'instance_args': args.instance_args }
+    return { my_loader, my_render, my_selection,
+      'instance_args': args.instance_args }
   }
 
   it('throws if invalid loader supplied', function() {
@@ -278,7 +294,8 @@ describe('Component', function() {
 
   it('render is called with fetched data', function() {
     const fetched_value = {'hello': 'world'}
-    const { my_render, instance_args, my_selection } = loader_test({'loader': 'json', fetched_value})
+    const { my_render, instance_args, my_selection } = loader_test(
+      {'loader': 'json', fetched_value})
     my_render.should.be.calledWith(instance_args, my_selection, fetched_value)
   })
 
@@ -293,19 +310,23 @@ describe('Component', function() {
   })
 
   it('while jq is being loaded, a spinner should be displayed', () => {
-    call_test_component_with({'instance_args': {'query': ''}, 'render_func': () => null, 'dont_execute_query': true})
+    call_test_component_with({'instance_args': {'query': ''},
+      'render_func': () => null, 'dont_execute_query': true})
     assert.equal(d3.selection().selectAll('.spinner').size(), 1)
   })
 
   it('spinner should disappear when query is finished', () => {
-    call_test_component_with({'instance_args': {'query': ''}, 'render_func': () => null})
+    call_test_component_with({'instance_args': {'query': ''},
+      'render_func': () => null})
     assert.equal(d3.selection().selectAll('.spinner').size(), 0)
   })
 
   it('render is called with init return value', () => {
     const my_element = 11
-    const { my_render } = call_test_component_with({'element': my_element, 'has_init': true})
-    my_render.should.be.calledWith(sinon.match.any, sinon.match.any, sinon.match.any, my_element)
+    const { my_render } = call_test_component_with(
+      {'element': my_element, 'has_init': true})
+    my_render.should.be.calledWith(sinon.match.any, sinon.match.any,
+      sinon.match.any, my_element)
   })
 
   it('calls format_value with proper arguments', () => {
@@ -502,10 +523,11 @@ describe('Component', function() {
     })
     state_handler.get_state = () => ({'x': 'foo', 'y': 'bar'})
     callback(state_handler, callback)
-    my_render.should.be.calledWith(sinon.match.any, sinon.match.any, sinon.match.any, element2)
+    my_render.should.be.calledWith(sinon.match.any, sinon.match.any,
+      sinon.match.any, element2)
   })
 
-  it('returned component should call args validator with formatted args', () => {
+  it('returned component calls args validator with formatted args', () => {
     const format_value_return = sinon.spy()
     const { my_validator } = call_test_component_with({
       'instance_args': {'state_handler': {
@@ -518,7 +540,7 @@ describe('Component', function() {
     my_validator.should.be.alwaysCalledWith(format_value_return)
   })
 
-  it('doesnt re-subscribe to state changes if element was deleted by parent component', () => {
+  it('doesnt re-subscribe to state if element was deleted by parent', () => {
     let callback
     const state_handler = {
       'get_state': sinon.spy(),
@@ -583,7 +605,8 @@ describe('Component', function() {
       'format_value_return2': format_value_return,
       'data': data
     })
-    my_render.should.be.calledWith(sinon.match.any, sinon.match.any, format_value_return, sinon.match.any, data)
+    my_render.should.be.calledWith(sinon.match.any, sinon.match.any,
+      format_value_return, sinon.match.any, data)
   })
 
 })

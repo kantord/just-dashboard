@@ -25,6 +25,7 @@ describe('Rows component', function() {
       ]
     })
     bind(d3.selection())
-    assert.equal(d3.selection().select('.ds--rows .ds--row h4').text(), 'random')
+    assert.equal(d3.selection().select('.ds--rows .ds--row h4').text(),
+      'random')
   })
 })

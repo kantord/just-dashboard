@@ -1,7 +1,8 @@
 import default_parser from '../default_parser.js'
 import Component from './base_component.js'
 
-const ContainerComponent = ({ wrapper_tag, wrapper_class, validators, init }) => Component({
+const ContainerComponent = (
+  { wrapper_tag, wrapper_class, validators, init }) => Component({
   'render': (args, selection, _, __, data) => {
     selection.selectAll('*').remove()
     if (data instanceof Array) data.map((definition) => {
@@ -10,7 +11,8 @@ const ContainerComponent = ({ wrapper_tag, wrapper_class, validators, init }) =>
         .attr('class', wrapper_class)
       const updated_definition = Object.assign({}, definition)
       if (updated_definition.args === undefined) updated_definition.args = {}
-      if (args !== undefined) updated_definition.args.state_handler = args.state_handler
+      if (args !== undefined)
+        updated_definition.args.state_handler = args.state_handler
       default_parser(updated_definition)(wrapper)
     })
   },

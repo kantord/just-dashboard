@@ -3,7 +3,8 @@ import { regexp } from './validators'
 
 describe('require validator', function() {
   it('should throw message when argument is not supplied', () => {
-    (() => {required('title')({})}).should.throw('Argument \'title\' is required but not supplied.')
+    (() => {required('title')({})})
+      .should.throw('Argument \'title\' is required but not supplied.')
   })
 
   it('should not throw when argument is supplied', () => {
@@ -11,13 +12,15 @@ describe('require validator', function() {
   })
 
   it('should throw message when argument is not supplied', () => {
-    (() => {required('foo')({'title': ''})}).should.throw('Argument \'foo\' is required but not supplied.')
+    (() => {required('foo')({'title': ''})})
+      .should.throw('Argument \'foo\' is required but not supplied.')
   })
 })
 
 describe('regexp validator', function() {
   it('should throw error when argument doesn\'t match regexp', () => {
-    (() => {regexp('title', /bar/)({'title': 'foo'})}).should.throw('Argument \'title\' is invalid')
+    (() => {regexp('title', /bar/)({'title': 'foo'})})
+      .should.throw('Argument \'title\' is invalid')
   })
 
   it('doesn\'t throw when format is valid', () => {
@@ -25,7 +28,8 @@ describe('regexp validator', function() {
   })
 
   it('correct error message is shown', () => {
-    (() => {regexp('class', /bar/)({'class': 'foo'})}).should.throw('Argument \'class\' is invalid')
+    (() => {regexp('class', /bar/)({'class': 'foo'})})
+      .should.throw('Argument \'class\' is invalid')
   })
 
   it('correct regexp is used', () => {

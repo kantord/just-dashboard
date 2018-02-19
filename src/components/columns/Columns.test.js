@@ -25,7 +25,8 @@ describe('Columns component', function() {
       ]
     })
     bind(d3.selection())
-    assert.equal(d3.selection().select('.ds--columns[data-ds--columns="2"] .ds--column h4').text(), 'random')
+    assert.equal(d3.selection().select(
+      '.ds--columns[data-ds--columns="2"] .ds--column h4').text(), 'random')
   })
 
   it('integration test - non default column count', () => {
@@ -42,7 +43,8 @@ describe('Columns component', function() {
       ]
     })
     bind(d3.selection())
-    assert.equal(d3.selection().select('.ds--columns[data-ds--columns="3"] .ds--column h4').text(), 'foobar')
+    assert.equal(d3.selection().select(
+      '.ds--columns[data-ds--columns="3"] .ds--column h4').text(), 'foobar')
   })
 
 })

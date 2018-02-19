@@ -3,7 +3,8 @@ const format_string = (input, state) => {
   const first_key = Object.keys(state)[0]
   const copy = Object.assign({}, state)
   delete copy[first_key]
-  return format_string(input.replace('${' + first_key + '}', state[first_key]), copy)
+  return format_string(input.replace('${' + first_key + '}', state[first_key]),
+    copy)
 }
 
 const format_array = (input, state) => {
@@ -20,7 +21,8 @@ const format_value = (input, state) => {
 
 const format_object = (input, state) => {
   return Object.assign({}, ...Object.entries(input).map(
-    ([key, value]) => ({[format_string(key, state)]: format_value(value, state)})
+    ([key, value]) => (
+      {[format_string(key, state)]: format_value(value, state)})
   ))
 }
 

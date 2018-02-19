@@ -27,7 +27,8 @@ describe('Text component', function() {
     const init_variable = sinon.spy()
     const set_variable = sinon.spy()
     const get_state = sinon.stub().returns(args.state || {})
-    const subscribe = (args.subscribe === undefined) ? sinon.spy() : args.subscribe
+    const subscribe = (args.subscribe === undefined)
+      ? sinon.spy() : args.subscribe
     const state_handler = { init_variable, set_variable, get_state, subscribe }
     const component_args = Object.assign(args.args, {
       state_handler
@@ -39,7 +40,8 @@ describe('Text component', function() {
 
   it('creates select item', () => {
     const d3 = require('d3')
-    call_render_with({'args': {'variable': 'my_var', 'default': ''}, 'data': []})
+    call_render_with({'args': {'variable': 'my_var', 'default': ''},
+      'data': []})
     assert.equal(d3.selectAll('select.ds--select').size(), 1)
   })
   
@@ -51,15 +53,18 @@ describe('Text component', function() {
   option_inputs.forEach(input => {
     it(`creates option(s) - ${input.length}`, () => {
       const d3 = require('d3')
-      call_render_with({'args': {'variable': 'my_var', 'default': ''}, 'data': input})
-      assert.equal(d3.selectAll('option.ds--select-option').size(), input.length)
+      call_render_with({'args': {'variable': 'my_var', 'default': ''},
+        'data': input})
+      assert.equal(d3.selectAll('option.ds--select-option').size(),
+        input.length)
     })
   })
 
   it('removes superfluous options', () => {
     const d3 = require('d3')
-    const { render } = call_render_with({'args': {'variable': 'my_var', 'default': ''},
-      'data': [{ 'value': 4, 'text': 'four' }, { 'value': 5, 'text': 'five' }]})
+    const { render } = call_render_with({'args': {'variable': 'my_var',
+      'default': ''},
+    'data': [{ 'value': 4, 'text': 'four' }, { 'value': 5, 'text': 'five' }]})
     render([{ 'value': 4, 'text': 'four' }])
     assert.equal(d3.selectAll('option.ds--select-option').size(), 1)
   })
@@ -84,57 +89,64 @@ describe('Text component', function() {
 
   it('updated existing option text', () => {
     const d3 = require('d3')
-    const { render } = call_render_with({'args': {'variable': 'my_var', 'default': ''},
-      'data': [{ 'text': 'foo', 'value': null }]})
+    const { render } = call_render_with({'args': {'variable': 'my_var',
+      'default': ''},
+    'data': [{ 'text': 'foo', 'value': null }]})
     render([{ 'text': 'bar', 'value': null }])
     assert.equal(d3.select('option.ds--select-option').text(), 'bar')
   })
 
   it('updated existing option value', () => {
     const d3 = require('d3')
-    const { render } = call_render_with({'args': {'variable': 'my_var', 'default': ''},
-      'data': [{ 'text': 'foo', 'value': 0 }]})
+    const { render } = call_render_with({'args': {'variable': 'my_var',
+      'default': ''},
+    'data': [{ 'text': 'foo', 'value': 0 }]})
     render([{ 'text': 'foo', 'value': -56 }])
     assert.equal(d3.select('option.ds--select-option').node().value, -56)
   })
 
   it('init_variable has to be called with default value', () => {
     const my_spy = sinon.spy()
-    const { init_variable } = call_render_with({'args': {'variable': 'my_var', 'default': my_spy},
-      'data': [{ 'text': 'foo', 'value': 0 }]})
+    const { init_variable } = call_render_with({'args': {'variable': 'my_var',
+      'default': my_spy},
+    'data': [{ 'text': 'foo', 'value': 0 }]})
     init_variable.should.be.calledWith('my_var', my_spy)
   })
 
   it('init_variable has to be called with default value 2', () => {
     const my_spy = sinon.spy()
-    const { init_variable } = call_render_with({'args': {'variable': 'my_var2', 'default': my_spy},
-      'data': [{ 'text': 'foo', 'value': 0 }]})
+    const { init_variable } = call_render_with({'args': {'variable': 'my_var2',
+      'default': my_spy},
+    'data': [{ 'text': 'foo', 'value': 0 }]})
     init_variable.should.be.calledWith('my_var2', my_spy)
   })
 
   it('set_variable should not be called before change', () => {
-    const { set_variable } = call_render_with({'args': {'variable': 'my_var', 'default': ''},
-      'data': [{ 'text': 'foo', 'value': 0 }]})
+    const { set_variable } = call_render_with({'args': {'variable': 'my_var',
+      'default': ''},
+    'data': [{ 'text': 'foo', 'value': 0 }]})
     set_variable.should.not.be.called()
   })
 
   it('set_variable should be called after change', () => {
-    const { d3, set_variable } = call_render_with({'args': {'variable': 'var', 'default': ''},
-      'data': [
-        { 'text': 'foo', 'value': 'fo' },
-        { 'text': 'bar', 'value': 'bar' },
-      ]})
+    const { d3, set_variable } = call_render_with({'args': {'variable': 'var',
+      'default': ''},
+    'data': [
+      { 'text': 'foo', 'value': 'fo' },
+      { 'text': 'bar', 'value': 'bar' },
+    ]})
     d3.select('select').property('value', 'fo')
     d3.select('select').dispatch('change')
     set_variable.should.be.calledWith('var', 'fo')
   })
 
   it('set_variable should be called after change 2', () => {
-    const { d3, set_variable } = call_render_with({'args': {'variable': 'my_var', 'default': ''},
-      'data': [
-        { 'text': 'foo', 'value': 'fo' },
-        { 'text': 'bar', 'value': 'baz' },
-      ]})
+    const { d3, set_variable } = call_render_with(
+      {'args': {'variable': 'my_var', 'default': ''},
+        'data': [
+          { 'text': 'foo', 'value': 'fo' },
+          { 'text': 'bar', 'value': 'baz' },
+        ]})
     d3.select('select').property('value', 'fo')
     d3.select('select').property('value', 'baz')
     d3.select('select').dispatch('change')
@@ -162,11 +174,13 @@ describe('Text component', function() {
         { 'text': 'foo', 'value': 'fo' },
         { 'text': 'bar', 'value': 'baz' },
       ]})
-    assert.equal(d3.selectAll('option.ds--select-option').size(), 2, 'Correct number of items before change')
+    assert.equal(d3.selectAll('option.ds--select-option').size(), 2,
+      'Correct number of items before change')
     d3.select('select').property('value', 'baz')
     d3.select('select').dispatch('change')
     callback({'subscribe': sinon.spy()}, callback)
-    assert.equal(d3.selectAll('option.ds--select-option').size(), 2, 'Correct number of items after change')
+    assert.equal(d3.selectAll('option.ds--select-option').size(), 2,
+      'Correct number of items after change')
   })
 
 })

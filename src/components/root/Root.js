@@ -36,7 +36,8 @@ const RootComponent = Component({
     if (data instanceof Array) data.map((definition) => {
       const updated_definition = Object.assign({'args': {}}, definition)
       updated_definition.args.state_handler = args.state_handler
-      default_parser(updated_definition)(body.append('div').attr('class', 'ds--wrapper'))
+      default_parser(updated_definition)(body.append('div')
+        .attr('class', 'ds--wrapper'))
     })
   }
 })

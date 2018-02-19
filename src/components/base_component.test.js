@@ -35,7 +35,8 @@ describe('Component', function() {
     const my_validator = sinon.spy()
     const validators = [my_validator]
     const my_component = (args.has_init === true) ? Component({
-      'render': my_render, 'validators': validators, 'init': my_init
+      'render': my_render, 'validators': validators,
+      'init': (args.init_func) ? args.init_func: my_init
     }) : Component({
       'render': my_render, 'validators': validators
     })
@@ -45,7 +46,7 @@ describe('Component', function() {
     const render = bind(my_selection)
     render(args.data)
     return { my_init, my_component, my_render, my_selection, render, jq,
-      format_value, my_validator }
+      format_value, my_validator, d3 }
   }
 
   it('should require a render function', () => {
@@ -607,6 +608,29 @@ describe('Component', function() {
     })
     my_render.should.be.calledWith(sinon.match.any, sinon.match.any,
       format_value_return, sinon.match.any, data)
+  })
+
+  const test_error_messages = ['Totally random error', 'Another error here']
+
+  test_error_messages.forEach(message => {
+    it(`error message when error happens during render() (${message})`, () => {
+      const my_render = sinon.stub().throws(message)
+      const { d3 } = call_test_component_with({
+        'render_func': my_render
+      })
+      my_render.should.be.called()
+      assert.equal(d3.select('p.error').text(), message)
+    })
+
+    it(`error message when error happens during init() (${message})`, () => {
+      const my_init = sinon.stub().throws(message)
+      const { d3 } = call_test_component_with({
+        'init_func': my_init,
+        'has_init': true
+      })
+      my_init.should.be.called()
+      assert.equal(d3.select('p.error').text(), message)
+    })
   })
 
 })

@@ -37,17 +37,26 @@ const with_spinner = (selection) => (func) => (callback) => {
   })
 }
 
+const show_error_message = (message) => (selection) =>
+  selection.append('p').attr('class', 'error').text(message)
+
 const has_query = (instance_args) =>
   instance_args !== undefined && instance_args.hasOwnProperty('query')
 
 const call_render_function = (args, instance_args, selection, element) =>
-  (data) =>
-    args.render(instance_args, selection, format_data(instance_args, data),
-      element, data)
+  (data) => {
+    try {
+      args.render(instance_args, selection, format_data(instance_args, data),
+        element, data)
+    } catch (error) {
+      selection.call(show_error_message(error))
+    }
+  }
 
 const execute_query = (query, data) =>
   (callback) =>
-    jq(data, query).then((data) => callback(data))
+    jq(data, query)
+      .then((data) => callback(data))
 
 const render_component_with_query = (args, instance_args, selection,
   element) => (data) =>
@@ -61,9 +70,14 @@ const render_component = (args, instance_args, ...rest) =>
     : call_render_function(args, instance_args, ...rest)
 
 
-const create_element = (init_func, instance_args, selection) =>
-  (typeof init_func === 'function')
-    ? init_func(instance_args, selection) : null 
+const create_element = (init_func, instance_args, selection) => {
+  try {
+    return (typeof init_func === 'function')
+      ? init_func(instance_args, selection) : null 
+  } catch(error) {
+    selection.call(show_error_message(error))
+  }
+}
 
 const load_external_data = (raw_data) => (loader_func, spinner_func) =>
   spinner_func(loader_func(raw_data))

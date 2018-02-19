@@ -6,3 +6,4 @@ dist/
 lib/
 /coverage.lcov
 /stats.json
+mochawesome-report/

@@ -5,8 +5,8 @@
   "main": "dist/dashboard.js",
   "module": "src/index.js",
   "scripts": {
-    "test": "mocha-webpack \"src/**/*.test.js\" --webpack-config webpack.test.config.js --require babel-polyfill",
-    "test:watch": "mocha-webpack --watch \"src/**/*.test.js\" --webpack-config webpack.test.config.js  --require babel-polyfill",
+    "test": "mocha-webpack \"src/**/*.test.js\" --webpack-config webpack.test.config.js --require babel-polyfill --reporter mochawesome",
+    "test:watch": "mocha-webpack --watch \"src/**/*.test.js\" --webpack-config webpack.test.config.js  --require babel-polyfill  --reporter mochawesome",
     "build": "WEBPACK_ENV=build webpack",
     "dev": "WEBPACK_ENV=dev webpack --progress --colors --watch",
     "html-coverage": "cross-env NODE_ENV=test nyc --reporter=html mocha-webpack \"src/**/*.test.js\" --webpack-config webpack.test.config.js",
@@ -58,6 +58,7 @@
     "minami": "^1.2.3",
     "mocha": "^5.0.1",
     "mocha-webpack": "^1.0.1",
+    "mochawesome": "^3.0.2",
     "node-sass": "^4.7.2",
     "nyc": "^11.4.1",
     "sass-loader": "^6.0.6",

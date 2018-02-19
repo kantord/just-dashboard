@@ -14,7 +14,8 @@ describe('ChartComponent', function() {
 
   const call_render_with = (args) => {
     const fake_generate = sinon.spy()
-    const ChartComponent = ChartComponentInjector({'billboard.js': {'bb': {'generate': fake_generate}}}).default
+    const ChartComponent = ChartComponentInjector(
+      {'billboard.js': {'bb': {'generate': fake_generate}}}).default
     const bind = ChartComponent(args.component_args)
     const d3 = require('d3')
     const selection = d3.selection()

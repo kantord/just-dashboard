@@ -26,7 +26,8 @@ describe('Wrapped', function() {
     const wrapped_render = wrapped_component(args)(selection)
     wrapped_render()
 
-    return { selection, render, wrapper, fake_bind, wrapped_selection, args, fake_component, wrapped_render, fake_render }
+    return { selection, render, wrapper, fake_bind, wrapped_selection, args,
+      fake_component, wrapped_render, fake_render }
   }
 
   it('requires wrapper function', function() {

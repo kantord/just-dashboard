@@ -23,7 +23,8 @@ describe('Parser', function() {
 
 
   it('should throw when called with empty object', () => {
-    (() => {parse()({})}).should.throw('Argument \'component\' is required but not supplied.')
+    (() => {parse()({})})
+      .should.throw('Argument \'component\' is required but not supplied.')
   })
 
   it('should throw error when argument is not an object', () => {
@@ -31,13 +32,16 @@ describe('Parser', function() {
   })
 
   it('should throw when component name is invalid', () => {
-    (() => {parse()({'component': 'bullshit component name'})}).should.throw('Argument \'component\' is invalid')
+    (() => {parse()({'component': 'bullshit component name'})})
+      .should.throw('Argument \'component\' is invalid')
   })
 
   it('should throw when component does not exist', () => {
     (() => {
-      const fake_component_loader = sinon.stub().throws(new Error('Component does not exist'))
-      parse(fake_component_loader)({'component': 'AbsolutelyNonExistentComponent'})
+      const fake_component_loader = sinon.stub()
+        .throws(new Error('Component does not exist'))
+      parse(fake_component_loader)(
+        {'component': 'AbsolutelyNonExistentComponent'})
     }).should.throw('Component does not exist')
   })
 
@@ -51,15 +55,18 @@ describe('Parser', function() {
   it('returns function', () => {
     const fake_component = sinon.spy()
     const fake_component_loader = sinon.stub().returns(fake_component)
-    const component = parse(fake_component_loader)({'component': 'foo', 'args': {'magic': 42}})
+    const component = parse(fake_component_loader)(
+      {'component': 'foo', 'args': {'magic': 42}})
     component.should.be.a.Function()
   })
 
   it('passes state handler to root', () => {
-    const fake_component = sinon.stub().returns(sinon.stub().returns(sinon.spy()))
+    const fake_component = sinon.stub().returns(
+      sinon.stub().returns(sinon.spy()))
     const fake_component_loader = sinon.stub().returns(fake_component)
     const my_selection = null
-    const component = parse(fake_component_loader)({'component': 'root', 'args': {'title': ''}})
+    const component = parse(fake_component_loader)(
+      {'component': 'root', 'args': {'title': ''}})
     component(my_selection)
     fake_component.should.be.calledWith({
       'title': '',
@@ -68,33 +75,37 @@ describe('Parser', function() {
   })
 
   it('only passes state handler to root', () => {
-    const fake_component = sinon.stub().returns(sinon.stub().returns(sinon.spy()))
+    const fake_component = sinon.stub().returns(
+      sinon.stub().returns(sinon.spy()))
     const fake_component_loader = sinon.stub().returns(fake_component)
     const my_selection = null
-    const component = parse(fake_component_loader)({'component': 'text', 'args': {'tagName': 'p'}})
+    const component = parse(fake_component_loader)(
+      {'component': 'text', 'args': {'tagName': 'p'}})
     component(my_selection)
     fake_component.should.be.calledWith({
       'tagName': 'p',
     })
   })
 
-  it('loaded component is bound to the selection the wrapper is bound to', () => {
+  it('loaded component bound to the selection the wrapper is bound to', () => {
     const my_bind_function = sinon.stub().returns(sinon.spy())
     const fake_component = sinon.stub().returns(my_bind_function)
     const fake_component_loader = sinon.stub().returns(fake_component)
     const my_selection = {'rare': 'selection'}
-    const component = parse(fake_component_loader)({'component': 'foo', 'args': {'magic': 42}})
+    const component = parse(fake_component_loader)(
+      {'component': 'foo', 'args': {'magic': 42}})
     component(my_selection)
     my_bind_function.should.be.calledWith(my_selection)
   })
 
-  it('initial data is passed to update function when component is bound to selection', () => {
+  it('initial data passed to update when component bound to selection', () => {
     const my_update_function = sinon.spy()
     const my_bind_function = sinon.stub().returns(my_update_function)
     const fake_component = sinon.stub().returns(my_bind_function)
     const fake_component_loader = sinon.stub().returns(fake_component)
     const my_selection = {'rare': 'selection'}
-    const component = parse(fake_component_loader)({'component': 'foo', 'data': [[1, 0], [2, 3]]})
+    const component = parse(fake_component_loader)(
+      {'component': 'foo', 'data': [[1, 0], [2, 3]]})
     component(my_selection)
     my_update_function.should.be.calledWith([[1, 0], [2, 3]])
   })
@@ -105,18 +116,20 @@ describe('Parser', function() {
     const fake_component = sinon.stub().returns(my_bind_function)
     const fake_component_loader = sinon.stub().returns(fake_component)
     const my_selection = {'rare': 'selection'}
-    const component = parse(fake_component_loader)({'component': 'foo', 'data': [[1, 0], [2, 3]]})
+    const component = parse(fake_component_loader)(
+      {'component': 'foo', 'data': [[1, 0], [2, 3]]})
     const update = component(my_selection)
     update.should.be.a.Function()
   })
 
-  it('update function should call original update function with correct arguments', () => {
+  it('update function calls original update with correct arguments', () => {
     const my_update_function = sinon.spy()
     const my_bind_function = sinon.stub().returns(my_update_function)
     const fake_component = sinon.stub().returns(my_bind_function)
     const fake_component_loader = sinon.stub().returns(fake_component)
     const my_selection = {'rare': 'selection'}
-    const component = parse(fake_component_loader)({'component': 'foo', 'data': [[1, 0], [2, 3]]})
+    const component = parse(fake_component_loader)(
+      {'component': 'foo', 'data': [[1, 0], [2, 3]]})
     const update = component(my_selection)
     update([[2]])
     update.should.be.calledWith([[2]])

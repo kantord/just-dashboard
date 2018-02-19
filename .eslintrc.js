@@ -12,6 +12,9 @@ module.exports = {
         "allowImportExportEverywhere": true
     },
     "rules": {
+        "max-len": [
+          "error"
+        ],
         "indent": [
             "error",
             2

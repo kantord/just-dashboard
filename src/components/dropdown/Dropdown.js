@@ -25,7 +25,8 @@ const update_pattern = (selection) =>
 
 const DropdownComponent = Component({
   'validators': [
-    required('variable'), regexp('variable', /^[A-Za-z]([_A-Za-z0-9-]*[_A-Za-z0-9])?$/),
+    required('variable'),
+    regexp('variable', /^[A-Za-z]([_A-Za-z0-9-]*[_A-Za-z0-9])?$/),
     required('default')],
   'init': (args, selection) => {
     args.state_handler.init_variable(args.variable, args.default)
@@ -39,7 +40,8 @@ const DropdownComponent = Component({
       .property('value', args.state_handler.get_state()[args.variable])
     item
       .on('change', function() {
-        args.state_handler.set_variable(args.variable, d3.select(this).property('value'))
+        args.state_handler.set_variable(args.variable, d3.select(this)
+          .property('value'))
       })
   }
 })

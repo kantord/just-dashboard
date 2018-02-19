@@ -1,7 +1,8 @@
 import * as validators from '../validators.js'
 import create_state_handler from '../state_handler.js'
 
-/** Creates a function that parses a JSON component and compiles it into a Javascript component
+/** Creates a function that parses a JSON component and compiles it into a
+ * Javascript component
   * @param {Function} component_loader - A function that can load components*/
 const parse = (component_loader) => (input) => {
   if (!(typeof input === 'object')) throw new Error('An object is required')

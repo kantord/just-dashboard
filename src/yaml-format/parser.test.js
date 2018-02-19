@@ -38,7 +38,8 @@ describe('yaml format - parser', function() {
 
   inputs.forEach((arg) =>
     it(`yaml called with input - ${arg}`, function() {
-      const { parser, safeLoadSpy } = set_up({'safeLoadSpyReturns': {'dashboard "a"': []}})
+      const { parser, safeLoadSpy } = set_up(
+        {'safeLoadSpyReturns': {'dashboard "a"': []}})
       parser(arg)
       safeLoadSpy.should.be.calledWith(arg)
     })
@@ -123,10 +124,11 @@ describe('yaml format - root component', function() {
 
 
   tests.forEach(function({input, output}) {
-    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]].length}`, function() {
-      const { parser } = set_up(input)
-      assert.deepEqual(parser(input), output)
-    })
+    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]].length}`,
+      () => {
+        const { parser } = set_up(input)
+        assert.deepEqual(parser(input), output)
+      })
   })
 })
 
@@ -171,7 +173,7 @@ describe('yaml format - text component', function() {
 
 
   tests.forEach(function({input, output}) {
-    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]]}`, function() {
+    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]]}`, () => {
       const { parser } = set_up(input)
       assert.deepEqual(parser(''), output)
     })
@@ -224,10 +226,11 @@ describe('yaml format - rows component', function() {
 
 
   tests.forEach(function({input, output}) {
-    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]].length}`, function() {
-      const { parser } = set_up(input)
-      assert.deepEqual(parser(input), output)
-    })
+    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]].length}`,
+      () => {
+        const { parser } = set_up(input)
+        assert.deepEqual(parser(input), output)
+      })
   })
 })
 
@@ -302,10 +305,11 @@ describe('yaml format - columns component', function() {
 
 
   tests.forEach(function({input, output}) {
-    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]].length}`, function() {
-      const { parser } = set_up(input)
-      assert.deepEqual(parser(input), output)
-    })
+    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]].length}`,
+      () => {
+        const { parser } = set_up(input)
+        assert.deepEqual(parser(input), output)
+      })
   })
 })
 
@@ -349,7 +353,7 @@ describe('yaml format - chart component', function() {
 
 
   tests.forEach(function({input, output}) {
-    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]]}`, function() {
+    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]]}`, () => {
       const { parser } = set_up(input)
       assert.deepEqual(parser(input), output)
     })
@@ -399,7 +403,7 @@ describe('yaml format - handling URL', function() {
 
 
   tests.forEach(function({input, output}) {
-    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]]}`, function() {
+    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]]}`, () => {
       const { parser } = set_up(input)
       assert.deepEqual(parser(input), output)
     })
@@ -480,10 +484,11 @@ describe('yaml format - attr: syntax', function() {
 
 
   tests.forEach(function({input, output}) {
-    it(`${Object.keys(input)[0]} - ${Object.values(input)[0].map(Object.keys)}`, function() {
-      const { parser } = set_up(input)
-      assert.deepEqual(parser(input), output)
-    })
+    it(`${Object.keys(input)[0]} - ${Object.values(input)[0].map(Object.keys)}`,
+      function() {
+        const { parser } = set_up(input)
+        assert.deepEqual(parser(input), output)
+      })
   })
 })
 
@@ -577,7 +582,7 @@ describe('yaml format - dropdown component', function() {
 
 
   tests.forEach(function({input, output}) {
-    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]]}`, function() {
+    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]]}`, () => {
       const { parser } = set_up(input)
       assert.deepEqual(parser(''), output)
     })

@@ -51,7 +51,8 @@ describe('base container component', function() {
     call_render_with({
       'component_args': {'title': 'I don\'t care'},
       'parser': () => (selection) => selection.append('h1').text('My title'),
-      'render_args': [{'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title'}]
+      'render_args': [{'component': 'text', 'args': {'tagName': 'h1'},
+        'data': 'My title'}]
     })
     assert.equal(d3.selection().select('h1').text(), 'My title')
   })
@@ -70,7 +71,8 @@ describe('base container component', function() {
       'parser': () => (selection) => selection.append('h1').text('My title'),
       'render_args': [
         { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
-        { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
+        { 'component': 'text', 'args': {'tagName': 'h2'},
+          'data': 'My secondary header' }
       ]
     })
     assert.equal(d3.selection().selectAll('h1').size(), 2)
@@ -80,7 +82,8 @@ describe('base container component', function() {
     call_render_with({
       'component_args': {'title': ''},
       'parser': () => (selection) => selection.append('b').text(''),
-      'render_args': [ { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' } ]
+      'render_args': [ { 'component': 'text', 'args': {'tagName': 'h1'},
+        'data': 'My title' } ]
     })
     assert.equal(d3.selection().selectAll('b').size(), 1)
   })
@@ -111,7 +114,8 @@ describe('base container component', function() {
       'wrapper_tag': 'div', 'wrapper_class': 'foo',
       'render_args': [
         { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
-        { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
+        { 'component': 'text', 'args': {'tagName': 'h2'},
+          'data': 'My secondary header' }
       ]
     })
     assert.equal(d3.selection().selectAll('div.foo').size(), 2)
@@ -124,7 +128,8 @@ describe('base container component', function() {
       'wrapper_tag': 'span', 'wrapper_class': 'bar',
       'render_args': [
         { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
-        { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
+        { 'component': 'text', 'args': {'tagName': 'h2'},
+          'data': 'My secondary header' }
       ]
     })
     assert.equal(d3.selection().selectAll('span.bar').size(), 2)
@@ -139,7 +144,8 @@ describe('base container component', function() {
       'validators': my_validators,
       'render_args': [
         { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
-        { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
+        { 'component': 'text', 'args': {'tagName': 'h2'},
+          'data': 'My secondary header' }
       ]
     })
     my_component_func.should.be.calledWith({
@@ -158,7 +164,8 @@ describe('base container component', function() {
       'init': my_init,
       'render_args': [
         { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
-        { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
+        { 'component': 'text', 'args': {'tagName': 'h2'},
+          'data': 'My secondary header' }
       ]
     })
     my_component_func.should.be.calledWith({
@@ -170,12 +177,14 @@ describe('base container component', function() {
 
   it('only new component is visible after second render', () => {
     const { render } = call_render_with({
-      'parser': (component) => (selection) => selection.append(component.component),
+      'parser': (component) => (selection) => selection.append(
+        component.component),
       'component_args': {'title': ''},
       'wrapper_tag': 'span', 'wrapper_class': 'bar',
       'render_args': [
         { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
-        { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
+        { 'component': 'text', 'args': {'tagName': 'h2'},
+          'data': 'My secondary header' }
       ]
     })
     assert.equal(d3.selection().selectAll('text').size(), 2)
@@ -211,7 +220,8 @@ describe('base container component', function() {
       'wrapper_tag': 'span', 'wrapper_class': 'bar',
       'render_args': [
         { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
-        { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
+        { 'component': 'text', 'args': {'tagName': 'h2'},
+          'data': 'My secondary header' }
       ]
     })
     assert.equal(d3.selection().selectAll('h1').size(), 2)

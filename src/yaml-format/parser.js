@@ -54,9 +54,11 @@ const handle_attr_syntax = (component) => {
   const attrs = component.data.filter((x) => Object.keys(x)[0].match(/attr:.*/))
   if (attrs.length === 0) return component
 
-  const mapped_attrs = attrs.map((x) => [Object.keys(x)[0], Object.values(x)[0]])
+  const mapped_attrs = attrs
+    .map((x) => [Object.keys(x)[0], Object.values(x)[0]])
   let parsed_args = {}
-  mapped_attrs.map((value) => parsed_args[value[0].match(/attr:(.*)/)[1]] = value[1])
+  mapped_attrs
+    .map((value) => parsed_args[value[0].match(/attr:(.*)/)[1]] = value[1])
 
   return {
     'component': component.component,
@@ -73,7 +75,8 @@ const handle_attr_syntax = (component) => {
  * @returns {object}
  */
 const parser = (input) => {
-  const yaml_contents = (typeof input === 'string') ? yaml.safeLoad(input) : input
+  const yaml_contents = (typeof input === 'string')
+    ? yaml.safeLoad(input) : input
   if (yaml_contents === undefined)
     throw new Error('A non-empty input file is required')
 
@@ -83,7 +86,8 @@ const parser = (input) => {
   for (const rule of rules) {
     const [ patterns, func ] = rule
     for (const pattern of patterns) {
-      if (key.match(pattern)) return handle_urls(handle_attr_syntax(func(key.match(pattern), value)))
+      if (key.match(pattern)) return handle_urls(
+        handle_attr_syntax(func(key.match(pattern), value)))
     }
   }
 

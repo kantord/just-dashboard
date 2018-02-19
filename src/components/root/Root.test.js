@@ -46,7 +46,8 @@ describe('Root component', function() {
     call_render_with({
       'component_args': {'title': 'I don\'t care'},
       'parser': () => (selection) => selection.append('h1').text('My title'),
-      'render_args': [{'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title'}]
+      'render_args': [{'component': 'text', 'args': {'tagName': 'h1'}, 
+        'data': 'My title'}]
     })
     assert.equal(d3.selection().select('h1').text(), 'My title')
   })
@@ -65,7 +66,8 @@ describe('Root component', function() {
       'parser': () => (selection) => selection.append('h1').text('My title'),
       'render_args': [
         { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
-        { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
+        { 'component': 'text', 'args': {'tagName': 'h2'},
+          'data': 'My secondary header' }
       ]
     })
     assert.equal(d3.selection().selectAll('h1').size(), 2)
@@ -75,7 +77,8 @@ describe('Root component', function() {
     call_render_with({
       'component_args': {'title': ''},
       'parser': () => (selection) => selection.append('b').text(''),
-      'render_args': [ { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' } ]
+      'render_args': [ { 'component': 'text', 'args': {'tagName': 'h1'},
+        'data': 'My title' } ]
     })
     assert.equal(d3.selection().selectAll('b').size(), 1)
   })
@@ -105,7 +108,8 @@ describe('Root component', function() {
       'component_args': {'title': ''},
       'render_args': [
         { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
-        { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
+        { 'component': 'text', 'args': {'tagName': 'h2'},
+          'data': 'My secondary header' }
       ]
     })
     assert.equal(d3.selection().selectAll('.ds--wrapper').size(), 2)
@@ -150,7 +154,8 @@ describe('Root component', function() {
       'component_args': {'title': ''},
       'render_args': [
         { 'component': 'text', 'args': {'tagName': 'h1'}, 'data': 'My title' },
-        { 'component': 'text', 'args': {'tagName': 'h2'}, 'data': 'My secondary header' }
+        { 'component': 'text', 'args': {'tagName': 'h2'},
+          'data': 'My secondary header' }
       ]
     })
     assert.equal(d3.selection().selectAll('.ds--wrapper').size(), 2)

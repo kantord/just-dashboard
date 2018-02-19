@@ -1,9 +1,14 @@
 {
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc"]
+    },
     "opts": {
         "template": "node_modules/minami",
         "encoding": "utf8",
         "destination": "./docs/",
-        "recurse": true
+        "recurse": true,
+        "private": true
     },
     "plugins": ["plugins/markdown", "node_modules/jsdoc-babel"],
     "source": {
@@ -11,5 +16,14 @@
         "exclude": [],
         "includePattern": ".+\\.js(doc|x)?$",
         "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": true,
+        "useLongnameInNav": false,
+        "showInheritedInNav": true,
+        "default": {
+          "includeDate": false
+        }
     }
 }

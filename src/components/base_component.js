@@ -57,6 +57,7 @@ const execute_query = (query, data) =>
   (callback) =>
     jq(data, query)
       .then((data) => callback(data))
+      .catch((error) => {throw error})
 
 const render_component_with_query = (args, instance_args, selection,
   element) => (data) =>
@@ -147,3 +148,4 @@ const Component = (args) => {
 }
 
 export default Component
+export { execute_query }

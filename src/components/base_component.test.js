@@ -17,7 +17,10 @@ describe('Component', function() {
     const injector = require('inject-loader!./base_component.js')
     const jq = sinon.stub().returns(
       (args.dont_execute_query === true) ? {'then': () => null}
-        : {'then': (x) => x(args.jq_return_value)}
+        : {'then': (resolve, reject) => {
+          if (args.jq_error) reject(args.jq_error)
+          resolve(args.jq_return_value)
+        }}
     )
     const format_value = sinon.stub()
       .onCall(0).returns(args.format_value_return)
@@ -228,6 +231,20 @@ describe('Component', function() {
       'render_func': render_func})
     render_func.should.be.calledWith(sinon.match.any, sinon.match.any,
       jq_return_value)
+  })
+
+  it('render() should throw error returned by jq\'s promise reject', () => {
+    const injector = require('inject-loader!./base_component.js')
+    const jq_error = new Error('Random error')
+    const execute_query = injector({
+      '../jq-web.js': () => ({
+        'then': () => null,
+        'catch': (reject) => reject(jq_error),
+      })
+    }).execute_query
+    (() => {
+      execute_query(null, null)
+    }).should.throw(jq_error)
   })
 
   const loader_test = (args) => {

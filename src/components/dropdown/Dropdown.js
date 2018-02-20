@@ -53,7 +53,8 @@ const update_pattern = (selection) =>
  * @example <caption>JavaScript format</caption>
  * import DropdownComponent from 'components/dropdown'
  *
- * DropdownComponent({"variable": "name", "default": "JohnDoe"})(d3.selection())(...)
+ * DropdownComponent({
+ *   "variable": "name", "default": "JohnDoe"})(d3.selection())(...)
  *
  *
  */

@@ -65,6 +65,7 @@
     "mochawesome": "^3.0.2",
     "node-sass": "^4.7.2",
     "nyc": "^11.4.1",
+    "phantomjs-prebuilt": "^2.1.16",
     "sass-loader": "^6.0.6",
     "selenium-webdriver": "^4.0.0-alpha.1",
     "semantic-release": "^12.4.1",

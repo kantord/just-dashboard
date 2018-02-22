@@ -26,11 +26,14 @@ describe('Integration test', function() {
 
   it('jq + d3 + url loading', function(done) {
     const browser = new Browser({ site: 'http://localhost:3000' })
-    browser.visit('lib/test_page.html', () => {
-      console.log(browser.location.href);
-      console.log(browser.html())
-      done()
+    browser.visit('manual_test.js', () => {
+        console.log('cucc', browser.html())
     });
+
+    //browser.visit('lib/test_page.html', () => {
+      //browser.assert.text('title', 'Cereals')
+      //done()
+    //});
   })
 
 })

@@ -15,7 +15,7 @@
     "lint:fix": "eslint src --fix",
     "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text npm run test",
     "analyze": "webpack --profile --json > stats.json",
-    "manual-test": "webpack-dev-server './src/manual_test.js' --hot --inline --output-filename 'manual_test.js'",
+    "manual-test": "webpack-dev-server './src/manual_test.js' --hot --inline --output-filename 'test.js'",
     "semantic-release": "semantic-release",
     "test:e2e": "webpack src/manual_test.js  --output-filename test.js --config webpack.config.js && mocha-webpack \"src/e2e-test.js\" --timeout 80000 --webpack-config webpack.test.config.js  --require babel-polyfill"
   },

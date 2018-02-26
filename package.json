@@ -31,7 +31,6 @@
     "spinkit": "^1.2.5"
   },
   "devDependencies": {
-    "@rill/http": "^7.0.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.2",
@@ -65,7 +64,6 @@
     "mochawesome": "^3.0.2",
     "node-sass": "^4.7.2",
     "nyc": "^11.4.1",
-    "phantomjs-prebuilt": "^2.1.16",
     "sass-loader": "^6.0.6",
     "selenium-webdriver": "^4.0.0-alpha.1",
     "semantic-release": "^12.4.1",
@@ -76,8 +74,7 @@
     "stylish": "^1.0.0",
     "webpack": "^3.11.0",
     "webpack-dev-server": "^2.11.1",
-    "webpack-node-externals": "^1.6.0",
-    "zombie": "^5.0.7"
+    "webpack-node-externals": "^1.6.0"
   },
   "nyc": {
     "require": [

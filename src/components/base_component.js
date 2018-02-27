@@ -54,15 +54,16 @@ const call_render_function = (args, instance_args, selection, element) =>
   }
 
 const execute_query = (query, data) =>
-  (callback) =>
+  (reject) => (resolve) =>
     jq(data, query)
-      .then((data) => callback(data))
-      .catch((error) => {throw error})
+      .then((data) => resolve(data))
+      .catch((error) => {reject(error)})
 
 const render_component_with_query = (args, instance_args, selection,
   element) => (data) =>
   with_spinner(selection)(
-    execute_query(instance_args.query, data))(
+    execute_query(instance_args.query, data)(
+      e => show_error_message(e)(selection)))(
     call_render_function(args, instance_args, selection, element))
 
 const render_component = (args, instance_args, ...rest) => 

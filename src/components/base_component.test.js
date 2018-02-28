@@ -16,8 +16,13 @@ describe('Component', function() {
   const call_test_component_with = (args) => {
     const injector = require('inject-loader!./base_component.js')
     const jq = sinon.stub().returns(
-      (args.dont_execute_query === true) ? {'then': () => null}
-        : {'then': (x) => x(args.jq_return_value)}
+      (args.dont_execute_query === true) ? {
+        'then': () => ({'catch': () => null})}
+        : {'then': (resolve, reject) => {
+          if (args.jq_error) reject(args.jq_error)
+          resolve(args.jq_return_value)
+          return {'catch': () => null}
+        }}
     )
     const format_value = sinon.stub()
       .onCall(0).returns(args.format_value_return)
@@ -35,7 +40,8 @@ describe('Component', function() {
     const my_validator = sinon.spy()
     const validators = [my_validator]
     const my_component = (args.has_init === true) ? Component({
-      'render': my_render, 'validators': validators, 'init': my_init
+      'render': my_render, 'validators': validators,
+      'init': (args.init_func) ? args.init_func: my_init
     }) : Component({
       'render': my_render, 'validators': validators
     })
@@ -45,7 +51,7 @@ describe('Component', function() {
     const render = bind(my_selection)
     render(args.data)
     return { my_init, my_component, my_render, my_selection, render, jq,
-      format_value, my_validator }
+      format_value, my_validator, d3 }
   }
 
   it('should require a render function', () => {
@@ -227,6 +233,21 @@ describe('Component', function() {
       'render_func': render_func})
     render_func.should.be.calledWith(sinon.match.any, sinon.match.any,
       jq_return_value)
+  })
+
+  it('execute_query calls reject', () => {
+    const injector = require('inject-loader!./base_component.js')
+    const jq_error = new Error('Random error')
+    const execute_query = injector({
+      '../jq-web.js': () => ({
+        'then': () => ({
+          'catch': (x) => x(jq_error)
+        })
+      })
+    }).execute_query
+    const fail_handler = sinon.spy()
+    execute_query(null, null)(fail_handler)(() => null)
+    fail_handler.should.be.calledWith(jq_error)
   })
 
   const loader_test = (args) => {
@@ -609,4 +630,26 @@ describe('Component', function() {
       format_value_return, sinon.match.any, data)
   })
 
+  const test_error_messages = ['Totally random error', 'Another error here']
+
+  test_error_messages.forEach(message => {
+    it(`error message when error happens during render() (${message})`, () => {
+      const my_render = sinon.stub().throws(message)
+      const { d3 } = call_test_component_with({
+        'render_func': my_render
+      })
+      my_render.should.be.called()
+      assert.equal(d3.select('p.error').text(), message)
+    })
+
+    it(`error message when error happens during init() (${message})`, () => {
+      const my_init = sinon.stub().throws(message)
+      const { d3 } = call_test_component_with({
+        'init_func': my_init,
+        'has_init': true
+      })
+      my_init.should.be.called()
+      assert.equal(d3.select('p.error').text(), message)
+    })
+  })
 })

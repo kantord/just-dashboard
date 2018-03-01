@@ -51,7 +51,7 @@
     "fake-style-loader": "^1.0.1",
     "file-loader": "^1.1.8",
     "hard-source-webpack-plugin": "^0.6.0",
-    "html-webpack-plugin": "^2.30.1",
+    "html-webpack-plugin": "^3.0.0",
     "inject-loader": "^3.0.1",
     "js-yaml": "^3.10.0",
     "jsdoc": "^3.5.5",

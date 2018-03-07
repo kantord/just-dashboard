@@ -2,30 +2,43 @@ import should from 'should' // eslint-disable-line no-unused-vars
 import assert from 'assert'
 import sinon from 'sinon'
 
+
 describe('yaml format - parser', function() {
 
-  const set_up = function({safeLoadSpyReturns}) {
+  const set_up = function({safeLoadSpyReturns, safeLoadSpyThrows}) {
     const injector = require('inject-loader!./parser.js')
-    const safeLoadSpy = sinon.stub().returns(safeLoadSpyReturns)
-    const parser = injector({
+    let safeLoadSpy = sinon.stub().returns(safeLoadSpyReturns)
+    if (safeLoadSpyThrows)
+      safeLoadSpy = safeLoadSpy.throws(new Error(safeLoadSpyThrows))
+    const injected = injector({
       'js-yaml': {'safeLoad': safeLoadSpy},
-    }).default
+    })
 
-    return { parser, safeLoadSpy }
+    const parser = injected.default
+    const error_message = injected.error_message
+
+    return { parser, safeLoadSpy, error_message }
   }
 
-  it('should throw error for empty input', function() {
-    (function() {
-      const { parser } = set_up({'safeLoadSpyReturns': undefined})
-      parser('')
-    }).should.throw('A non-empty input file is required')
+  it('should display error for empty input', function() {
+    const { parser, error_message } = set_up({'safeLoadSpyReturns': undefined})
+    parser('').should.deepEqual(
+      error_message('A non-empty input file is required'))
   })
 
-  it('should not throw error for valid input', function() {
-    (function() {
-      const { parser } = set_up({'safeLoadSpyReturns': []})
-      parser('dashboard "Hello World": []')
-    }).should.not.throw('A non-empty input file is required')
+  it('should display error thrown by safeLoad', function() {
+    const error = 'foo bar baz!'
+    const { parser, error_message } = set_up({'safeLoadSpyThrows': error})
+    parser('').should.deepEqual(
+      error_message('Error: ' + error))
+  })
+
+  it('should not display error for valid input', function() {
+    const { parser, error_message } = set_up({'safeLoadSpyReturns': {
+      'dashboard "Hello World"': []
+    }})
+    parser('dashboard "Hello World": []').should.not.deepEqual(
+      error_message('A non-empty input file is required'))
   })
 
   it('yaml is only parsed if input is a string', function() {

@@ -29,7 +29,7 @@ import { required } from '../../validators'
  */
 const RootComponent = Component({
   'validators': [required('title')],
-  'init': (args, selection) => selection.select('title').text(args.title),
+  'init': (args, selection) => {selection.select('title').text(args.title)},
   'render': (args, selection, data) => {
     const body = selection.select('body')
     body.selectAll('*').remove()

@@ -68,6 +68,18 @@ const handle_attr_syntax = (component) => {
 }
 
 
+export const error_message = message => ({
+  'component': 'root',
+  'args': {'title': message},
+  'data': [
+    {
+      'component': 'text',
+      'args': {'tagName': 'p'},
+      'data': message
+    }
+  ]
+})
+
 
 /**
  * Compiles a YAML dashboard file into a JSON dashboard file
@@ -75,23 +87,27 @@ const handle_attr_syntax = (component) => {
  * @returns {object}
  */
 const parser = (input) => {
-  const yaml_contents = (typeof input === 'string')
-    ? yaml.safeLoad(input) : input
-  if (yaml_contents === undefined)
-    throw new Error('A non-empty input file is required')
+  try {
+    const yaml_contents = (typeof input === 'string')
+      ? yaml.safeLoad(input) : input
+    if (yaml_contents === undefined)
+      return error_message('A non-empty input file is required')
 
-  const key = Object.keys(yaml_contents)[0]
-  const value = Object.values(yaml_contents)[0]
+    const key = Object.keys(yaml_contents)[0]
+    const value = Object.values(yaml_contents)[0]
 
-  for (const rule of rules) {
-    const [ patterns, func ] = rule
-    for (const pattern of patterns) {
-      if (key.match(pattern)) return handle_urls(
-        handle_attr_syntax(func(key.match(pattern), value)))
+    for (const rule of rules) {
+      const [ patterns, func ] = rule
+      for (const pattern of patterns) {
+        if (key.match(pattern)) return handle_urls(
+          handle_attr_syntax(func(key.match(pattern), value)))
+      }
     }
-  }
 
-  return yaml_contents
+    return yaml_contents
+  } catch (error) {
+    return error_message(error.toString())
+  }
 }
 
 export default parser

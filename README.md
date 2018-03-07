@@ -1,4 +1,5 @@
-# just-dashboard [![Travis](https://img.shields.io/travis/kantord/just-dashboard/master.svg)]() [![Codecov](https://img.shields.io/codecov/c/github/kantord/just-dashboard/master.svg)]()
+# just-dashboard [![Travis](https://img.shields.io/travis/kantord/just-dashboard/master.svg)]() [![Codecov](https://img.shields.io/codecov/c/github/kantord/just-dashboard/master.svg)][![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkantord%2Fjust-dashboard.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkantord%2Fjust-dashboard?ref=badge_shield)
+()
 
 
 Turn this:
@@ -111,3 +112,7 @@ const render_dashboard = json_parser(dashboard)
 render_dashboard(d3.select("body"))
 
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkantord%2Fjust-dashboard.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkantord%2Fjust-dashboard?ref=badge_large)

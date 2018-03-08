@@ -55,7 +55,7 @@
     "inject-loader": "^3.0.1",
     "js-yaml": "^3.10.0",
     "jsdoc": "^3.5.5",
-    "jsdoc-babel": "^0.3.0",
+    "jsdoc-babel": "^0.4.0",
     "jsdom": "^11.6.2",
     "jsdom-global": "^3.0.2",
     "minami": "^1.2.3",

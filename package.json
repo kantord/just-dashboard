@@ -66,7 +66,7 @@
     "nyc": "^11.4.1",
     "sass-loader": "^6.0.6",
     "selenium-webdriver": "^4.0.0-alpha.1",
-    "semantic-release": "^12.4.1",
+    "semantic-release": "^15.0.1",
     "should": "^13.2.1",
     "should-sinon": "0.0.6",
     "sinon": "^4.3.0",

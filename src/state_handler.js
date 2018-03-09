@@ -22,6 +22,9 @@ const create_state_handler = () => {
 
   const state_handler = {
     'get_state': () => state,
+    'reset': () => {
+      subscriptions = []
+    },
     'init_variable': (variable, value) => {
       if (state[variable] === undefined) {
         handle_change(variable, value)

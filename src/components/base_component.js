@@ -110,7 +110,7 @@ const create_bind_function = (args, instance_args) => (selection) => {
         if (element === null || (element && element.node
           && !document.contains(element.node()))) return
         state_handler.subscribe(me)
-        element.remove()
+        if (element) element.remove()
         element = create_element(
           args.init, format_arguments(instance_args), selection)
         render_()

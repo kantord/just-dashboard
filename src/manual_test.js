@@ -11,6 +11,12 @@ render_dashboard(`
 dashboard "Cereals":
   - h1 text: "Cereals"
   - h2 text: "By calories"
+  - dropdown my_var=foo:
+    - {"value": "foo", "text": "Foo"}
+    - {"value": "bar", "text": "Bar"}
+  - 2 columns:
+    - p text: "foo \${my_var} bar"
+    - p text: "foo \${my_var} bar"
   - bar chart:
     - attr:query: '{"columns": [(sort_by(-(.calories | tonumber)) | .[] | [.name, .calories])]}'
     - data: https://gist.githubusercontent.com/ZeningQu/6184eaf8faa533e320abc938c4738c3e/raw/40f237de825061faa8721c2293b79c46979780b4/cereals.csv

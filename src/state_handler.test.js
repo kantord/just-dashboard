@@ -70,6 +70,20 @@ describe('state handler', () => {
     create_state_handler().subscribe.should.be.a.Function()
   })
 
+  it('has a reset method', () => {
+    create_state_handler().reset.should.be.a.Function()
+  })
+
+  it('reset() undoes subscriptions', () => {
+    const my_callback = sinon.spy()
+    const state_handler = create_state_handler()
+    state_handler.subscribe(my_callback)
+    state_handler.reset()
+    state_handler.set_variable('foo', 42)
+    my_callback.should.not.be.called()
+  })
+
+
   const methods_that_update_state = ['init_variable', 'set_variable']
 
   methods_that_update_state.forEach(method => {

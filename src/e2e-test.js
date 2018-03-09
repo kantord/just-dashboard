@@ -37,6 +37,15 @@ describe('Integration test', function() {
         title_text.should.equal('Cereals')
         const h1_text = await driver.findElement(By.css('h1')).getText()
         h1_text.should.equal('Cereals')
+        const original_elements = await driver.findElements(
+          By.css('svg'))
+        const original_element_count = original_elements.length
+        const dropdown = await driver.findElement(By.css('select'))
+        await driver.findElement(By.css('select option:nth-child(2)')).click()
+        const new_elements = await driver.findElements(
+          By.css('svg'))
+        const new_element_count = new_elements.length
+        original_element_count.should.equal(new_element_count)
       } finally {
         await driver.quit()
       }

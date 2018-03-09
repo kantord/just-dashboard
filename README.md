@@ -76,6 +76,33 @@ You can see the results for yourself here: [http://bottoml.in/e/kantord/aa4a30d0
 Using the same principle, you can also loads parts from your dashboard from
 other files, or just JSON/CSV data for specific charts.
 
+## Variables
+Suppose you are only interested in comparing foods by how much they contain of
+a single macronutrient. However, you want to be able to decide which
+macronutrient.
+
+In this case, you can use a variable to store which nutrient you're interested
+in, and a dropdown to make that variable configurable on your page. Then you
+can use some jq magic to transform your date for your chart.
+
+```yaml
+dashboard "Food":
+  - h1 text: Food
+  - dropdown macro=Protein:
+    - {"value": "Protein", "text": "Protein"}
+    - {"value": "Fat", "text": "Fat"}
+    - {"value": "Sugar", "text": "Sugar"}
+    - {"value": "Other carbs", "text": "Other carbs"}
+  - h2 text: By ${macro} content
+  - bar chart:
+    - attr:query: '{"columns": [to_entries | .[] | [.key, (.value | .[] | select(.[0] == "${macro}"))[1] ]]}'
+- data: https://gist.githubusercontent.com/kantord/2b2e3b22cb70be0415a7d50c395fa411/raw/47542f8a3db0d65aeeb48e28ddfaa8feabbc72b5/nutri.json
+```
+
+![Screenshot of a dashboard that uses a dropdown to configure charts](https://github.com/kantord/just-dashboard/raw/master/screenshot_variables.png "")
+
+
+
 ## Documentation
 
 Documentation is available at: [https://kantord.github.io/just-dashboard/](https://kantord.github.io/just-dashboard/)

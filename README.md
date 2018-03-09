@@ -101,7 +101,7 @@ dashboard "Food":
 
 ![Screenshot of a dashboard that uses a dropdown to configure charts](https://github.com/kantord/just-dashboard/raw/master/screenshot_variables.png "")
 
-
+Try it live: [https://bottoml.in/e/kantord/866ebc270b4e0db5389b7de9bf181430](https://bottoml.in/e/kantord/866ebc270b4e0db5389b7de9bf181430)
 
 ## Documentation
 

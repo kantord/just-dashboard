@@ -116,7 +116,7 @@ describe('Root component', function() {
   })
 
   it('variables are initialized in state', function() {
-    const state_handler = {'init_variable': sinon.spy()}
+    const state_handler = {'init_variable': sinon.spy(), 'reset': sinon.spy()}
     const my_default = sinon.spy()
     call_render_with({
       'parser': (component) => () => component.args.state_handler.init_variable(
@@ -131,8 +131,24 @@ describe('Root component', function() {
     state_handler.init_variable.should.be.calledWith('foo', my_default)
   })
 
+  it('calls state_handler\'s reset', function() {
+    const state_handler = {'reset': sinon.spy()}
+    const my_default = sinon.spy()
+    call_render_with({
+      'parser': (component) => () => component.args.state_handler.init_variable(
+        component.args.variable, component.args.default),
+      'component_args': {'title': 'x', 'state_handler': state_handler},
+      'render_args': [
+        { 'component': 'dropdown', 'args': {
+          'default': my_default, 'variable': 'foo',
+        }, 'data': [] }
+      ]
+    })
+    state_handler.reset.should.be.called()
+  })
+
   it('variables are updated in state', function() {
-    const state_handler = {'set_variable': sinon.spy()}
+    const state_handler = {'set_variable': sinon.spy(), 'reset': sinon.spy()}
     const my_default = sinon.spy()
     call_render_with({
       'parser': (component) => () => component.args.state_handler.set_variable(

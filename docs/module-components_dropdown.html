@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>components/columns - Documentation</title>
+    <title>components/dropdown - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">components/columns</h1>
+    <h1 class="page-title">components/dropdown</h1>
     
 
     
@@ -51,8 +51,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Useful for grouping elements in a horizontal layout. Similar to
-Columns, but the elements are aligned in columns.</p></div>
+            <div class="description"><p>Creates a dropdown</p></div>
         
 
         
@@ -94,7 +93,7 @@ Columns, but the elements are aligned in columns.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_columns_Columns.js.html">components/columns/Columns.js</a>, <a href="components_columns_Columns.js.html#line19">line 19</a>
+        <a href="components_dropdown_Dropdown.js.html">components/dropdown/Dropdown.js</a>, <a href="components_dropdown_Dropdown.js.html#line47">line 47</a>
     </li></ul></dd>
     
 
@@ -164,11 +163,7 @@ Columns, but the elements are aligned in columns.</p></div>
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -180,7 +175,7 @@ Columns, but the elements are aligned in columns.</p></div>
 
         <tr>
             
-                <td class="name"><code>columns</code></td>
+                <td class="name"><code>variable</code></td>
             
 
             <td class="type">
@@ -188,28 +183,32 @@ Columns, but the elements are aligned in columns.</p></div>
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
 
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    2
-                
-                </td>
             
 
             <td class="description last">
-                <p>Ideal number of columns. Might be reduced on smaller
-screens.</p>
+                <p>Variable name</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>default</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Default value</p>
                 
             </td>
         </tr>
@@ -267,34 +266,30 @@ screens.</p>
 
         <p class="code-caption">YAML format</p>
     
-    <pre class="prettyprint"><code>columns:
-  ...</code></pre>
+    <pre class="prettyprint"><code>dropdown name=JohnDoe:
+  - {"value": "JohnDoe", "text": "John Doe"}
+  - {"value": "JoeSmith", "text": "Joe Smith"}</code></pre>
 
-    <pre class="prettyprint"><code>4 columns:
+    <pre class="prettyprint"><code>bar dropdown:
   ...</code></pre>
 
         <p class="code-caption">JSON format</p>
     
     <pre class="prettyprint"><code>{
-  "component": "columns",
-  "data": [...]
-}</code></pre>
-
-    <pre class="prettyprint"><code>{
-  "component": "columns",
-  "args": {"columns": 4},
-  "data": [...]
+  "component": "dropdown",
+  "args": {"variable": "name", "default": "JohnDoe"},
+  "data": [
+    {"value": "JohnDoe", "text": "John Doe"},
+    {"value": "JoeSmith", "text": "Joe Smith"}
+  ]
 }</code></pre>
 
         <p class="code-caption">JavaScript format</p>
     
-    <pre class="prettyprint"><code>import ColumnsComponent from 'components/columns'
+    <pre class="prettyprint"><code>import DropdownComponent from 'components/dropdown'
 
-ColumnsComponent({})(d3.selection())(...)</code></pre>
-
-    <pre class="prettyprint"><code>import ColumnsComponent from 'components/columns'
-
-ColumnsComponent({'columns': '4'})(d3.selection())(...)</code></pre>
+DropdownComponent({
+  "variable": "name", "default": "JohnDoe"})(d3.selection())(...)</code></pre>
 
 </div>
 

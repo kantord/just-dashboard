@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>components/columns/Columns.js - Documentation</title>
+    <title>components/dropdown/Dropdown.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">components/columns/Columns.js</h1>
+    <h1 class="page-title">components/dropdown/Dropdown.js</h1>
     
 
     
@@ -39,61 +39,90 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import ContainerComponent from '../container_base.js'
-import Wrapped from '../wrapped'
-import './Columns.scss'
+            <pre class="prettyprint source linenums"><code>import Component from '../base_component.js'
+import { required } from '../../validators'
+import { regexp } from '../../validators'
+import * as d3 from 'd3'
+
+const set_values = (selection) => selection
+  .property('value', d => d.value)
+  .text(d => d.text)
+
+const enter = (selection) => selection
+  .enter()
+  .append('option')
+  .attr('class', 'ds--select-option')
+  .call(set_values)
+
+const exit = (selection) => selection
+  .exit()
+  .remove()
+
+const update = (selection) => selection
+  .call(set_values)
+
+const update_pattern = (selection) =>
+  [enter, exit, update].map(f => f(selection))
 
 /**
- * Useful for grouping elements in a horizontal layout. Similar to
- * Columns, but the elements are aligned in columns.
- * @module components/columns
+ * Creates a dropdown
+ * @module components/dropdown
  * @param args Component arguments
- * @param [args.columns=2] Ideal number of columns. Might be reduced on smaller
- * screens.
+ * @param args.variable Variable name
+ * @param args.default Default value
  * @returns {function}
  *
  * @example &lt;caption>YAML format&lt;/caption>
- * columns:
- *   ...
+ * dropdown name=JohnDoe:
+ *   - {"value": "JohnDoe", "text": "John Doe"}
+ *   - {"value": "JoeSmith", "text": "Joe Smith"}
  *
  * @example
- * 4 columns:
+ * bar dropdown:
  *   ...
  *
  * @example &lt;caption>JSON format&lt;/caption>
  * {
- *   "component": "columns",
- *   "data": [...]
+ *   "component": "dropdown",
+ *   "args": {"variable": "name", "default": "JohnDoe"},
+ *   "data": [
+ *     {"value": "JohnDoe", "text": "John Doe"},
+ *     {"value": "JoeSmith", "text": "Joe Smith"}
+ *   ]
  * }
  *
- * @example
- * {
- *   "component": "columns",
- *   "args": {"columns": 4},
- *   "data": [...]
- * }
  * @example &lt;caption>JavaScript format&lt;/caption>
- * import ColumnsComponent from 'components/columns'
+ * import DropdownComponent from 'components/dropdown'
  *
- * ColumnsComponent({})(d3.selection())(...)
+ * DropdownComponent({
+ *   "variable": "name", "default": "JohnDoe"})(d3.selection())(...)
  *
- * @example
- * import ColumnsComponent from 'components/columns'
  *
- * ColumnsComponent({'columns': '4'})(d3.selection())(...)
-
  */
-const ColumnsComponent = Wrapped((args, selection) => selection
-  .append('div')
-  .attr('class', 'ds--columns')
-  .attr('data-ds--columns', (
-    (args === undefined || args.columns === undefined) ? 2 : args.columns))
-)(ContainerComponent({
-  'wrapper_tag': 'div',
-  'wrapper_class': 'ds--column'
-}))
+const DropdownComponent = Component({
+  'validators': [
+    required('variable'),
+    regexp('variable', /^[A-Za-z]([_A-Za-z0-9-]*[_A-Za-z0-9])?$/),
+    required('default')],
+  'init': (args, selection) => {
+    args.state_handler.init_variable(args.variable, args.default)
+    return selection
+      .append('select').attr('class', 'ds--select')
+  },
+  'render': (args, selection, data, item) => {
+    item
+      .selectAll('option').data(data).call(update_pattern)
+    item
+      .property('value', args.state_handler.get_state()[args.variable])
+    item
+      .on('change', function() {
+        args.state_handler.set_variable(args.variable, d3.select(this)
+          .property('value'))
+      })
+  }
+})
 
-export default ColumnsComponent
+export default DropdownComponent
 </code></pre>
         </article>
     </section>

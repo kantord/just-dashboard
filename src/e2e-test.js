@@ -40,7 +40,6 @@ describe('Integration test', function() {
         const original_elements = await driver.findElements(
           By.css('svg'))
         const original_element_count = original_elements.length
-        const dropdown = await driver.findElement(By.css('select'))
         await driver.findElement(By.css('select option:nth-child(2)')).click()
         const new_elements = await driver.findElements(
           By.css('svg'))

@@ -171,7 +171,7 @@ describe('Component', function() {
   })
 
   it('if there is no init() function, a <span> is created', () => {
-    const { my_init } = call_test_component_with(
+    call_test_component_with(
       {'instance_args': {}, 'has_init': false})
     d3.selectAll('span').size().should.equal(1)
   })

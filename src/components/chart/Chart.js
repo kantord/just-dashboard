@@ -31,9 +31,10 @@ import { required } from '../../validators'
  */
 const ChartComponent = Component({
   'validators': [required('type')],
-  'render': (args, selection, data) => {
+  'init': (args, selection) => selection.append('div'),
+  'render': (args, selection, data, element) => {
+    console.log('render called') // eslint-disable-line
     const {bb} = require('billboard.js')
-    const element = selection.append('div')
     bb.generate({
       'bindto': element.node(),
       'data': Object.assign(data, {'type': args.type})

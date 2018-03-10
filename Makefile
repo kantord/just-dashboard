@@ -20,7 +20,10 @@ component_gallery/examples/%.js: ./component_gallery/examples/%.yml
 		const parserd_yaml = yaml_parser(data); \
 		json_parser(parserd_yaml)(d3.selection()); \
 	  }; \
-	  render_dashboard(\``cat '$<'`\`) \
+	  render_dashboard(\``cat '$<'`\`); \
+	  d3.selectAll('path.domain').attr('fill', 'transparent'); \
+	  d3.selectAll('path.domain').attr('stroke', 'black'); \
+	  d3.selectAll('.bb-chart-line').attr('fill', 'transparent'); \
 	" | sed 's/---/\n/' > $@
 
 component_gallery/component_gallery.md: component_gallery/gallery.json

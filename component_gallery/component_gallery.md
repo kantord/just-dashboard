@@ -1,3 +1,46 @@
+## Charts
+### bar chart
+![](screenshots/bar_chart.png)
+[Source](examples/bar_chart.yml)
+
+### donut chart
+![](screenshots/donut_chart.png)
+[Source](examples/donut_chart.yml)
+
+### pie chart
+![](screenshots/pie_chart.png)
+[Source](examples/pie_chart.yml)
+
+### gauge chart
+![](screenshots/gauge_chart.png)
+[Source](examples/gauge_chart.yml)
+
+### scatter chart
+![](screenshots/scatter_chart.png)
+[Source](examples/scatter_chart.yml)
+
+### line chart
+![](screenshots/line_chart.png)
+[Source](examples/line_chart.yml)
+
+### bubble chart
+![](screenshots/bubble_chart.png)
+[Source](examples/bubble_chart.yml)
+
+### spline chart
+![](screenshots/spline_chart.png)
+[Source](examples/spline_chart.yml)
+
+### area chart
+![](screenshots/area_chart.png)
+[Source](examples/area_chart.yml)
+
+### step chart
+![](screenshots/step_chart.png)
+[Source](examples/step_chart.yml)
+
+
+
 ## Controls
 ### dropdown
 ![](screenshots/dropdown.png)

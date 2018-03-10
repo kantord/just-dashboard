@@ -15,7 +15,7 @@ const options = {
   },
   captureSelector: 'body>*',
   defaultWhiteBackground: true,
-  renderDelay: 3000,
+  renderDelay: 2000,
   errorIfJSException: true
 }
 

@@ -1,0 +1,9 @@
+---
+  dashboard "Example": 
+    - 
+      gauge chart: 
+        columns: 
+          - 
+            - "data"
+            - 30
+

@@ -1,0 +1,15 @@
+---
+  dashboard "Example": 
+    - 
+      pie chart: 
+        columns: 
+          - 
+            - "Apples"
+            - 3
+          - 
+            - "Oranges"
+            - 2
+          - 
+            - "Pears"
+            - 2
+

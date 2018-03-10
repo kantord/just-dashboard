@@ -1,6 +1,5 @@
 ---
-  - "Text"
-  - "h3 text"
-  - 
-    h3 text: "Lorem ipsum dolor sit amet"
+  dashboard "Example": 
+    - 
+      h3 text: "Lorem ipsum dolor sit amet"
 

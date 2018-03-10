@@ -1,6 +1,5 @@
 ---
-  - "Text"
-  - "p text"
-  - 
-    p text: "Lorem ipsum dolor sit amet"
+  dashboard "Example": 
+    - 
+      p text: "Lorem ipsum dolor sit amet"
 

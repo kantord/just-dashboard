@@ -58,6 +58,7 @@
     "jsdoc-babel": "^0.4.0",
     "jsdom": "^11.6.2",
     "jsdom-global": "^3.0.2",
+    "json2yaml": "^1.1.0",
     "minami": "^1.2.3",
     "mocha": "^5.0.1",
     "mocha-webpack": "^1.0.1",

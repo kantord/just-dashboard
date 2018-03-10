@@ -7,3 +7,5 @@ lib/
 /coverage.lcov
 /stats.json
 mochawesome-report/
+/component_gallery/gallery.csv
+/component_gallery/gallery.json

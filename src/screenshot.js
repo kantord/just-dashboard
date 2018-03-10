@@ -1,6 +1,7 @@
+/* eslint-disable no-console */
 const express = require('express')
 const app = express()
-const webshot = require('webshot');
+const webshot = require('webshot')
 
 console.log('Starting server')
 app.use(express.static('lib'))
@@ -19,7 +20,8 @@ const options = {
 }
 
 console.log('Creating screenshot')
-webshot('http://localhost:3000/screenshot.html', process.argv[2], options, function(err) {
+const url ='http://localhost:3000/screenshot.html'
+webshot(url, process.argv[2], options, (err) => {
   if (err) {
     console.log(err)
   } else {

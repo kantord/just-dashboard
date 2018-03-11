@@ -1,0 +1,11 @@
+title: just-dashboard
+description: Create dashboards using YAML files
+github: [metadata]
+encoding: UTF-8
+kramdown:
+  input: GFM
+  hard_wrap: false
+future: true
+jailed: false
+theme: jekyll-theme-cayman
+gfm_quirks: paragraph_end

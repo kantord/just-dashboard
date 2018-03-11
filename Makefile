@@ -27,6 +27,7 @@ docs/examples/%.js: ./docs/examples/%.yml
 	" | sed 's/---/\n/' > $@
 
 docs/components.md: docs/gallery.json
+	bash -c 'echo "# Components" > $@'
 	cat $^ | jq --slurp " \
 	  group_by(.[0]) | \
 	  .[] | [ \
@@ -39,7 +40,7 @@ docs/components.md: docs/gallery.json
 		] | join(\"\n\") ), \
 		\"\", \
 		\"\"] \
-	  | join(\"\n\")" -r > $@
+	  | join(\"\n\")" -r >> $@
 
 docs/examples: docs/gallery.json
 	cat $^ | tr "\n" "\0"| xargs -L1 -0 -n1 -I % bash -c "echo '%' | jq '{\"dashboard \\\"Example\\\"\": [.[2]]}' | ./node_modules/json2yaml/cli.js > docs\/examples\/\`echo '%' | jq '.[1]' -r | sed 's/ /_/g'\`.yml"

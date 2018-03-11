@@ -1,3 +1,4 @@
+# Components
 ## Charts
 ### bar chart
 ![](screenshots/bar_chart.png)

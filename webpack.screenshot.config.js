@@ -22,14 +22,16 @@ module.exports = {
   module: {
     rules: [
       {
-		test: /\.scss$/,
+		test: /\.s?css$/,
 		use: [{
-			loader: "fake-style-loader" // creates style nodes from JS strings
+			loader: "style-loader" // creates style nodes from JS strings
 		}, {
 			loader: "css-loader" // translates CSS into CommonJS
 		}, {
 			loader: "sass-loader" // compiles Sass to CSS
-		}]
+		}, {
+            loader: 'postcss-loader'
+        }]
 	  },
       {
         test: /\.js$/,

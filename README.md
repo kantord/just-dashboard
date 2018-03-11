@@ -106,7 +106,7 @@ Try it live: [https://bottoml.in/e/kantord/866ebc270b4e0db5389b7de9bf181430](htt
 ## Documentation
 
 Documentation is available at: [https://kantord.github.io/just-dashboard/](https://kantord.github.io/just-dashboard/)
-Here's a gallery of supported components: [https://github.com/kantord/just-dashboard/blob/master/component_gallery/component_gallery.md](https://github.com/kantord/just-dashboard/blob/master/component_gallery/component_gallery.md])
+Here's a gallery of supported components: [https://github.com/kantord/just-dashboard/blob/master/component_gallery/component_gallery.md](https://github.com/kantord/just-dashboard/blob/master/component_gallery/component_gallery.md)
 
 ## Using your own backend
 

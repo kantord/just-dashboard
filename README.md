@@ -1,5 +1,7 @@
 # just-dashboard [![Travis](https://img.shields.io/travis/kantord/just-dashboard/master.svg)]() ![Codecov](https://img.shields.io/codecov/c/github/kantord/just-dashboard/master.svg)
 
+[Website](https://kantord.github.io/just-dashboard/)
+
 just-dashboard let's you turn this:
 ```yaml
 dashboard "Food":

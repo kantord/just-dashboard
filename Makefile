@@ -1,17 +1,17 @@
-component_gallery: component_gallery/examples component_gallery/component_gallery.md component_gallery/screenshots
+docs: docs/examples docs/components.md docs/screenshots
 
 
-component_gallery/screenshots: component_gallery/gallery.json
-	cat $^ | tr "\n" "\0"| xargs -L1 -0 -n1 -I % bash -c "make component_gallery\/screenshots\/\`echo '%' | jq '.[1]' -r | sed 's/ /_/g'\`.png"
+docs/screenshots: docs/gallery.json
+	cat $^ | tr "\n" "\0"| xargs -L1 -0 -n1 -I % bash -c "make docs\/screenshots\/\`echo '%' | jq '.[1]' -r | sed 's/ /_/g'\`.png"
 
-component_gallery/screenshots/%.png: component_gallery/examples/%.js
+docs/screenshots/%.png: docs/examples/%.js
 	rm -f src/_temp.js
 	cp $< src/_temp.js
 	bash -c "npx webpack src/_temp.js --output-filename screenshot_index.js --config webpack.screenshot.config.js"
 	node ./src/screenshot.js $@
 	rm -f src/_temp.js
 
-component_gallery/examples/%.js: ./component_gallery/examples/%.yml
+docs/examples/%.js: ./docs/examples/%.yml
 	echo " \
 	  import {json_parser, yaml_parser} from './index.js'; \
 	  import * as d3 from 'd3'; \
@@ -26,7 +26,7 @@ component_gallery/examples/%.js: ./component_gallery/examples/%.yml
 	  d3.selectAll('.bb-chart-line').attr('fill', 'transparent'); \
 	" | sed 's/---/\n/' > $@
 
-component_gallery/component_gallery.md: component_gallery/gallery.json
+docs/components.md: docs/gallery.json
 	cat $^ | jq --slurp " \
 	  group_by(.[0]) | \
 	  .[] | [ \
@@ -41,10 +41,10 @@ component_gallery/component_gallery.md: component_gallery/gallery.json
 		\"\"] \
 	  | join(\"\n\")" -r > $@
 
-component_gallery/examples: component_gallery/gallery.json
-	cat $^ | tr "\n" "\0"| xargs -L1 -0 -n1 -I % bash -c "echo '%' | jq '{\"dashboard \\\"Example\\\"\": [.[2]]}' | ./node_modules/json2yaml/cli.js > component_gallery\/examples\/\`echo '%' | jq '.[1]' -r | sed 's/ /_/g'\`.yml"
+docs/examples: docs/gallery.json
+	cat $^ | tr "\n" "\0"| xargs -L1 -0 -n1 -I % bash -c "echo '%' | jq '{\"dashboard \\\"Example\\\"\": [.[2]]}' | ./node_modules/json2yaml/cli.js > docs\/examples\/\`echo '%' | jq '.[1]' -r | sed 's/ /_/g'\`.yml"
 
-component_gallery/gallery.json: $(shell find src/components -name "gallery.json")
+docs/gallery.json: $(shell find src/components -name "gallery.json")
 	cat $^ | jq -c " \
 	  .[] | {\"example\": .examples | to_entries| .[], \"data\": .data, \"category\": .category} | \
 	  {\"code\": {(.example.value): .data}, \"category\": .category, \"name\": .example.key} | \

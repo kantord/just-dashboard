@@ -32,12 +32,22 @@ docs/components.md: docs/gallery.json
 	  group_by(.[0]) | \
 	  .[] | [ \
 		\"## \" + .[0][0], \
+		\"\", \
+		\"<div class=\\\"gallery-category\\\" markdown=\\\"1\\\">\", \
+		\"\", \
 		([.[] | \
-		  \"### \" + .[1], \
+		  \"\", \
+		  \"<div class=\\\"gallery-item\\\"  markdown=\\\"1\\\">\", \
+		  \"\", \
+		  \"### \" + .[1] + \
+			\" ( [Source](examples/\" + (.[1] | split(\" \") | join(\"_\")) + \".yml) )\", \
 		  \"![](screenshots/\" + (.[1] | split(\" \") | join(\"_\")) +  \".png)\", \
-		  \"[Source](examples/\" + (.[1] | split(\" \") | join(\"_\")) + \".yml)\", \
+		  \"\", \
+		  \"</div>\", \
 		  \"\" \
 		] | join(\"\n\") ), \
+		\"\", \
+		\"</div>\", \
 		\"\", \
 		\"\"] \
 	  | join(\"\n\")" -r >> $@

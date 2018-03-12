@@ -16,7 +16,7 @@ if (env === 'build') {
 
 module.exports = {
   devServer: {
-    contentBase: path.join(__dirname, "lib"),
+    contentBase: path.join(__dirname, "dist"),
     compress: true,
     port: 9000
   },
@@ -32,7 +32,7 @@ module.exports = {
     library: 'dashboard',
     libraryTarget: 'umd',
     umdNamedDefine: true,
-    path: path.resolve(__dirname, 'lib')
+    path: path.resolve(__dirname, 'dist')
   },
   plugins: plugins,
   module: {

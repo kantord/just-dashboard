@@ -11,6 +11,23 @@ docs/screenshots/%.png: docs/examples/%.js
 	node ./src/screenshot.js $@
 	rm -f src/_temp.js
 
+
+docs/examples/%.md: ./docs/examples/%.yml
+	echo "---" > $@
+	echo "layout: default" >> $@
+	echo "title: How to use $*" | sed 's/_/ /g' >> $@
+	echo "---" >> $@
+	echo "" >> $@
+	echo "# How to use $*" | sed 's/_/ /g' >> $@
+	echo "Here's an example code regarding the use of $*: " | sed 's/_/ /g' >> $@
+	echo "" >> $@
+	echo "\`\`\`yaml" >> $@
+	cat $^ >> $@
+	echo "\`\`\`" >> $@
+	echo "The code above will render a $* that looks like this:" | sed 's/_/ /g' >> $@
+	echo "" >> $@
+	echo "![](../screenshots/$*.png)" >> $@
+
 docs/examples/%.js: ./docs/examples/%.yml
 	echo " \
 	  import {json_parser, yaml_parser} from './index.js'; \
@@ -40,7 +57,7 @@ docs/components.md: docs/gallery.json
 		  \"<div class=\\\"gallery-item\\\"  markdown=\\\"1\\\">\", \
 		  \"\", \
 		  \"### \" + .[1] + \
-			\" ( [Source](examples/\" + (.[1] | split(\" \") | join(\"_\")) + \".yml) )\", \
+			\" ( [Source](examples/\" + (.[1] | split(\" \") | join(\"_\")) + \") )\", \
 		  \"![](screenshots/\" + (.[1] | split(\" \") | join(\"_\")) +  \".png)\", \
 		  \"\", \
 		  \"</div>\", \
@@ -54,6 +71,7 @@ docs/components.md: docs/gallery.json
 
 docs/examples: docs/gallery.json
 	cat $^ | tr "\n" "\0"| xargs -L1 -0 -n1 -I % bash -c "echo '%' | jq '{\"dashboard \\\"Example\\\"\": [.[2]]}' | ./node_modules/json2yaml/cli.js > docs\/examples\/\`echo '%' | jq '.[1]' -r | sed 's/ /_/g'\`.yml"
+	cat $^ | tr "\n" "\0"| xargs -L1 -0 -n1 -I % bash -c "make docs\/examples\/\`echo '%' | jq '.[1]' -r | sed 's/ /_/g'\`.md"
 
 docs/gallery.json: $(shell find src/components -name "gallery.json")
 	cat $^ | jq -c " \

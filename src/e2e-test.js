@@ -14,7 +14,7 @@ describe('Integration test', function() {
   before(function(done) {
     const express = require('express')
     const app = express()
-    app.use(express.static('lib'))
+    app.use(express.static('dist'))
     app.listen(3000, function(err) {
       if (err) { return done(err) }
       done()

@@ -4,7 +4,7 @@ const app = express()
 const webshot = require('webshot')
 
 console.log('Starting server')
-app.use(express.static('lib'))
+app.use(express.static('dist'))
 app.listen(3000)
 console.log('Server started')
 

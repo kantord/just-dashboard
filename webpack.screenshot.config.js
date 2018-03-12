@@ -14,10 +14,10 @@ module.exports = {
     library: 'dashboard',
     libraryTarget: 'umd',
     umdNamedDefine: true,
-    path: path.resolve(__dirname, 'lib')
+    path: path.resolve(__dirname, 'dist')
   },
   devServer: {
-    contentBase: './lib'
+    contentBase: './dist'
   },
   module: {
     rules: [

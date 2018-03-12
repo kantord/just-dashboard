@@ -1,81 +1,169 @@
 # Components
 ## Charts
-### bar chart
+
+<div class="gallery-category" markdown="1">
+
+
+<div class="gallery-item"  markdown="1">
+
+### bar chart ( [Source](examples/bar_chart.yml) )
 ![](screenshots/bar_chart.png)
-[Source](examples/bar_chart.yml)
 
-### donut chart
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
+### donut chart ( [Source](examples/donut_chart.yml) )
 ![](screenshots/donut_chart.png)
-[Source](examples/donut_chart.yml)
 
-### pie chart
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
+### pie chart ( [Source](examples/pie_chart.yml) )
 ![](screenshots/pie_chart.png)
-[Source](examples/pie_chart.yml)
 
-### gauge chart
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
+### gauge chart ( [Source](examples/gauge_chart.yml) )
 ![](screenshots/gauge_chart.png)
-[Source](examples/gauge_chart.yml)
 
-### scatter chart
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
+### scatter chart ( [Source](examples/scatter_chart.yml) )
 ![](screenshots/scatter_chart.png)
-[Source](examples/scatter_chart.yml)
 
-### line chart
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
+### line chart ( [Source](examples/line_chart.yml) )
 ![](screenshots/line_chart.png)
-[Source](examples/line_chart.yml)
 
-### bubble chart
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
+### bubble chart ( [Source](examples/bubble_chart.yml) )
 ![](screenshots/bubble_chart.png)
-[Source](examples/bubble_chart.yml)
 
-### spline chart
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
+### spline chart ( [Source](examples/spline_chart.yml) )
 ![](screenshots/spline_chart.png)
-[Source](examples/spline_chart.yml)
 
-### area chart
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
+### area chart ( [Source](examples/area_chart.yml) )
 ![](screenshots/area_chart.png)
-[Source](examples/area_chart.yml)
 
-### step chart
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
+### step chart ( [Source](examples/step_chart.yml) )
 ![](screenshots/step_chart.png)
-[Source](examples/step_chart.yml)
 
+</div>
+
+
+</div>
 
 
 ## Controls
-### dropdown
-![](screenshots/dropdown.png)
-[Source](examples/dropdown.yml)
 
+<div class="gallery-category" markdown="1">
+
+
+<div class="gallery-item"  markdown="1">
+
+### dropdown ( [Source](examples/dropdown.yml) )
+![](screenshots/dropdown.png)
+
+</div>
+
+
+</div>
 
 
 ## Grid
-### rows
+
+<div class="gallery-category" markdown="1">
+
+
+<div class="gallery-item"  markdown="1">
+
+### rows ( [Source](examples/rows.yml) )
 ![](screenshots/rows.png)
-[Source](examples/rows.yml)
 
-### columns
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
+### columns ( [Source](examples/columns.yml) )
 ![](screenshots/columns.png)
-[Source](examples/columns.yml)
 
+</div>
+
+
+</div>
 
 
 ## Text
-### h1 text
+
+<div class="gallery-category" markdown="1">
+
+
+<div class="gallery-item"  markdown="1">
+
+### h1 text ( [Source](examples/h1_text.yml) )
 ![](screenshots/h1_text.png)
-[Source](examples/h1_text.yml)
 
-### h2 text
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
+### h2 text ( [Source](examples/h2_text.yml) )
 ![](screenshots/h2_text.png)
-[Source](examples/h2_text.yml)
 
-### h3 text
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
+### h3 text ( [Source](examples/h3_text.yml) )
 ![](screenshots/h3_text.png)
-[Source](examples/h3_text.yml)
 
-### p text
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
+### p text ( [Source](examples/p_text.yml) )
 ![](screenshots/p_text.png)
-[Source](examples/p_text.yml)
 
+</div>
+
+
+</div>
 
 

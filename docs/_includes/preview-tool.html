@@ -36,6 +36,16 @@
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
     editor.session.setMode("ace/mode/yaml");
+    var update_dashboard = function(delta) {
+        window.update_needed = true;
+        setTimeout(function() {
+            if (window.update_needed)
+                document.getElementById('preview').contentWindow.render_code(editor.getValue())
+            window.update_needed = false;
+        }, 10)
+    }
+    editor.session.on('change', update_dashboard);
+    document.getElementById('preview').onload = update_dashboard;
 </script>
 
 

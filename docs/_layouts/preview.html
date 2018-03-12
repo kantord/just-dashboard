@@ -1,3 +1,10 @@
-Hack
-
-<script src="https://unpkg.com/just-dashboard@0.5.4/dist/dashboard.js"></script>
+<div class="loader">Loading...</div>
+<script src="https://unpkg.com/just-dashboard@latest/dist/dashboard.js"></script>
+<script>
+    function render_code(code) {
+        var json_code = dashboard.yaml_parser(code)
+        var render = dashboard.json_parser(json_code)
+        render(dashboard.d3.selection())
+        dashboard.d3.select("body").attr("class", "typeset")
+    }
+</script>

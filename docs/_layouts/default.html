@@ -59,6 +59,7 @@
       {% if page.layout == 'home' and site.github.is_project_page %}
           <a href="{{ site.github.repository_url }}" class="btn">View on GitHub</a>
           <a href="getting-started" class="btn">Getting started</a>
+          {% include preview-tool.html %}
         {% if site.show_downloads %}
           <a href="{{ site.github.zip_url }}" class="btn">Download .zip</a>
           <a href="{{ site.github.tar_url }}" class="btn">Download .tar.gz</a>
@@ -84,7 +85,14 @@
 
       {{ content }}
 
-      <footer class="site-footer"></footer>
+      <footer class="site-footer">
+<iframe src="https://ghbtns.com/github-btn.html?user=kantord&repo=just-dashboard&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+<iframe src="https://ghbtns.com/github-btn.html?user=kantord&repo=just-dashboard&type=watch&count=true&v=2" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+<iframe src="https://ghbtns.com/github-btn.html?user=kantord&repo=just-dashboard&type=fork&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+<iframe src="https://ghbtns.com/github-btn.html?user=kantord&type=follow&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+
+
+      </footer>
     </section>
 
     {% if site.google_analytics %}

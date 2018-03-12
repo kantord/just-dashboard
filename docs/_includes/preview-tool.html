@@ -1,0 +1,42 @@
+<div id="previewtool">
+  <div id="editor">dashboard "Food":
+  - h1 text: Food
+  - h2 text: By caloric content
+  - 3 columns:
+    - rows:
+      - h3 text: Bananas
+      - pie chart: {
+          "columns": [
+            ["Protein", 5], ["Sugar", 10], ["Other carbs", 40], ["Fat", 1]
+          ]
+        }
+    - rows:
+      - h3 text: Tofu
+      - pie chart: {
+          "columns": [
+            ["Protein", 30], ["Sugar", 0], ["Other carbs", 40], ["Fat", 3]
+          ]
+        }
+    - rows:
+      - h3 text: Peanut butter
+      - pie chart: {
+          "columns": [
+            ["Protein", 20], ["Sugar", 2], ["Other carbs", 20], ["Fat", 50]
+          ]
+}</div>
+
+  <iframe seamless="seamless" frameBorder="0" id="preview" src="http://bottoml.in/e/kantord/2973bdd4ad689642562018bb4091ffbd"></iframe>
+</div>
+
+<div>
+</div>
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.3.1/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/yaml");
+</script>
+
+
+

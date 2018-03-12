@@ -87,6 +87,53 @@ a {
   }
 }
 
+#previewtool {
+  box-shadow: 0 0 10px 0px #00000080;
+  #editor {
+    height: 37.5em;
+  }
+
+  #preview {
+    background: white;
+    height: 37.5em;
+    width: 100%;
+  }
+}
+
+
+@media all and (min-width:60em) { 
+  #previewtool {
+    position: absolute;
+    top: 25em;
+    box-shadow: 0 0 10px 0px #00000080;
+    left: -3em;
+    right: -3em;
+    transform: scale(.9);
+
+    #editor, #preview {
+      width: 50%;
+    }
+
+    #editor {
+      height: 50em;
+    }
+
+    #preview {
+      right: 0;
+      position: absolute;
+      background: white;
+      top: 0;
+      height: 37.5em;
+      z-index: 10;
+    }
+  }
+
+  #previewtool ~ div {
+    height: 40em;
+  }
+
+}
+
 .page-header {
   color: $header-heading-color;
   text-align: center;

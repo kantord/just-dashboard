@@ -142,6 +142,8 @@ GEM
     jekyll-theme-cayman (0.1.0)
       jekyll (~> 3.5)
       jekyll-seo-tag (~> 2.0)
+    jekyll-theme-cayman-blog (0.0.6)
+      jekyll (~> 3.3)
     jekyll-theme-dinky (0.1.0)
       jekyll (~> 3.5)
       jekyll-seo-tag (~> 2.0)
@@ -213,9 +215,10 @@ GEM
     rubyzip (1.2.1)
     safe_yaml (1.0.4)
     sass (3.5.5)
-      sass-listen (>= 4.0.0)
+      sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
-      rb-inotify (>= 0.9.7, >= 0.9)
+      rb-fsevent (~> 0.9, >= 0.9.4)
+      rb-inotify (~> 0.9, >= 0.9.7)
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
@@ -233,6 +236,7 @@ PLATFORMS
 
 DEPENDENCIES
   github-pages
+  jekyll-theme-cayman-blog
 
 BUNDLED WITH
    1.16.1

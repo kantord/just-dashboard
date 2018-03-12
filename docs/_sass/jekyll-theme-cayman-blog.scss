@@ -106,25 +106,37 @@ a {
     position: absolute;
     top: 25em;
     box-shadow: 0 0 10px 0px #00000080;
-    left: -3em;
-    right: -3em;
-    transform: scale(.9);
-
-    #editor, #preview {
-      width: 50%;
-    }
+    left: 2em;
+    right: 2em;
 
     #editor {
+      width: 50%;
       height: 50em;
     }
 
-    #preview {
+    #preview-wrap {
+      width: 50%;
       right: 0;
+      top: 0;
       position: absolute;
       background: white;
-      top: 0;
       height: 37.5em;
       z-index: 10;
+      overflow: hidden;
+
+      .wrap {
+        position: relative;
+        height: 100%;
+      }
+
+      iframe {
+        position: absolute;
+        top: -5% * ( 1 / .9 );
+        left: -5% * ( 1 / .9 );
+        width: 100% * ( 1 / .9 );
+        height: 37.5em * ( 1 / .9 );
+        transform: scale(.9);
+      }
     }
   }
 

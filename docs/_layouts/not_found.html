@@ -1,0 +1,9 @@
+---
+layout: default
+---
+
+<div>
+
+  {{ content }}
+
+</div>

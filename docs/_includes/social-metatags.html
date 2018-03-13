@@ -26,6 +26,8 @@
   {% assign page_image = site.url | append: site.baseurl | append: page.image %}
 {%else if site.image %}
   {% assign page_image = site.url | append: site.baseurl | append: site.image %}
+{%else %}
+  {% assign page_image = site.url | append: site.baseurl | append: 'page_screenshot.png' %}
 {%endif %}
 
 {% assign canonical_url = page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url %}

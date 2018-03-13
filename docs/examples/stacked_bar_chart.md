@@ -33,7 +33,6 @@ Here's an example code regarding the use of stacked bar chart:
             - 0
             - 3
             - 4
-            - 2
 
 ```
 The code above will render a stacked bar chart that looks like this:

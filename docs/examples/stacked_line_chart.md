@@ -1,7 +1,16 @@
 ---
+layout: default
+title: How to use stacked line chart
+---
+
+# How to use stacked line chart
+Here's an example code regarding the use of stacked line chart: 
+
+```yaml
+---
   dashboard "Example": 
     - 
-      stacked bar chart: 
+      stacked line chart: 
         columns: 
           - 
             - "Apples"
@@ -25,3 +34,7 @@
             - 3
             - 4
 
+```
+The code above will render a stacked line chart that looks like this:
+
+![](../screenshots/stacked_line_chart.png)

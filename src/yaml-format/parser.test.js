@@ -535,8 +535,8 @@ describe('yaml format - attr: syntax', function() {
       ]},
       'output': {
         'component': 'chart',
-        'args': {'loader': 'json', 'type': '${var_Name1}', 'title': 'Hello World',
-          'pi': 3.14, 'stacked': false},
+        'args': {'loader': 'json', 'type': '${var_Name1}', 
+          'title': 'Hello World', 'pi': 3.14, 'stacked': false},
         'data': 'https://example.com/text.json'
       }
     },

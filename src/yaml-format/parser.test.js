@@ -342,7 +342,7 @@ describe('yaml format - chart component', function() {
       'input': {'pie chart': []},
       'output': {
         'component': 'chart',
-        'args': {'type': 'pie'},
+        'args': {'type': 'pie', 'stacked': false},
         'data': []
       }
     },
@@ -350,7 +350,7 @@ describe('yaml format - chart component', function() {
       'input': {'bar chart': []},
       'output': {
         'component': 'chart',
-        'args': {'type': 'bar'},
+        'args': {'type': 'bar', 'stacked': false},
         'data': []
       }
     },
@@ -358,7 +358,7 @@ describe('yaml format - chart component', function() {
       'input': {'bar chart': 'foo'},
       'output': {
         'component': 'chart',
-        'args': {'type': 'bar'},
+        'args': {'type': 'bar', 'stacked': false},
         'data': 'foo'
       }
     },
@@ -473,7 +473,8 @@ describe('yaml format - attr: syntax', function() {
       ]},
       'output': {
         'component': 'chart',
-        'args': {'loader': 'json', 'type': 'pie', 'foo': 'bar'},
+        'args': {'loader': 'json', 'type': 'pie', 'foo': 'bar',
+          'stacked': false},
         'data': 'https://example.com/text.json'
       }
     },
@@ -484,7 +485,8 @@ describe('yaml format - attr: syntax', function() {
       ]},
       'output': {
         'component': 'chart',
-        'args': {'loader': 'json', 'type': 'pie', 'bar': 'foo'},
+        'args': {'loader': 'json', 'type': 'pie', 'bar': 'foo',
+          'stacked': false},
         'data': 'https://example.com/text.json'
       }
     },
@@ -497,7 +499,7 @@ describe('yaml format - attr: syntax', function() {
       'output': {
         'component': 'chart',
         'args': {'loader': 'json', 'type': 'pie', 'title': 'Hello World',
-          'pi': 3.14},
+          'pi': 3.14, 'stacked': false},
         'data': 'https://example.com/text.json'
       }
     },

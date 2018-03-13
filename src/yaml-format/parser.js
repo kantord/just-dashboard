@@ -24,14 +24,12 @@ const rules = [
     'component': 'columns',
     'data': value.map(parser)
   })],
-  [[/stacked ([a-z]+) chart/], (match, value) => ({
+  [[/(stacked)? *([a-z]+) chart/], (match, value) => ({
     'component': 'chart',
-    'args': {'type': match[1], 'stacked': true},
-    'data': value
-  })],
-  [[/([a-z]+) chart/], (match, value) => ({
-    'component': 'chart',
-    'args': {'type': match[1]},
+    'args': {
+      'type': match[2],
+      'stacked': match[1] === 'stacked'
+    },
     'data': value
   })],
   [[/dropdown ([^=]+)=(.*)/], (match, value) => ({

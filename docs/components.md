@@ -38,6 +38,30 @@
 
 <div class="gallery-item"  markdown="1">
 
+### stacked line chart ( [Source](examples/stacked_line_chart) )
+![](screenshots/stacked_line_chart.png)
+
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
+### stacked spline chart ( [Source](examples/stacked_spline_chart) )
+![](screenshots/stacked_spline_chart.png)
+
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
+### stacked area chart ( [Source](examples/stacked_area_chart) )
+![](screenshots/stacked_area_chart.png)
+
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
 ### gauge chart ( [Source](examples/gauge_chart) )
 ![](screenshots/gauge_chart.png)
 

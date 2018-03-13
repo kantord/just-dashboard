@@ -1,7 +1,16 @@
 ---
+layout: default
+title: How to use stacked spline chart
+---
+
+# How to use stacked spline chart
+Here's an example code regarding the use of stacked spline chart: 
+
+```yaml
+---
   dashboard "Example": 
     - 
-      stacked bar chart: 
+      stacked spline chart: 
         columns: 
           - 
             - "Apples"
@@ -25,3 +34,7 @@
             - 3
             - 4
 
+```
+The code above will render a stacked spline chart that looks like this:
+
+![](../screenshots/stacked_spline_chart.png)

@@ -1,7 +1,16 @@
 ---
+layout: default
+title: How to use stacked area chart
+---
+
+# How to use stacked area chart
+Here's an example code regarding the use of stacked area chart: 
+
+```yaml
+---
   dashboard "Example": 
     - 
-      stacked bar chart: 
+      stacked area chart: 
         columns: 
           - 
             - "Apples"
@@ -25,3 +34,7 @@
             - 3
             - 4
 
+```
+The code above will render a stacked area chart that looks like this:
+
+![](../screenshots/stacked_area_chart.png)

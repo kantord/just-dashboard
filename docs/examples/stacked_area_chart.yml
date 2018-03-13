@@ -1,7 +1,7 @@
 ---
   dashboard "Example": 
     - 
-      stacked bar chart: 
+      stacked area chart: 
         columns: 
           - 
             - "Apples"

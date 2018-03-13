@@ -355,6 +355,30 @@ describe('yaml format - chart component', function() {
       }
     },
     {
+      'input': {'scatter plot': []},
+      'output': {
+        'component': 'chart',
+        'args': {'type': 'scatter', 'stacked': false},
+        'data': []
+      }
+    },
+    {
+      'input': {'line diagram': []},
+      'output': {
+        'component': 'chart',
+        'args': {'type': 'line', 'stacked': false},
+        'data': []
+      }
+    },
+    {
+      'input': {'line graph': []},
+      'output': {
+        'component': 'chart',
+        'args': {'type': 'line', 'stacked': false},
+        'data': []
+      }
+    },
+    {
       'input': {'bar chart': 'foo'},
       'output': {
         'component': 'chart',

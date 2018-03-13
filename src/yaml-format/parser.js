@@ -24,7 +24,7 @@ const rules = [
     'component': 'columns',
     'data': value.map(parser)
   })],
-  [[/(stacked)? *([a-z]+) chart/], (match, value) => ({
+  [[/(stacked)? *([a-z]+) (chart|plot|diagram|graph)/], (match, value) => ({
     'component': 'chart',
     'args': {
       'type': match[2],

@@ -37,6 +37,14 @@ const rules = [
     },
     'data': value
   })],
+  [[/(stacked)? *\${([A-z_0-9]+)} (chart|plot|diagram|graph)/], (match, value) => ({
+    'component': 'chart',
+    'args': {
+      'type': '${' + match[2] + '}',
+      'stacked': match[1] === 'stacked'
+    },
+    'data': value
+  })],
 ]
 
 const handle_urls = (component) => {

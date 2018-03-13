@@ -527,6 +527,19 @@ describe('yaml format - attr: syntax', function() {
         'data': 'https://example.com/text.json'
       }
     },
+    {
+      'input': {'${var_Name1} chart': [
+        {'attr:title': 'Hello World'},
+        {'attr:pi': 3.14},
+        {'data': 'https://example.com/text.json'}
+      ]},
+      'output': {
+        'component': 'chart',
+        'args': {'loader': 'json', 'type': '${var_Name1}', 'title': 'Hello World',
+          'pi': 3.14, 'stacked': false},
+        'data': 'https://example.com/text.json'
+      }
+    },
   ]
 
 

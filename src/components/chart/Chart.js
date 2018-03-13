@@ -33,12 +33,18 @@ const ChartComponent = Component({
   'validators': [required('type')],
   'init': (args, selection) => selection.append('div'),
   'render': (args, selection, data, element) => {
-    console.log('render called') // eslint-disable-line
     const {bb} = require('billboard.js')
-    bb.generate({
+    const configuration = {
       'bindto': element.node(),
       'data': Object.assign(data, {'type': args.type})
-    })
+    }
+    if (args.stacked) {
+      if (data.columns)
+        configuration.data.groups = [data.columns.map(column => column[0])]
+      if (data.rows)
+        configuration.data.groups = [data.rows[0]]
+    }
+    bb.generate(configuration)
   }
 })
 

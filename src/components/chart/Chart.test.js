@@ -77,6 +77,71 @@ describe('ChartComponent', function() {
     })
   })
 
+  it('billboard called with correct arguments (stacked)', function() {
+    const { fake_generate, selection } = call_render_with({
+      'component_args': {'type': 'pie', 'stacked': true},
+      'render_args': {'columns': [
+        ['a', 1, 2, 3],
+        ['b', 1, 2, 3],
+      ]}
+    })
+    fake_generate.should.be.calledWith({
+      'bindto': selection.append().node(),
+      'data': {
+        'type': 'pie',
+        'groups': [['a', 'b']],
+        'columns': [
+          ['a', 1, 2, 3],
+          ['b', 1, 2, 3],
+        ]
+      }
+    })
+  })
+
+  it('billboard called with correct arguments (stacked 2)', function() {
+    const { fake_generate, selection } = call_render_with({
+      'component_args': {'type': 'pie', 'stacked': true},
+      'render_args': {'columns': [
+        ['bar', 1, 2, 3],
+        ['foo', 1, 2, 3],
+        ['x', 1, 2, 3],
+      ]}
+    })
+    fake_generate.should.be.calledWith({
+      'bindto': selection.append().node(),
+      'data': {
+        'type': 'pie',
+        'groups': [['bar', 'foo', 'x']],
+        'columns': [
+          ['bar', 1, 2, 3],
+          ['foo', 1, 2, 3],
+          ['x', 1, 2, 3],
+        ]
+      }
+    })
+  })
+
+  it('billboard called with correct arguments (stacked, rows)', function() {
+    const { fake_generate, selection } = call_render_with({
+      'component_args': {'type': 'pie', 'stacked': true},
+      'render_args': {'rows': [
+        ['foo', 'bar'],
+        [0, 1]
+      ]}
+    })
+    fake_generate.should.be.calledWith({
+      'bindto': selection.append().node(),
+      'data': {
+        'type': 'pie',
+        'groups': [['foo', 'bar']],
+        'rows': [
+          ['foo', 'bar'],
+          [0, 1]
+        ]
+      }
+    })
+  })
+
   it('should take rows as well', function() {
     const { fake_generate, selection } = call_render_with({
       'component_args': {'type': 'bar'},

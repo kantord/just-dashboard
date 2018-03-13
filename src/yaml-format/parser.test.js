@@ -362,6 +362,14 @@ describe('yaml format - chart component', function() {
         'data': 'foo'
       }
     },
+    {
+      'input': {'stacked bar chart': 'foo'},
+      'output': {
+        'component': 'chart',
+        'args': {'type': 'bar', 'stacked': true},
+        'data': 'foo'
+      }
+    },
   ]
 
 

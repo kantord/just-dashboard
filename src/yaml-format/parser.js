@@ -24,6 +24,11 @@ const rules = [
     'component': 'columns',
     'data': value.map(parser)
   })],
+  [[/dropdown ([^=]+)=(.*)/], (match, value) => ({
+    'component': 'dropdown',
+    'args': {'variable': match[1], 'default': match[2]},
+    'data': value
+  })],
   [[/(stacked)? *([a-z]+) (chart|plot|diagram|graph)/], (match, value) => ({
     'component': 'chart',
     'args': {
@@ -32,11 +37,6 @@ const rules = [
     },
     'data': value
   })],
-  [[/dropdown ([^=]+)=(.*)/], (match, value) => ({
-    'component': 'dropdown',
-    'args': {'variable': match[1], 'default': match[2]},
-    'data': value
-  })]
 ]
 
 const handle_urls = (component) => {

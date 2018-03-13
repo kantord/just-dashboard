@@ -1,5 +1,7 @@
 # just-dashboard [![Travis](https://img.shields.io/travis/kantord/just-dashboard/master.svg)]() ![Codecov](https://img.shields.io/codecov/c/github/kantord/just-dashboard/master.svg)
 
+[![Join the chat at https://gitter.im/just-dashboard/Lobby](https://badges.gitter.im/just-dashboard/Lobby.svg)](https://gitter.im/just-dashboard/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [Website](https://kantord.github.io/just-dashboard/)
 
 just-dashboard let's you turn this:

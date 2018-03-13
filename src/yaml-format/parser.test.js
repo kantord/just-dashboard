@@ -625,6 +625,14 @@ describe('yaml format - dropdown component', function() {
         'data': 42
       }
     },
+    {
+      'input': {'dropdown chart=pie': 42},
+      'output': {
+        'component': 'dropdown',
+        'args': {'variable': 'chart', 'default': 'pie'},
+        'data': 42
+      }
+    },
   ]
 
 

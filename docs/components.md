@@ -30,6 +30,14 @@
 
 <div class="gallery-item"  markdown="1">
 
+### stacked bar chart ( [Source](examples/stacked_bar_chart) )
+![](screenshots/stacked_bar_chart.png)
+
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
 ### gauge chart ( [Source](examples/gauge_chart) )
 ![](screenshots/gauge_chart.png)
 
@@ -110,16 +118,16 @@
 
 <div class="gallery-item"  markdown="1">
 
-### rows ( [Source](examples/rows) )
-![](screenshots/rows.png)
+### columns ( [Source](examples/columns) )
+![](screenshots/columns.png)
 
 </div>
 
 
 <div class="gallery-item"  markdown="1">
 
-### columns ( [Source](examples/columns) )
-![](screenshots/columns.png)
+### rows ( [Source](examples/rows) )
+![](screenshots/rows.png)
 
 </div>
 

@@ -164,12 +164,17 @@ a {
 
 #editor_toolbar {
   text-align: left;
-  width: 50%;
+  width: 100%;
   background: #2F3129;
   color: #8F908A;
 }
 
 @media all and (min-width:60em) { 
+
+  #editor_toolbar {
+    width: 50%;
+  }
+
   #previewtool {
     position: absolute;
     top: 21em;

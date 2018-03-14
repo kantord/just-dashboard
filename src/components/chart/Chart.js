@@ -44,6 +44,9 @@ const ChartComponent = Component({
       if (data.rows)
         configuration.data.groups = [data.rows[0]]
     }
+    if (args.axis) {
+      configuration.axis = args.axis
+    }
     bb.generate(configuration)
   }
 })

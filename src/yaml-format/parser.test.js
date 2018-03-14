@@ -355,6 +355,30 @@ describe('yaml format - chart component', function() {
       }
     },
     {
+      'input': {'horizontal bar chart': []},
+      'output': {
+        'component': 'chart',
+        'args': {'type': 'bar', 'stacked': false, 
+          'axis': {
+            'rotated': true
+          },
+        },
+        'data': []
+      }
+    },
+    {
+      'input': {'rotated line chart': []},
+      'output': {
+        'component': 'chart',
+        'args': {'type': 'line', 'stacked': false, 
+          'axis': {
+            'rotated': true
+          },
+        },
+        'data': []
+      }
+    },
+    {
       'input': {'scatter plot': []},
       'output': {
         'component': 'chart',

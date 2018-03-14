@@ -31,22 +31,22 @@ const rules = [
   })],
   [[/(horizontal|rotated)? *(stacked)? *([a-z]+|\${[A-z_0-9]+}) (chart|plot|diagram|graph)/], // eslint-disable-line
     (match, value) => ({
-    'component': 'chart',
-    'args': Object.assign({},
-      {
-        'type': match[3],
-        'stacked': match[2] === 'stacked',
-       
-      },
-      match[1] === 'horizontal' || match[1] === 'rotated' ?
+      'component': 'chart',
+      'args': Object.assign({},
         {
-          'axis': {
-            'rotated': true
-          }
-        }: {}
-    ),
-    'data': value
-  })],
+          'type': match[3],
+          'stacked': match[2] === 'stacked',
+       
+        },
+        match[1] === 'horizontal' || match[1] === 'rotated' ?
+          {
+            'axis': {
+              'rotated': true
+            }
+          }: {}
+      ),
+      'data': value
+    })],
 ]
 
 const handle_urls = (component) => {

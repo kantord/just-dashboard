@@ -14,6 +14,14 @@
 
 <div class="gallery-item"  markdown="1">
 
+### horizontal bar chart ( [Source](examples/horizontal_bar_chart) )
+![](screenshots/horizontal_bar_chart.png)
+
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
 ### donut chart ( [Source](examples/donut_chart) )
 ![](screenshots/donut_chart.png)
 
@@ -32,6 +40,14 @@
 
 ### stacked bar chart ( [Source](examples/stacked_bar_chart) )
 ![](screenshots/stacked_bar_chart.png)
+
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
+### horizontal stacked bar chart ( [Source](examples/horizontal_stacked_bar_chart) )
+![](screenshots/horizontal_stacked_bar_chart.png)
 
 </div>
 
@@ -70,8 +86,8 @@
 
 <div class="gallery-item"  markdown="1">
 
-### scatter chart ( [Source](examples/scatter_chart) )
-![](screenshots/scatter_chart.png)
+### scatter plot ( [Source](examples/scatter_plot) )
+![](screenshots/scatter_plot.png)
 
 </div>
 

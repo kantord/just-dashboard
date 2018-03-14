@@ -29,23 +29,24 @@ const rules = [
     'args': {'variable': match[1], 'default': match[2]},
     'data': value
   })],
-  [[/(stacked)? *([a-z]+) (chart|plot|diagram|graph)/], (match, value) => ({
+  [[/(horizontal|rotated)? *(stacked)? *([a-z]+|\${[A-z_0-9]+}) (chart|plot|diagram|graph)/], // eslint-disable-line
+    (match, value) => ({
     'component': 'chart',
-    'args': {
-      'type': match[2],
-      'stacked': match[1] === 'stacked'
-    },
+    'args': Object.assign({},
+      {
+        'type': match[3],
+        'stacked': match[2] === 'stacked',
+       
+      },
+      match[1] === 'horizontal' || match[1] === 'rotated' ?
+        {
+          'axis': {
+            'rotated': true
+          }
+        }: {}
+    ),
     'data': value
   })],
-  [[/(stacked)? *\${([A-z_0-9]+)} (chart|plot|diagram|graph)/],
-    (match, value) => ({
-      'component': 'chart',
-      'args': {
-        'type': '${' + match[2] + '}',
-        'stacked': match[1] === 'stacked'
-      },
-      'data': value
-    })],
 ]
 
 const handle_urls = (component) => {

@@ -98,6 +98,31 @@ describe('ChartComponent', function() {
     })
   })
 
+  it('billboard called with correct arguments (horizontal)', function() {
+    const { fake_generate, selection } = call_render_with({
+      'component_args': {'type': 'pie', 'axis': {'rotated': true}},
+      'render_args': {'columns': [
+        ['bar', 1, 2, 3],
+        ['foo', 1, 2, 3],
+        ['x', 1, 2, 3],
+      ]}
+    })
+    fake_generate.should.be.calledWith({
+      'bindto': selection.append().node(),
+      'axis': {
+        'rotated': true
+      },
+      'data': {
+        'type': 'pie',
+        'columns': [
+          ['bar', 1, 2, 3],
+          ['foo', 1, 2, 3],
+          ['x', 1, 2, 3],
+        ]
+      }
+    })
+  })
+
   it('billboard called with correct arguments (stacked 2)', function() {
     const { fake_generate, selection } = call_render_with({
       'component_args': {'type': 'pie', 'stacked': true},

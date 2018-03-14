@@ -10,6 +10,7 @@
     "category": "Charts",
     "examples": {
       "bar chart": "bar chart",
+      "horizontal bar chart": "horizontal bar chart",
       "donut chart": "donut chart",
       "pie chart": "pie chart"
     }
@@ -25,6 +26,7 @@
     "category": "Charts",
     "examples": {
       "stacked bar chart": "stacked bar chart",
+      "horizontal stacked bar chart": "horizontal stacked bar chart",
       "stacked line chart": "stacked line chart",
       "stacked spline chart": "stacked spline chart",
       "stacked area chart": "stacked area chart"
@@ -56,7 +58,7 @@
     },
     "category": "Charts",
     "examples": {
-      "scatter chart": "scatter plot"
+      "scatter plot": "scatter plot"
     }
   },
   {

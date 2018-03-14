@@ -57,7 +57,7 @@ docs/components.md: docs/gallery.json
 		  \"<div class=\\\"gallery-item\\\"  markdown=\\\"1\\\">\", \
 		  \"\", \
 		  \"### \" + .[1] + \
-			\" ( [Source](examples/\" + (.[1] | split(\" \") | join(\"_\")) + \") )\", \
+			\" ([Usage](examples/\" + (.[1] | split(\" \") | join(\"_\")) + \"))\", \
 		  \"![](screenshots/\" + (.[1] | split(\" \") | join(\"_\")) +  \".png)\", \
 		  \"\", \
 		  \"</div>\", \

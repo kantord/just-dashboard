@@ -1,30 +1,38 @@
 <div id="previewtool">
-  <div id="editor"># EDIT THIS
-dashboard "Food":
-  - h1 text: Food
-  - h2 text: By caloric content
-  - 3 columns:
-    - rows:
-      - h3 text: Bananas
-      - pie chart: {
-          "columns": [
-            ["Protein", 5], ["Sugar", 10], ["Other carbs", 40], ["Fat", 1]
-          ]
-        }
-    - rows:
-      - h3 text: Tofu
-      - pie chart: {
-          "columns": [
-            ["Protein", 30], ["Sugar", 0], ["Other carbs", 40], ["Fat", 3]
-          ]
-        }
-    - rows:
-      - h3 text: Peanut butter
-      - pie chart: {
-          "columns": [
-            ["Protein", 20], ["Sugar", 2], ["Other carbs", 20], ["Fat", 50]
-          ]
-        }</div>
+    <div id="editor_wrapper">
+      <div id="editor"># EDIT THIS
+    dashboard "Food":
+      - h1 text: Food
+      - h2 text: By caloric content
+      - 3 columns:
+        - rows:
+          - h3 text: Bananas
+          - pie chart: {
+              "columns": [
+                ["Protein", 5], ["Sugar", 10], ["Other carbs", 40], ["Fat", 1]
+              ]
+            }
+        - rows:
+          - h3 text: Tofu
+          - pie chart: {
+              "columns": [
+                ["Protein", 30], ["Sugar", 0], ["Other carbs", 40], ["Fat", 3]
+              ]
+            }
+        - rows:
+          - h3 text: Peanut butter
+          - pie chart: {
+              "columns": [
+                ["Protein", 20], ["Sugar", 2], ["Other carbs", 20], ["Fat", 50]
+              ]
+            }</div>
+      <div id="editor_toolbar">
+          <span>Load another example:</span>
+          <select id="editor_toolbar_dropdown" name="editor_toolbar_dropdown">
+            {% include examples.html %}
+          </select>
+      </div>
+    </div>
 
   <div id="preview-wrap">
     <div class="wrap">
@@ -51,6 +59,10 @@ dashboard "Food":
     }
     editor.session.on('change', update_dashboard);
     document.getElementById('preview').onload = update_dashboard;
+    document.getElementById('editor_toolbar_dropdown').onchange = function(event) {
+        var url = 'https://kantord.github.io/just-dashboard/examples/' + event.target.value
+        document.getElementById('preview').contentWindow.dashboard.d3.text(url, function(data) {console.log(data); editor.setValue(data)})
+    };
 </script>
 
 

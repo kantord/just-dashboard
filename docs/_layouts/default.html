@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="{{ page.lang | default: site.lang | default: "en" }}">
 
   <head>
 
@@ -26,10 +24,7 @@
     <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
 
     {% if site.gems contains "jekyll-feed" %}
-      <link rel="alternate" type="application/rss+xml" title="{{ site.title | escape }}" href="{{ "/feed.xml" | relative_url }}">
-    {% endif %}
-
-    <link rel="shortcut icon" href="{{ site.url }}/favicon.ico">
+      <link rel="alternate" type="application/rss+xml" title="{{ site.title | escape }}" href="{{ "/feed.xml" | relative_url }}"> {% endif %} <link rel="shortcut icon" href="{{ site.url }}/favicon.ico">
     <meta name="robots" content="noarchive">
 
     <!-- <link rel="alternate" media="only screen and (max-width: 640px)" href="">

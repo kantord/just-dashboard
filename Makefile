@@ -11,6 +11,12 @@ docs/screenshots/%.png: docs/examples/%.js
 	node ./src/screenshot.js $@
 	rm -f src/_temp.js
 
+docs/_includes/examples.html: docs/examples
+	ls $^ | \
+	grep -e '\.yml$$' | \
+	sed 's \.yml$$  ' | \
+	sed 's \(.*\) <option\ value="\1.yml">\1</option> ' \
+	> $@
 
 docs/examples/%.md: ./docs/examples/%.yml
 	echo "---" > $@

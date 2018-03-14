@@ -118,6 +118,14 @@
 
 <div class="gallery-item"  markdown="1">
 
+### custom axes ( [Source](examples/custom_axes) )
+![](screenshots/custom_axes.png)
+
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
 ### area chart ( [Source](examples/area_chart) )
 ![](screenshots/area_chart.png)
 

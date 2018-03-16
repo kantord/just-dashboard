@@ -166,16 +166,16 @@
 
 <div class="gallery-item"  markdown="1">
 
-### columns ([Usage](examples/columns))
-![](screenshots/columns.png)
+### rows ([Usage](examples/rows))
+![](screenshots/rows.png)
 
 </div>
 
 
 <div class="gallery-item"  markdown="1">
 
-### rows ([Usage](examples/rows))
-![](screenshots/rows.png)
+### columns ([Usage](examples/columns))
+![](screenshots/columns.png)
 
 </div>
 

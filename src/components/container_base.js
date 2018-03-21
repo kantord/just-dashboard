@@ -11,8 +11,10 @@ const ContainerComponent = (
         .attr('class', wrapper_class)
       const updated_definition = Object.assign({}, definition)
       if (updated_definition.args === undefined) updated_definition.args = {}
-      if (args !== undefined)
+      if (args !== undefined) {
         updated_definition.args.state_handler = args.state_handler
+        updated_definition.args.file_loader = args.file_loader
+      }
       default_parser(updated_definition)(wrapper)
     })
   },

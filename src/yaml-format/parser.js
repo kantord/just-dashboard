@@ -62,6 +62,20 @@ const handle_urls = (component) => {
   return component
 }
 
+const handle_files = (component) => {
+  if (typeof component.data === 'string' && component.data.match(/file:/))
+    return {
+      'component': component.component,
+      'args': Object.assign({
+        'loader': component.data.match(/file.*\.(.*)$/)[1],
+        'is_file': true
+      }, component.args),
+      'data': component.data
+    }
+
+  return component
+}
+
 const handle_attr_syntax = (component) => {
   if (component.data.map === undefined) return component
   const attrs = component.data.filter((x) => Object.keys(x)[0].match(/attr:.*/))
@@ -112,8 +126,8 @@ const parser = (input) => {
     for (const rule of rules) {
       const [ patterns, func ] = rule
       for (const pattern of patterns) {
-        if (key.match(pattern)) return handle_urls(
-          handle_attr_syntax(func(key.match(pattern), value)))
+        if (key.match(pattern)) return handle_files(handle_urls(
+          handle_attr_syntax(func(key.match(pattern), value))))
       }
     }
 

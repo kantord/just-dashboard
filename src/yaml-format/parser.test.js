@@ -429,6 +429,57 @@ describe('yaml format - chart component', function() {
   })
 })
 
+describe('yaml format - handling file', function() {
+  const set_up = function() {
+    const injector = require('inject-loader!./parser.js')
+    const safeLoadSpy = sinon.spy(x => x)
+    const parser = injector({
+      'js-yaml': {'safeLoad': safeLoadSpy},
+    }).default
+
+    return { parser }
+  }
+
+  const tests = [
+    {
+      'input': {'h1 text': 'file://example.com/text.csv'},
+      'output': {
+        'component': 'text',
+        'args': {'loader': 'csv', 'tagName': 'h1', 'is_file': true},
+        'data': 'file://example.com/text.csv'
+      }
+    },
+    {
+      'input': {'h1 text': 'file://example.com/text.json'},
+      'output': {
+        'component': 'text',
+        'args': {'loader': 'json', 'tagName': 'h1', 'is_file': true},
+        'data': 'file://example.com/text.json'
+      }
+    },
+    {
+      'input': {'h1 text': [
+        {'attr:loader': 'csv'},
+        {'data': 'file://example.com/text.json'}
+      ]},
+      'output': {
+        'component': 'text',
+        'args': {'loader': 'csv', 'tagName': 'h1', 'is_file': true},
+        'data': 'file://example.com/text.json'
+      }
+    }
+  ]
+
+
+  tests.forEach(function({input, output}) {
+    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]]}`, () => {
+      const { parser } = set_up(input)
+      assert.deepEqual(parser(input), output)
+    })
+  })
+})
+
+
 describe('yaml format - handling URL', function() {
   const set_up = function() {
     const injector = require('inject-loader!./parser.js')

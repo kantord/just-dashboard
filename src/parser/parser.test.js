@@ -70,7 +70,24 @@ describe('Parser', function() {
     component(my_selection)
     fake_component.should.be.calledWith({
       'title': '',
-      'state_handler': fake_state_handler
+      'state_handler': fake_state_handler,
+      'file_loader': sinon.match.any
+    })
+  })
+
+  it('passes file_loader to root', () => {
+    const fake_component = sinon.stub().returns(
+      sinon.stub().returns(sinon.spy()))
+    const fake_component_loader = sinon.stub().returns(fake_component)
+    const my_selection = null
+    const my_file_loader = sinon.spy()
+    const component = parse(fake_component_loader)(
+      {'component': 'root', 'args': {'title': ''}}, my_file_loader)
+    component(my_selection)
+    fake_component.should.be.calledWith({
+      'title': '',
+      'state_handler': sinon.match.any,
+      'file_loader': my_file_loader,
     })
   })
 

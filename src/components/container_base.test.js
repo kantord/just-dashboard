@@ -207,7 +207,24 @@ describe('base container component', function() {
     })
     fake_parser.should.be.calledWith({
       'component': sinon.match.any,
-      'args': {'state_handler': state_handler},
+      'args': {'state_handler': state_handler, 'file_loader': sinon.match.any},
+      'data': sinon.match.any,
+    })
+  })
+
+  it('passes on file_loader', () => {
+    const fake_parser = sinon.stub().returns(sinon.spy())
+    const file_loader = sinon.spy()
+    call_render_with({
+      'parser': fake_parser,
+      'component_args': {'title': '', 'file_loader': file_loader,},
+      'render_args': [
+        { 'component': 'text', 'data': 'My title' },
+      ]
+    })
+    fake_parser.should.be.calledWith({
+      'component': sinon.match.any,
+      'args': {'file_loader': file_loader, 'state_handler': sinon.match.any},
       'data': sinon.match.any,
     })
   })

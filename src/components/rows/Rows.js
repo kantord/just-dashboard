@@ -1,5 +1,6 @@
 import ContainerComponent from '../container_base.js'
 import Wrapped from '../wrapped'
+import './Rows.scss'
 
 /**
  * Useful for grouping elements in a vertical layout. Similar to RootComponent,

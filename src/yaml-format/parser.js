@@ -15,6 +15,10 @@ const rules = [
     'component': 'rows',
     'data': value.map(parser)
   })],
+  [[/board/], (match, value) => ({
+    'component': 'board',
+    'data': value.map(parser)
+  })],
   [[/([1-9]+) columns/], (match, value) => ({
     'component': 'columns',
     'args': {'columns': match[1] * 1},

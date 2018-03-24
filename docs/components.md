@@ -174,6 +174,14 @@
 
 <div class="gallery-item"  markdown="1">
 
+### board ([Usage](examples/board))
+![](screenshots/board.png)
+
+</div>
+
+
+<div class="gallery-item"  markdown="1">
+
 ### columns ([Usage](examples/columns))
 ![](screenshots/columns.png)
 

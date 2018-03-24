@@ -194,6 +194,60 @@ describe('yaml format - text component', function() {
 })
 
 
+describe('yaml format - board component', function() {
+  const set_up = function() {
+    const injector = require('inject-loader!./parser.js')
+    const safeLoadSpy = sinon.spy(x => x)
+    const parser = injector({
+      'js-yaml': {'safeLoad': safeLoadSpy},
+    }).default
+
+    return { parser }
+  }
+
+  const tests = [
+    {
+      'input': {'board': []},
+      'output': {
+        'component': 'board',
+        'data': []
+      }
+    },
+    {
+      'input': {'board': [{'board': []}]},
+      'output': {
+        'component': 'board',
+        'data': [{
+          'component': 'board',
+          'data': []
+        }]
+      }
+    },
+    {
+      'input': {'board': [
+        {'attr:query': 'asd'},
+        {'data': 'xxxxx'},
+      ]},
+      'output': {
+        'component': 'board',
+        'args': {'query': 'asd'},
+        'data': 'xxxxx'
+      }
+    },
+  ]
+
+
+  tests.forEach(function({input, output}) {
+    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]].length}`,
+      () => {
+        const { parser } = set_up(input)
+        assert.deepEqual(parser(input), output)
+      })
+  })
+})
+
+
+
 
 describe('yaml format - rows component', function() {
   const set_up = function() {

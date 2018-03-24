@@ -17,6 +17,7 @@
 ["Charts","custom axes",{"line chart":[{"attr:axis":{"x":{"label":"Year","type":"timeseries","tick":{"format":"%Y"}},"y":{"label":"Amount consumed (tonnes)"}}},{"data":{"x":"x","xFormat":"%Y","columns":[["x","1999","2001","2002","2004","2007","2008"],["Apples",30,29,25,26,27,10],["Oranges",20,21,22,20,27,19],["Pears",10,9,8,8,7,8]]}}]}]
 ["Charts","area chart",{"area chart":{"columns":[["Apples",30,29,25,26,27,10],["Oranges",20,21,22,20,27,19]]}}]
 ["Charts","step chart",{"step chart":{"columns":[["Apples",30,29,25,26,27,10],["Oranges",20,21,22,20,27,19]]}}]
+["Grid","board",{"board":[{"rows":[{"pie chart":{"columns":[["Apples",3],["Oranges",2],["Pears",2]]}},{"p text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dolor massa, luctus rhoncus justo vel, cursus placerat ligula. Proin pulvinar ipsum in enim rutrum, quis fermentum ex finibus. Nunc commodo urna tellus, tristique tempor magna tempor eget. Phasellus eu ex lacinia sapien viverra fermentum."}]}]}]
 ["Text","h1 text",{"h1 text":"Lorem ipsum dolor sit amet"}]
 ["Text","h2 text",{"h2 text":"Lorem ipsum dolor sit amet"}]
 ["Text","h3 text",{"h3 text":"Lorem ipsum dolor sit amet"}]

@@ -1,5 +1,8 @@
 import Component from '../base_component.js'
 import { required } from '../../validators'
+import './Chart.scss'
+
+
 /**
  * Creates a visualization
  * @module components/chart
@@ -31,7 +34,8 @@ import { required } from '../../validators'
  */
 const ChartComponent = Component({
   'validators': [required('type')],
-  'init': (args, selection) => selection.append('div'),
+  'init': (args, selection) => selection
+    .append('div').attr('class', 'ds--chart'),
   'render': (args, selection, data, element) => {
     const {bb} = require('billboard.js')
     const configuration = {

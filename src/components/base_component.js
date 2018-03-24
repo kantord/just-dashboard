@@ -3,10 +3,39 @@ import jq from '../jq-web.js'
 import { format_value } from '../interpolation.js'
 
 const loaders = {
-  'csv': d3.csv,
-  'tsv': d3.tsv,
-  'text': d3.text,
-  'json': d3.json
+
+  'tsv': (path, callback, file_loader, is_file) => {
+    if (!is_file) {
+      d3.tsv(path, callback)
+    } else {
+      file_loader(path, (_, data) => callback(undefined, d3.tsvParse(data)))
+    }
+  },
+
+  'csv': (path, callback, file_loader, is_file) => {
+    if (!is_file) {
+      d3.csv(path, callback)
+    } else {
+      file_loader(path, (_, data) => callback(undefined, d3.csvParse(data)))
+    }
+  },
+
+  'text': (path, callback, file_loader, is_file) => {
+    if (!is_file) {
+      d3.text(path, callback)
+    } else {
+      file_loader(path, callback)
+    }
+  },
+
+  'json': (path, callback, file_loader, is_file) => {
+    if (!is_file) {
+      d3.json(path, callback)
+    } else {
+      file_loader(path, (_, data) => callback(undefined, JSON.parse(data)))
+    }
+  },
+
 }
 
 const execute_validations = (validators) => (args) =>
@@ -20,9 +49,9 @@ const validate_selection = (selection) => {
 const loader_exists = (loader_name) =>
   loaders[loader_name] !== undefined
 
-const with_loader = (loader_name) => (source) => (callback) => {
+const with_loader = (loader_name, file_loader, is_file) => (source) => (callback) => {
   if (!loader_exists(loader_name)) throw new Error('Invalid loader')
-  loaders[loader_name](source, callback)
+  loaders[loader_name](source, callback, file_loader, is_file)
 }
 
 const create_spinner = (selection) =>
@@ -91,7 +120,7 @@ const handle_external_data = (instance_args, selection, raw_data) =>
   (resolve) =>
     has_loader(instance_args)
       ? load_external_data(raw_data)(
-        with_loader(instance_args.loader),
+        with_loader(instance_args.loader, instance_args.file_loader, instance_args.is_file),
         with_spinner(selection))(
         (_, data) => resolve(data))
       : resolve(raw_data)

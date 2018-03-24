@@ -49,10 +49,11 @@ const validate_selection = (selection) => {
 const loader_exists = (loader_name) =>
   loaders[loader_name] !== undefined
 
-const with_loader = (loader_name, file_loader, is_file) => (source) => (callback) => {
-  if (!loader_exists(loader_name)) throw new Error('Invalid loader')
-  loaders[loader_name](source, callback, file_loader, is_file)
-}
+const with_loader = (loader_name, file_loader, is_file) =>
+  (source) => (callback) => {
+    if (!loader_exists(loader_name)) throw new Error('Invalid loader')
+    loaders[loader_name](source, callback, file_loader, is_file)
+  }
 
 const create_spinner = (selection) =>
   selection.append('div')
@@ -120,7 +121,8 @@ const handle_external_data = (instance_args, selection, raw_data) =>
   (resolve) =>
     has_loader(instance_args)
       ? load_external_data(raw_data)(
-        with_loader(instance_args.loader, instance_args.file_loader, instance_args.is_file),
+        with_loader(instance_args.loader, instance_args.file_loader,
+          instance_args.is_file),
         with_spinner(selection))(
         (_, data) => resolve(data))
       : resolve(raw_data)

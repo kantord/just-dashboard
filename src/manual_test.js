@@ -4,12 +4,17 @@ import * as d3 from 'd3'
 
 const render_dashboard = (data) => {
   const parserd_yaml = yaml_parser(data)
-  json_parser(parserd_yaml)(d3.selection())
+  const file_loader = (path, callback) => {
+    callback(undefined, 'a,b\nCereals,0')
+  }
+  json_parser(parserd_yaml, file_loader)(d3.selection())
 }
 
 render_dashboard(`
 dashboard "Cereals":
-  - h1 text: "Cereals"
+  - h1 text: 
+    - attr:query: '.[0].a'
+    - data: file:///foo/bar.csv
   - h2 text: "By calories"
   - dropdown my_var=foo:
     - {"value": "foo", "text": "Foo"}

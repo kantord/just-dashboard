@@ -266,7 +266,8 @@ describe('Component', function() {
     const d3 = require('d3')
     const Component = injector({
       '../jq-web.js': jq,
-      'd3': Object.assign({'json': my_loader, 'selection': d3.selection, 'csv': () => null}, args.d3)
+      'd3': Object.assign({'json': my_loader, 'selection': d3.selection,
+        'csv': () => null}, args.d3)
     }).default
     const my_render = (args.render_func === undefined )
       ? sinon.spy() : args.render_func
@@ -330,7 +331,8 @@ describe('Component', function() {
         'is_file': true,
         'file_loader': my_file_loader
       }})
-    my_render.should.be.calledWith(sinon.match.any, sinon.match.any, my_file_loader_return, sinon.match.any)
+    my_render.should.be.calledWith(sinon.match.any, sinon.match.any,
+      my_file_loader_return, sinon.match.any)
   })
 
   it('loader is called with render args - file loader 2', function() {
@@ -344,7 +346,8 @@ describe('Component', function() {
         'is_file': true,
         'file_loader': my_file_loader
       }})
-    my_render.should.be.calledWith(sinon.match.any, sinon.match.any, {'a': 42}, sinon.match.any)
+    my_render.should.be.calledWith(sinon.match.any, sinon.match.any, 
+      {'a': 42},sinon.match.any)
   })
 
   it('loader is called with render args - file loader 3', function() {
@@ -398,7 +401,8 @@ describe('Component', function() {
       data, instance_args: {
         'is_file': false
       }})
-    my_render.should.be.calledWith(sinon.match.any, sinon.match.any, 'Hello World', sinon.match.any)
+    my_render.should.be.calledWith(sinon.match.any, sinon.match.any,
+      'Hello World', sinon.match.any)
   })
 
 

@@ -19,7 +19,12 @@ describe('ChartComponent', function() {
     const bind = ChartComponent(args.component_args)
     const d3 = require('d3')
     const selection = d3.selection()
-    selection.append = () => ({'node': () => 'magic'})
+    selection.append = () => ({
+      'node': () => 'magic',
+      'attr': () => ({
+        'node': () => 'magic',
+      })
+    })
     const render = bind(selection)
     render(args.render_args)
 

@@ -1,4 +1,4 @@
-import Component from '../base_component.js'
+import Component from '../base'
 import { required } from '../../validators'
 import { regexp } from '../../validators'
 import './Text.scss'

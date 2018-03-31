@@ -1,4 +1,4 @@
-import Component from './base_component'
+import Component from './index.js'
 import sinon from 'sinon'
 import assert from 'assert'
 import * as d3 from 'd3'
@@ -14,7 +14,7 @@ describe('Component', function() {
   })
 
   const call_test_component_with = (args) => {
-    const injector = require('inject-loader!./base_component.js')
+    const injector = require('inject-loader!./index.js')
     const jq = sinon.stub().returns(
       (args.dont_execute_query === true) ? {
         'then': () => ({'catch': () => null})}
@@ -28,8 +28,8 @@ describe('Component', function() {
       .onCall(0).returns(args.format_value_return)
       .returns(args.format_value_return2)
     const Component = injector({
-      '../jq-web.js': jq,
-      '../interpolation.js': {'format_value': format_value}
+      '../../jq-web.js': jq,
+      '../../interpolation.js': {'format_value': format_value}
     }).default
 
     const my_init = sinon.stub()
@@ -242,10 +242,10 @@ describe('Component', function() {
   })
 
   it('execute_query calls reject', () => {
-    const injector = require('inject-loader!./base_component.js')
+    const injector = require('inject-loader!./index.js')
     const jq_error = new Error('Random error')
     const execute_query = injector({
-      '../jq-web.js': () => ({
+      '../../jq-web.js': () => ({
         'then': () => ({
           'catch': (x) => x(jq_error)
         })
@@ -257,7 +257,7 @@ describe('Component', function() {
   })
 
   const loader_test = (args) => {
-    const injector = require('inject-loader!./base_component.js')
+    const injector = require('inject-loader!./index.js')
     const jq = sinon.stub().resolves(args.jq_return_value)
     const my_loader = sinon.spy(function(url, callback) {
       if (args.no_resolve !== true)
@@ -265,7 +265,7 @@ describe('Component', function() {
     })
     const d3 = require('d3')
     const Component = injector({
-      '../jq-web.js': jq,
+      '../../jq-web.js': jq,
       'd3': Object.assign({'json': my_loader, 'selection': d3.selection,
         'csv': () => null}, args.d3)
     }).default

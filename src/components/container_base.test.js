@@ -1,7 +1,7 @@
 import should from 'should' // eslint-disable-line no-unused-vars
 import * as d3 from 'd3'
 import assert from 'assert'
-import Component from '../components/base_component.js'
+import Component from '../components/base'
 import sinon from 'sinon'
 
 describe('base container component', function() {
@@ -25,7 +25,7 @@ describe('base container component', function() {
   const get_component_with_mocks = ({ parser, Component }) => {
     return base_container_componentInjector({
       '../default_parser.js': parser,
-      './base_component.js': Component
+      './base': Component
     }).default
   }
 

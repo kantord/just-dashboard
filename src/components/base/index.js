@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
-import jq from '../jq-web.js'
-import { format_value } from '../interpolation.js'
+import jq from '../../jq-web.js'
+import { format_value } from '../../interpolation.js'
 
 const loaders = {
 

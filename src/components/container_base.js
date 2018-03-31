@@ -1,5 +1,5 @@
 import default_parser from '../default_parser.js'
-import Component from './base_component.js'
+import Component from './base'
 
 const ContainerComponent = (
   { wrapper_tag, wrapper_class, validators, init }) => Component({

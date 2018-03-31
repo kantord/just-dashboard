@@ -1,4 +1,4 @@
-import Component from '../base_component.js'
+import Component from '../base'
 import default_parser from '../../default_parser.js'
 import { required } from '../../validators'
 

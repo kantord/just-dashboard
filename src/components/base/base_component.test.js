@@ -41,10 +41,10 @@ describe('Component', function() {
           './render': (
             require('inject-loader!./render.js')({
               '../../jq-web.js': jq,
-            './state_handling': (
-              require('inject-loader!./state_handling.js')({
-                '../../interpolation.js': {'format_value': format_value}
-              })),
+              './state_handling': (
+                require('inject-loader!./state_handling.js')({
+                  '../../interpolation.js': {'format_value': format_value}
+                })),
             })),
         }))
     }).default

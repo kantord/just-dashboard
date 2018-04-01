@@ -28,8 +28,25 @@ describe('Component', function() {
       .onCall(0).returns(args.format_value_return)
       .returns(args.format_value_return2)
     const Component = injector({
-      '../../jq-web.js': jq,
-      '../../interpolation.js': {'format_value': format_value}
+      './state_handling': (
+        require('inject-loader!./state_handling.js')({
+          '../../interpolation.js': {'format_value': format_value}
+        })),
+      './bind': (
+        require('inject-loader!./bind.js')({
+          './state_handling': (
+            require('inject-loader!./state_handling.js')({
+              '../../interpolation.js': {'format_value': format_value}
+            })),
+          './render': (
+            require('inject-loader!./render.js')({
+              '../../jq-web.js': jq,
+            './state_handling': (
+              require('inject-loader!./state_handling.js')({
+                '../../interpolation.js': {'format_value': format_value}
+              })),
+            })),
+        }))
     }).default
 
     const my_init = sinon.stub()
@@ -242,7 +259,7 @@ describe('Component', function() {
   })
 
   it('execute_query calls reject', () => {
-    const injector = require('inject-loader!./index.js')
+    const injector = require('inject-loader!./render.js')
     const jq_error = new Error('Random error')
     const execute_query = injector({
       '../../jq-web.js': () => ({
@@ -263,11 +280,28 @@ describe('Component', function() {
       if (args.no_resolve !== true)
         callback(null, args.fetched_value)
     })
-    const d3 = require('d3')
     const Component = injector({
-      '../../jq-web.js': jq,
-      'd3': Object.assign({'json': my_loader, 'selection': d3.selection,
-        'csv': () => null}, args.d3)
+      './bind': (
+        require('inject-loader!./bind.js')({
+          './render': (
+            require('inject-loader!./render.js')({
+              '../../jq-web.js': jq
+            })
+          ),
+          './external_data': (
+            require('inject-loader!./external_data.js')({
+              './loaders': (
+                require('inject-loader!./loaders.js')({
+                  'd3': Object.assign({
+                    'json': my_loader, 'selection': d3.selection,
+                    'csv': () => null}, args.d3)
+                })
+              )
+            })
+          )
+        })
+      ),
+      
     }).default
     const my_render = (args.render_func === undefined )
       ? sinon.spy() : args.render_func

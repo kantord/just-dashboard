@@ -9,9 +9,9 @@ module.exports = {
     compress: true,
     port: 9000
   },
-  entry: './src/index.js',
+  entry: ["babel-polyfill", './src/index.js'],
   target: 'web',
-  mode: 'production',
+  mode: 'development',
   node: {
     fs: 'empty'
   },

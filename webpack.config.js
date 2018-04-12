@@ -11,7 +11,7 @@ module.exports = {
   },
   entry: ["babel-polyfill", './src/index.js'],
   target: 'web',
-  mode: 'development',
+  mode: 'production',
   node: {
     fs: 'empty'
   },

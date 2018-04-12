@@ -2,7 +2,6 @@ const webpack = require('webpack');
 const path = require('path');
 const env = process.env.WEBPACK_ENV;
 const libraryName = 'dashboard';
-const outputFile = libraryName + '.js';
 
 module.exports = {
   devServer: {

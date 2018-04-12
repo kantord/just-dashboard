@@ -1,3 +1,4 @@
+import "babel-polyfill";
 import './style.scss'
 import json_parser from './default_parser'
 import yaml_parser from './yaml-format/parser'

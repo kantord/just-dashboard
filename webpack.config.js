@@ -1,18 +1,8 @@
 const webpack = require('webpack');
 const path = require('path');
-const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const env = process.env.WEBPACK_ENV;
 const libraryName = 'dashboard';
-
-let plugins = [];
-let outputFile;
-
-if (env === 'build') {
-  plugins.push(new UglifyJsPlugin({ minimize: true }));
-  outputFile = libraryName + '.min.js';
-} else {
-  outputFile = libraryName + '.js';
-}
+const outputFile = libraryName + '.js';
 
 module.exports = {
   devServer: {
@@ -20,9 +10,9 @@ module.exports = {
     compress: true,
     port: 9000
   },
-  entry: ['babel-polyfill', __dirname + '/src/index.js'],
+  entry: './src/index.js',
   target: 'web',
-  devtool: 'source-map',
+  mode: 'production',
   node: {
     fs: 'empty'
   },
@@ -34,7 +24,6 @@ module.exports = {
     umdNamedDefine: true,
     path: path.resolve(__dirname, 'dist')
   },
-  plugins: plugins,
   module: {
     rules: [
       {

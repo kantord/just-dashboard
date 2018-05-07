@@ -71,7 +71,7 @@
     "semantic-release": "^15.1.6",
     "should": "^13.2.1",
     "should-sinon": "0.0.6",
-    "sinon": "^4.5.0",
+    "sinon": "^5.0.4",
     "style-loader": "^0.20.3",
     "stylish": "^1.0.0",
     "webpack": "^4.5.0",

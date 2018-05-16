@@ -19,7 +19,7 @@ script:
   - npm run test:e2e
   - npm run lint
   - npm run coverage
-  - travis wait npm run build
+  - travis_wait npm run build
   - cat ./coverage/lcov.info | codecov
 
 deploy:

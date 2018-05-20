@@ -15,3 +15,23 @@ dashboard "Example":
 The code above will render a p text that looks like this:
 
 ![](../screenshots/p_text.png)
+
+## JSON format
+The YAML above is equivalent to this JSON:
+```json
+{
+  "component": "root",
+  "args": {
+    "title": "Example"
+  },
+  "data": [
+    {
+      "component": "text",
+      "args": {
+        "tagName": "p"
+      },
+      "data": "Lorem ipsum dolor sit amet"
+    }
+  ]
+}
+```

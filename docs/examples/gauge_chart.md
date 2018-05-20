@@ -19,3 +19,31 @@ dashboard "Example":
 The code above will render a gauge chart that looks like this:
 
 ![](../screenshots/gauge_chart.png)
+
+## JSON format
+The YAML above is equivalent to this JSON:
+```json
+{
+  "component": "root",
+  "args": {
+    "title": "Example"
+  },
+  "data": [
+    {
+      "component": "chart",
+      "args": {
+        "type": "gauge",
+        "stacked": false
+      },
+      "data": {
+        "columns": [
+          [
+            "data",
+            30
+          ]
+        ]
+      }
+    }
+  ]
+}
+```

@@ -33,6 +33,12 @@ docs/examples/%.md: ./docs/examples/%.yml
 	echo "The code above will render a $* that looks like this:" | sed 's/_/ /g' >> $@
 	echo "" >> $@
 	echo "![](../screenshots/$*.png)" >> $@
+	echo "" >> $@
+	echo "## JSON format" >> $@
+	echo "The YAML above is equivalent to this JSON:" >> $@
+	echo "\`\`\`json" >> $@
+	cat $^ | npx babel-node scripts/compile_yaml_to_json >> $@
+	echo "\`\`\`" >> $@
 
 docs/examples/%.js: ./docs/examples/%.yml
 	echo " \

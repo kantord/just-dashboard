@@ -21,3 +21,33 @@ dashboard "Example":
 The code above will render a dropdown that looks like this:
 
 ![](../screenshots/dropdown.png)
+
+## JSON format
+The YAML above is equivalent to this JSON:
+```json
+{
+  "component": "root",
+  "args": {
+    "title": "Example"
+  },
+  "data": [
+    {
+      "component": "dropdown",
+      "args": {
+        "variable": "gender",
+        "default": "male"
+      },
+      "data": [
+        {
+          "value": "male",
+          "text": "Male"
+        },
+        {
+          "value": "female",
+          "text": "Female"
+        }
+      ]
+    }
+  ]
+}
+```

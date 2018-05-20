@@ -7,20 +7,19 @@ title: How to use horizontal bar chart
 Here's an example code regarding the use of horizontal bar chart: 
 
 ```yaml
----
-  dashboard "Example": 
-    - 
-      horizontal bar chart: 
-        columns: 
-          - 
-            - "Apples"
-            - 3
-          - 
-            - "Oranges"
-            - 2
-          - 
-            - "Pears"
-            - 2
+dashboard "Example": 
+  - 
+    horizontal bar chart: 
+      columns: 
+        - 
+          - "Apples"
+          - 3
+        - 
+          - "Oranges"
+          - 2
+        - 
+          - "Pears"
+          - 2
 
 ```
 The code above will render a horizontal bar chart that looks like this:

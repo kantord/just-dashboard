@@ -28,7 +28,7 @@ docs/examples/%.md: ./docs/examples/%.yml
 	echo "Here's an example code regarding the use of $*: " | sed 's/_/ /g' >> $@
 	echo "" >> $@
 	echo "\`\`\`yaml" >> $@
-	cat $^ >> $@
+	cat $^ | sed '1,1d' | sed 's/^  //' >> $@
 	echo "\`\`\`" >> $@
 	echo "The code above will render a $* that looks like this:" | sed 's/_/ /g' >> $@
 	echo "" >> $@

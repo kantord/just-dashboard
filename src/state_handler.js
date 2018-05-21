@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import isEqual from 'lodash.isequal'
 
 const create_state_handler = () => {
   const state = {}
@@ -8,7 +8,7 @@ const create_state_handler = () => {
     // Replace old state with new state, report if value has actually changed
     const old_state = Object.assign({}, state)
     state[variable] = value
-    if (_.isEqual(old_state, state)) return false
+    if (isEqual(old_state, state)) return false
     return true
   }
 

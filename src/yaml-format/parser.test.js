@@ -5,36 +5,36 @@ import sinon from 'sinon'
 
 describe('yaml format - parser', function() {
 
-  const set_up = function({safeLoadSpyReturns, safeLoadSpyThrows}) {
+  const set_up = function({parseSpyReturns, parseSpyThrows}) {
     const injector = require('inject-loader!./parser.js')
-    let safeLoadSpy = sinon.stub().returns(safeLoadSpyReturns)
-    if (safeLoadSpyThrows)
-      safeLoadSpy = safeLoadSpy.throws(new Error(safeLoadSpyThrows))
+    let parseSpy = sinon.stub().returns(parseSpyReturns)
+    if (parseSpyThrows)
+      parseSpy = parseSpy.throws(new Error(parseSpyThrows))
     const injected = injector({
-      'js-yaml': {'safeLoad': safeLoadSpy},
+      'yamljs': {parse: parseSpy},
     })
 
     const parser = injected.default
     const error_message = injected.error_message
 
-    return { parser, safeLoadSpy, error_message }
+    return { parser, parseSpy, error_message }
   }
 
   it('should display error for empty input', function() {
-    const { parser, error_message } = set_up({'safeLoadSpyReturns': undefined})
+    const { parser, error_message } = set_up({'parseSpyReturns': undefined})
     parser('').should.deepEqual(
       error_message('A non-empty input file is required'))
   })
 
   it('should display error thrown by safeLoad', function() {
     const error = 'foo bar baz!'
-    const { parser, error_message } = set_up({'safeLoadSpyThrows': error})
+    const { parser, error_message } = set_up({'parseSpyThrows': error})
     parser('').should.deepEqual(
       error_message('Error: ' + error))
   })
 
   it('should not display error for valid input', function() {
-    const { parser, error_message } = set_up({'safeLoadSpyReturns': {
+    const { parser, error_message } = set_up({'parseSpyReturns': {
       'dashboard "Hello World"': []
     }})
     parser('dashboard "Hello World": []').should.not.deepEqual(
@@ -42,19 +42,19 @@ describe('yaml format - parser', function() {
   })
 
   it('yaml is only parsed if input is a string', function() {
-    const { parser, safeLoadSpy } = set_up({'safeLoadSpyReturns': []})
+    const { parser, parseSpy } = set_up({'parseSpyReturns': []})
     parser({'h1 text': ''})
-    safeLoadSpy.should.not.be.called()
+    parseSpy.should.not.be.called()
   })
 
   const inputs = ['foo', 'bar']
 
   inputs.forEach((arg) =>
     it(`yaml called with input - ${arg}`, function() {
-      const { parser, safeLoadSpy } = set_up(
-        {'safeLoadSpyReturns': {'dashboard "a"': []}})
+      const { parser, parseSpy } = set_up(
+        {'parseSpyReturns': {'dashboard "a"': []}})
       parser(arg)
-      safeLoadSpy.should.be.calledWith(arg)
+      parseSpy.should.be.calledWith(arg)
     })
   )
 })
@@ -62,9 +62,9 @@ describe('yaml format - parser', function() {
 describe('yaml format - root component', function() {
   const set_up = function() {
     const injector = require('inject-loader!./parser.js')
-    const safeLoadSpy = sinon.spy(x => x)
+    const parseSpy = sinon.spy(x => x)
     const parser = injector({
-      'js-yaml': {'safeLoad': safeLoadSpy},
+      'yamljs': {parse: parseSpy},
     }).default
 
     return { parser }
@@ -147,11 +147,11 @@ describe('yaml format - root component', function() {
 
 
 describe('yaml format - text component', function() {
-  const set_up = function(safeLoadSpyReturns) {
+  const set_up = function(parseSpyReturns) {
     const injector = require('inject-loader!./parser.js')
-    const safeLoadSpy = sinon.stub().returns(safeLoadSpyReturns)
+    const parseSpy = sinon.stub().returns(parseSpyReturns)
     const parser = injector({
-      'js-yaml': {'safeLoad': safeLoadSpy},
+      'yamljs': {parse: parseSpy},
     }).default
 
     return { parser }
@@ -197,9 +197,9 @@ describe('yaml format - text component', function() {
 describe('yaml format - board component', function() {
   const set_up = function() {
     const injector = require('inject-loader!./parser.js')
-    const safeLoadSpy = sinon.spy(x => x)
+    const parseSpy = sinon.spy(x => x)
     const parser = injector({
-      'js-yaml': {'safeLoad': safeLoadSpy},
+      'yamljs': {parse: parseSpy},
     }).default
 
     return { parser }
@@ -252,9 +252,9 @@ describe('yaml format - board component', function() {
 describe('yaml format - rows component', function() {
   const set_up = function() {
     const injector = require('inject-loader!./parser.js')
-    const safeLoadSpy = sinon.spy(x => x)
+    const parseSpy = sinon.spy(x => x)
     const parser = injector({
-      'js-yaml': {'safeLoad': safeLoadSpy},
+      'yamljs': {parse: parseSpy},
     }).default
 
     return { parser }
@@ -304,9 +304,9 @@ describe('yaml format - rows component', function() {
 describe('yaml format - columns component', function() {
   const set_up = function() {
     const injector = require('inject-loader!./parser.js')
-    const safeLoadSpy = sinon.spy(x => x)
+    const parseSpy = sinon.spy(x => x)
     const parser = injector({
-      'js-yaml': {'safeLoad': safeLoadSpy},
+      'yamljs': {parse: parseSpy},
     }).default
 
     return { parser }
@@ -383,9 +383,9 @@ describe('yaml format - columns component', function() {
 describe('yaml format - chart component', function() {
   const set_up = function() {
     const injector = require('inject-loader!./parser.js')
-    const safeLoadSpy = sinon.spy(x => x)
+    const parseSpy = sinon.spy(x => x)
     const parser = injector({
-      'js-yaml': {'safeLoad': safeLoadSpy},
+      'yamljs': {parse: parseSpy},
     }).default
 
     return { parser }
@@ -486,9 +486,9 @@ describe('yaml format - chart component', function() {
 describe('yaml format - handling file', function() {
   const set_up = function() {
     const injector = require('inject-loader!./parser.js')
-    const safeLoadSpy = sinon.spy(x => x)
+    const parseSpy = sinon.spy(x => x)
     const parser = injector({
-      'js-yaml': {'safeLoad': safeLoadSpy},
+      'yamljs': {parse: parseSpy},
     }).default
 
     return { parser }
@@ -537,9 +537,9 @@ describe('yaml format - handling file', function() {
 describe('yaml format - handling URL', function() {
   const set_up = function() {
     const injector = require('inject-loader!./parser.js')
-    const safeLoadSpy = sinon.spy(x => x)
+    const parseSpy = sinon.spy(x => x)
     const parser = injector({
-      'js-yaml': {'safeLoad': safeLoadSpy},
+      'yamljs': {parse: parseSpy},
     }).default
 
     return { parser }
@@ -588,9 +588,9 @@ describe('yaml format - handling URL', function() {
 describe('yaml format - attr: syntax', function() {
   const set_up = function() {
     const injector = require('inject-loader!./parser.js')
-    const safeLoadSpy = sinon.spy(x => x)
+    const parseSpy = sinon.spy(x => x)
     const parser = injector({
-      'js-yaml': {'safeLoad': safeLoadSpy},
+      'yamljs': {parse: parseSpy},
     }).default
 
     return { parser }
@@ -724,11 +724,11 @@ describe('integration tests', () => {
 })
 
 describe('yaml format - dropdown component', function() {
-  const set_up = function(safeLoadSpyReturns) {
+  const set_up = function(parseSpyReturns) {
     const injector = require('inject-loader!./parser.js')
-    const safeLoadSpy = sinon.stub().returns(safeLoadSpyReturns)
+    const parseSpy = sinon.stub().returns(parseSpyReturns)
     const parser = injector({
-      'js-yaml': {'safeLoad': safeLoadSpy},
+      'yamljs': {parse: parseSpy},
     }).default
 
     return { parser }

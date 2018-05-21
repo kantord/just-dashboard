@@ -24,7 +24,7 @@ describe('Integration test', function() {
   beforeEach(function (done) {
     setTimeout(function(){
       done()
-    }, 5000)
+    }, 500)
   })
 
   it('', function(done) {

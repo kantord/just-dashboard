@@ -1,4 +1,4 @@
-import yaml from 'js-yaml'
+import YAML from 'yamljs'
 
 const rules = [
   [[/dashboard ["]([^"]*)["]/, /dashboard [']([^']*)[']/], (match, value) => ({
@@ -120,7 +120,7 @@ export const error_message = message => ({
 const parser = (input) => {
   try {
     const yaml_contents = (typeof input === 'string')
-      ? yaml.safeLoad(input) : input
+      ? YAML.parse(input) : input
     if (yaml_contents === undefined)
       return error_message('A non-empty input file is required')
 

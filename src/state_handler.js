@@ -1,4 +1,4 @@
-import isEqual from 'lodash.isequal'
+import isEqual from 'fast-deep-equal'
 
 const create_state_handler = () => {
   const state = {}

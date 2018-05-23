@@ -99,7 +99,7 @@ describe('state handler', () => {
       const my_callback = sinon.spy()
       const injector = require('inject-loader!./state_handler.js')
       const state_handler = injector({
-        'lodash.isequal': () => true
+        'fast-deep-equal': () => true
       }).default()
       state_handler.subscribe(my_callback)
       state_handler[method]('foo', 42)
@@ -141,7 +141,7 @@ describe('state handler', () => {
       function() {state_handler.subscribe(my_callback)})
     const injector = require('inject-loader!./state_handler.js')
     const state_handler = injector({
-      'lodash.isequal': () => false
+      'fast-deep-equal': () => false
     }).default()
     state_handler.subscribe(my_callback)
     state_handler.set_variable('foo', 42)

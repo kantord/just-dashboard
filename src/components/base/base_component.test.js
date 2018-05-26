@@ -767,7 +767,7 @@ describe('Component', function() {
         'render_func': my_render
       })
       my_render.should.be.called()
-      assert.equal(d3.select('p.error').text(), message)
+      assert.equal(d3.select('p.error').text(), message + ' [render]')
     })
 
     it(`error message when error happens during init() (${message})`, () => {
@@ -777,7 +777,7 @@ describe('Component', function() {
         'has_init': true
       })
       my_init.should.be.called()
-      assert.equal(d3.select('p.error').text(), message)
+      assert.equal(d3.select('p.error').text(), message + ' [bind]')
     })
   })
 })

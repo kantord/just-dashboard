@@ -14,7 +14,7 @@ const create_element = (init_func, instance_args, selection) => {
     return (typeof init_func === 'function')
       ? init_func(instance_args, selection) : selection.append('span')
   } catch(error) {
-    selection.call(show_error_message(error))
+    selection.call(show_error_message(`${error} [bind]`))
   }
 }
 

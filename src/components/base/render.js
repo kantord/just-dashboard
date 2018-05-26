@@ -9,7 +9,7 @@ const call_render_function = (args, instance_args, selection, element) =>
       args.render(instance_args, selection, format_data(instance_args, data),
         element, data)
     } catch (error) {
-      selection.call(show_error_message(error))
+      selection.call(show_error_message(`${error} [render]`))
     }
   }
 
@@ -23,7 +23,7 @@ const render_component_with_query = (args, instance_args, selection,
   element) => (data) =>
   with_spinner(selection)(
     execute_query(instance_args.query, data)(
-      e => show_error_message(e)(selection)))(
+      e => show_error_message(`${e} [render]`)(selection)))(
     call_render_function(args, instance_args, selection, element))
 
 const has_query = (instance_args) =>

@@ -68,7 +68,7 @@
     "mocha-webpack": "^2.0.0-beta.0",
     "mochawesome": "^3.0.2",
     "node-sass": "^4.9.0",
-    "nyc": "^11.8.0",
+    "nyc": "^12.0.2",
     "postcss-loader": "^2.1.5",
     "sass-loader": "^7.0.1",
     "selenium-webdriver": "^4.0.0-alpha.1",

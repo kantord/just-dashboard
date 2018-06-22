@@ -16,7 +16,7 @@ dashboard "Cereals":
     - attr:query: '.[0].a'
     - data: file:///foo/bar.csv
   - h2 text: "By calories"
-  - dropdown my_var=foo:
+  - dropdown my_var=~last:
     - {"value": "foo", "text": "Foo"}
     - {"value": "bar", "text": "Bar"}
   - 2 columns:

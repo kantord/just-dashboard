@@ -183,5 +183,23 @@ describe('Text component', function() {
       'Correct number of items after change')
   })
 
+  const magic_default_values = [
+    {default_value: '~first', actual_value: 'fo'},
+    {default_value: '~last', actual_value: 'bar'},
+  ]
+  magic_default_values.forEach(
+    ({default_value, actual_value}) => it(
+      `automatic default variable ${default_value}`, () => {
+        const { set_variable } = call_render_with({'args': {'variable': 'var',
+          'default': default_value},
+        'state': {'var': default_value},
+        'data': [
+          { 'text': 'foo', 'value': 'fo' },
+          { 'text': 'bar', 'value': 'bar' },
+        ]})
+        set_variable.should.be.calledWith('var', actual_value)
+      }
+    ))
+
 })
 

@@ -69,10 +69,18 @@ const DropdownComponent = Component({
       .append('select').attr('class', 'ds--select')
   },
   'render': (args, selection, data, item) => {
+    const value = args.state_handler.get_state()[args.variable]
+    if (value === args.default && args.default === '~first') {
+      args.state_handler.set_variable(args.variable, data[0].value)
+    }
+    if (value === args.default && args.default === '~last') {
+      args.state_handler.set_variable(args.variable, data.slice(-1)[0].value)
+    }
+
     item
       .selectAll('option').data(data).call(update_pattern)
     item
-      .property('value', args.state_handler.get_state()[args.variable])
+      .property('value', value)
     item
       .on('change', function() {
         args.state_handler.set_variable(args.variable, d3.select(this)

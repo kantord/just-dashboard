@@ -50,7 +50,7 @@
     "css-loader": "^0.28.9",
     "cz-conventional-changelog": "^2.1.0",
     "docdash": "^0.4.0",
-    "eslint": "^4.19.1",
+    "eslint": "^5.0.0",
     "eslint-loader": "^2.0.0",
     "fake-style-loader": "^1.0.1",
     "file-loader": "^1.1.8",

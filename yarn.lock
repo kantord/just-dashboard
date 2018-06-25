@@ -3669,6 +3669,14 @@ find-cache-dir@^1.0.0:
     make-dir "^1.0.0"
     pkg-dir "^2.0.0"
 
+find-cache-dir@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/find-cache-dir/-/find-cache-dir-2.0.0.tgz#4c1faed59f45184530fb9d7fa123a4d04a98472d"
+  dependencies:
+    commondir "^1.0.1"
+    make-dir "^1.0.0"
+    pkg-dir "^3.0.0"
+
 find-up@^1.0.0:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/find-up/-/find-up-1.1.2.tgz#6b2e9822b1a2ce0a60ab64d610eccad53cb24d0f"
@@ -4157,17 +4165,17 @@ har-validator@~5.0.3:
     ajv "^5.1.0"
     har-schema "^2.0.0"
 
-hard-source-webpack-plugin@^0.8.1:
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/hard-source-webpack-plugin/-/hard-source-webpack-plugin-0.8.1.tgz#18a36c9a98930ce8948f07de4d3c8917b1310c28"
+hard-source-webpack-plugin@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/hard-source-webpack-plugin/-/hard-source-webpack-plugin-0.9.0.tgz#f53a793f9b293da2a3c31b9a79069219a9c433f6"
   dependencies:
     chalk "^2.4.1"
-    find-cache-dir "^1.0.0"
+    find-cache-dir "^2.0.0"
     jsonlint "^1.6.3"
     lodash "^4.15.0"
     mkdirp "^0.5.1"
     node-object-hash "^1.2.0"
-    pkg-dir "^2.0.0"
+    pkg-dir "^3.0.0"
     rimraf "^2.6.2"
     tapable "^1.0.0-beta.5"
     webpack-sources "^1.0.1"
@@ -6679,6 +6687,12 @@ pkg-dir@^2.0.0:
   resolved "https://registry.yarnpkg.com/pkg-dir/-/pkg-dir-2.0.0.tgz#f6d5d1109e19d63edf428e0bd57e12777615334b"
   dependencies:
     find-up "^2.1.0"
+
+pkg-dir@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/pkg-dir/-/pkg-dir-3.0.0.tgz#2749020f239ed990881b1f71210d51eb6523bea3"
+  dependencies:
+    find-up "^3.0.0"
 
 pluralize@^7.0.0:
   version "7.0.0"

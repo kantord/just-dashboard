@@ -62,8 +62,9 @@ describe('Component', function() {
     }) : Component({
       'render': my_render, 'validators': validators
     })
-    const bind = my_component(args.instance_args)
     const d3 = require('d3')
+    console.log('before-first-call',  d3.selectAll('*').html())
+    const bind = my_component(args.instance_args)
     const my_selection = d3.selection()
     const render = bind(my_selection)
     render(args.data)
@@ -779,5 +780,28 @@ describe('Component', function() {
       my_init.should.be.called()
       assert.equal(d3.select('p.error').text(), message + ' [bind]')
     })
+  })
+
+  it('Old error messages should disappear after re-render', () => {
+    let callback
+    const state_handler = {
+      'get_state': sinon.spy(),
+      'subscribe': sinon.spy(function(f) {callback = f})}
+    const message = 'Random error';
+    const my_render = sinon.stub().onFirstCall().throws(message)
+    const { d3 } = call_test_component_with({
+      'instance_args': {
+        'state_handler': state_handler
+      },
+      'render_func': my_render,
+      'init_func': (_, selection) => selection.append('h1')
+    })
+    //assert.equal(d3.selectAll('p.error').size(), 1)
+    //my_render.should.be.calledOnce()
+    console.log('after-first-call',  d3.selectAll('*').html())
+    callback(state_handler, callback)
+    //my_render.should.be.calledTwice()
+    console.log('after-second-call', d3.selectAll('*').html())
+    assert.equal(d3.selectAll('p.error').size(), 0)
   })
 })

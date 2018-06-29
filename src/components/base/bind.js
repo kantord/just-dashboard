@@ -33,7 +33,12 @@ const create_bind_function = (args, instance_args) => (selection) => {
         if (element === null || (element && element.node
           && !document.contains(element.node()))) return
         state_handler.subscribe(me)
-        if (element) element.remove()
+        console.log('shit', element)
+        if (element) {
+          element.remove()
+        } else {
+          throw new Error('this should not happen ever')
+        }
         element = create_element(
           args.init, format_arguments(instance_args), selection)
         render_()

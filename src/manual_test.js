@@ -22,6 +22,11 @@ dashboard "Cereals":
   - 2 columns:
     - p text: "foo \${my_var} bar"
     - p text: "foo \${my_var} bar"
+  - tabs:
+    - "Hello World":
+      h3 text: "Hello World"
+    - "Foo bar":
+      h4 text: "Foo bar"
   - bar chart:
     - attr:query: '{"columns": [(sort_by(-(.calories | tonumber)) | .[] | [.name, .calories])]}'
     - data: https://gist.githubusercontent.com/ZeningQu/6184eaf8faa533e320abc938c4738c3e/raw/40f237de825061faa8721c2293b79c46979780b4/cereals.csv

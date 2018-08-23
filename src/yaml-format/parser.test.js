@@ -301,6 +301,59 @@ describe('yaml format - rows component', function() {
   })
 })
 
+describe('yaml format - tabs component', function() {
+  const set_up = function() {
+    const injector = require('inject-loader!./parser.js')
+    const parseSpy = sinon.spy(x => x)
+    const parser = injector({
+      'yamljs': {parse: parseSpy},
+    }).default
+
+    return { parser }
+  }
+
+  const tests = [
+    {
+      'input': {'tabs': [
+        {'attr:query': 'asd'},
+        {'data': [
+          {"foo bar": {"h2 text": "asd"}},
+          {"foo baz": {"h1 text": "sd"}},
+        ]},
+      ]},
+      'output': {
+        'component': 'tabs',
+        'args': {'query': 'asd'},
+        'data': [
+          {
+            'foo bar': {
+              'component': 'text',
+              'args': {'tagName': 'h2'},
+              'data': 'asd'
+            },
+          },
+          {
+            'foo baz': {
+              'component': 'text',
+              'args': {'tagName': 'h1'},
+              'data': 'sd'
+            },
+          }
+        ]
+      }
+    },
+  ]
+
+
+  tests.forEach(function({input, output}) {
+    it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]].length}`,
+      () => {
+        const { parser } = set_up(input)
+        assert.deepEqual(parser(input), output)
+      })
+  })
+})
+
 describe('yaml format - columns component', function() {
   const set_up = function() {
     const injector = require('inject-loader!./parser.js')

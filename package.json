@@ -17,7 +17,7 @@
     "analyze:generate": "webpack --profile --json > stats.json",
     "analyze:tool": "webpack-bundle-analyzer stats.json",
     "analyze": "yarn analyze:generate && yarn analyze:tool",
-    "manual-test": "webpack-dev-server  --webpack-config webpack.test.config.js  './src/manual_test.js' --hot --inline --output-filename 'test.js'",
+    "manual-test": "webpack-dev-server  --webpack-config webpack.test.config.js --mode development './src/manual_test.js' --hot --inline --output-filename 'test.js'",
     "semantic-release": "semantic-release",
     "test:e2e": "webpack src/manual_test.js  --output-filename test.js --config webpack.config.js --mode development && mocha-webpack \"src/e2e-test.js\" --timeout 80000 --webpack-config webpack.test.config.js  --require babel-polyfill"
   },

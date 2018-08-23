@@ -6,6 +6,7 @@ import ColumnsComponent from './components/columns/Columns.js'
 import RowsComponent from './components/rows/Rows.js'
 import BoardComponent from './components/board/Board.js'
 import DropdownComponent from './components/dropdown/Dropdown.js'
+import TabsComponent from './components/tabs/Tabs.js'
 
 const test_parser = parse((component) => ({
   'root': RootComponent,
@@ -15,6 +16,7 @@ const test_parser = parse((component) => ({
   'text': TextComponent,
   'chart': ChartComponent,
   'dropdown': DropdownComponent,
+  'tabs': TabsComponent,
 }[component]))
 
 export default test_parser

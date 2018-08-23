@@ -15,6 +15,14 @@ const rules = [
     'component': 'rows',
     'data': value.map(parser)
   })],
+  [[/tabs/], (match, value) => ({
+    'component': 'tabs',
+    'data': value.map(item => {
+      return {
+        [Object.keys(item)[0]]: parser(Object.values(item)[0])
+      }
+    })
+  })],
   [[/board/], (match, value) => ({
     'component': 'board',
     'data': value.map(parser)

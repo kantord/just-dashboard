@@ -13,7 +13,7 @@ module.exports = {
     },
     "rules": {
         "max-len": [
-          "error"
+          "warn"
         ],
         "indent": [
             "error",

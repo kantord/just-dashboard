@@ -5,7 +5,7 @@ import sinon from 'sinon'
 
 describe('Root component', function() {
   beforeEach(function () {
-    this.jsdom = require('jsdom-global')()
+    this.jsdom = require('jsdom-global')(undefined, {'url': 'https://fake.url.com'})
   })
 
   afterEach(function () {

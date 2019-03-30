@@ -1,4 +1,4 @@
-{
+module.exports = {
   "presets": [
     "@babel/preset-env",
   ],
@@ -10,12 +10,6 @@
     "plugins": [
         "@babel/syntax-dynamic-import"
         ]
-    },
-    "test": {
-      "plugins": [
-        "@babel/syntax-dynamic-import",
-        "@babel/dynamic-import-node"
-      ]
     }
   }
 }

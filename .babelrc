@@ -1,22 +1,20 @@
 {
   "presets": [
-    "env",
-    "es2015"
+    "@babel/preset-env",
   ],
   "plugins": [
-      "syntax-dynamic-import",
+      "@babel/syntax-dynamic-import",
   ],
   "env": {
     "build": {
     "plugins": [
-        "syntax-dynamic-import"
+        "@babel/syntax-dynamic-import"
         ]
     },
     "test": {
       "plugins": [
-        "istanbul",
-        "syntax-dynamic-import",
-        "dynamic-import-node"
+        "@babel/syntax-dynamic-import",
+        "@babel/dynamic-import-node"
       ]
     }
   }

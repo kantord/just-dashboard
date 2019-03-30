@@ -9,7 +9,7 @@ module.exports = {
     compress: true,
     port: 9000
   },
-  entry: ["babel-polyfill", './src/index.js'],
+  entry: ["@babel/polyfill", './src/index.js'],
   target: 'web',
   mode: 'production',
   node: {
@@ -49,7 +49,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['babel-preset-env']
+            presets: ['@babel/preset-env']
           }
         }
       }

@@ -1,0 +1,49 @@
+image: ubuntu:18.04
+
+stages:
+  - test
+  - publish
+
+before_script:
+  - apt-get update -y
+  - apt-get install curl gnupg wget -y
+  - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+  - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+  - apt-get remove cmdtest
+  - apt-get update -y
+  - apt-get install firefox nodejs npm yarn -y
+  - npm install -g node-gyp
+  - npm install -g cross-env
+  - yarn
+  - wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz
+  - sh -c 'tar -x geckodriver -zf geckodriver-v0.23.0-linux64.tar.gz -O > /usr/bin/geckodriver'
+  - chmod +x /usr/bin/geckodriver
+  - rm geckodriver-v0.23.0-linux64.tar.gz
+
+test:
+  stage: test
+  script:
+  - yarn test
+
+test-e2e:
+  stage: test
+  script:
+  - yarn test:e2e
+ 
+test-lint:
+  stage: test
+  script:
+  - yarn lint
+
+test-build:
+  stage: test
+  script:
+  - yarn build
+
+semantic-release:
+  stage: publish
+  script:
+    - yarn semantic-release
+  only:
+    - master
+

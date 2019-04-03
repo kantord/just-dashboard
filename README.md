@@ -1,10 +1,15 @@
-# just-dashboard [![Travis](https://img.shields.io/travis/kantord/just-dashboard/master.svg)]() ![Codecov](https://img.shields.io/codecov/c/github/kantord/just-dashboard/master.svg)
+<h1 align="center">just-dashboard</h1>
 
-[![Join the chat at https://gitter.im/just-dashboard/Lobby](https://badges.gitter.im/just-dashboard/Lobby.svg)](https://gitter.im/just-dashboard/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[Website](https://kantord.github.io/just-dashboard/)
+<p align="center">
+  <a href="https://kantord.github.io/just-dashboard/">Documentation</a> •
+  <a href="https://kantord.github.io/just-dashboard/getting-started">Getting started</a> •
+  <a href="https://kantord.github.io/just-dashboard/components.html">Chart types</a>
+</p>
 
-just-dashboard let's you turn this:
+ [![Travis](https://img.shields.io/travis/kantord/just-dashboard/master.svg)]() ![Codecov](https://img.shields.io/codecov/c/github/kantord/just-dashboard/master.svg)
+
+just-dashboard turns this:
 ```yaml
 dashboard "Food":
   - h1 text: Food
@@ -44,10 +49,3 @@ To host your dashboard, you can roll your own backend, or:
 
 In fact, I've created a Gist with the example above: [https://gist.github.com/kantord/2973bdd4ad689642562018bb4091ffbd](https://gist.github.com/kantord/2973bdd4ad689642562018bb4091ffbd); 
 thus it's accessible as a dashboard at: [http://bottoml.in/e/kantord/2973bdd4ad689642562018bb4091ffbd](http://bottoml.in/e/kantord/2973bdd4ad689642562018bb4091ffbd)
-
-
-## Documentation
-Documentation is available at: [https://kantord.github.io/just-dashboard/](https://kantord.github.io/just-dashboard/)
-
-## License
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkantord%2Fjust-dashboard.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkantord%2Fjust-dashboard?ref=badge_large)

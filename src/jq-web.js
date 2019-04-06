@@ -1,8 +1,8 @@
 
-const jq = async (...args) => {
-  const jq_ = await import(/* webpackChunkName: "jq-web" */ 'jq-web')
-console.log(jq_) // eslint-disable-line
-  return jq_.default(...args)
+const emuto = async (data, query) => {
+  const emuto_ = await import(/* webpackChunkName: "emuto" */ 'emuto/lib/interpreter')
+	console.log(emuto_) // eslint-disable-line
+  return emuto_.default(query)(data)
 }
 
-export default jq
+export default emuto

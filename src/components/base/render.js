@@ -1,5 +1,5 @@
 import with_spinner from './spinner'
-import jq from '../../jq-web.js'
+import emuto from '../../jq-web.js'
 import show_error_message from './error_handling'
 import { format_data } from './state_handling'
 
@@ -15,8 +15,8 @@ const call_render_function = (args, instance_args, selection, element) =>
 
 const execute_query = (query, data) =>
   (reject) => (resolve) =>
-    jq(data, query)
-      .then((data) => resolve(data))
+    emuto(data, query)
+		.then((result) => {console.log('data!!!', result); return resolve(result)}) // eslint-disable-line
       .catch((error) => {reject(error)})
 
 const render_component_with_query = (args, instance_args, selection,

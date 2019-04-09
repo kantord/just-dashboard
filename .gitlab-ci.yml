@@ -43,7 +43,7 @@ test-build:
 semantic-release:
   stage: publish
   script:
-    - $(yarn bin)/semantic-release-gitlab
+    - yarn semantic-release
   only:
     - master
 

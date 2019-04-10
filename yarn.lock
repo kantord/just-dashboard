@@ -3404,14 +3404,13 @@ emojis-list@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-2.1.0.tgz#4daa4d9db00f9819880c79fa457ae5b09a1fd389"
 
-emuto@^1.37.0:
-  version "1.37.0"
-  resolved "https://registry.yarnpkg.com/emuto/-/emuto-1.37.0.tgz#9417439ea0b1db9701d61dbbb04339d05392feca"
-  integrity sha512-8J/L6OM2aA/THYcqnqrxMp6riAuJX4WkxYDvw1Joskr9H8KnCWdZKoyKY2N+zE0rY+oMUeWgCX052Lr1SXxu2A==
+emuto@^1.37.1:
+  version "1.37.1"
+  resolved "https://registry.yarnpkg.com/emuto/-/emuto-1.37.1.tgz#e3433fc4e9e9b3bf8c21142ae7c984d7fab2ed3b"
+  integrity sha512-ASnVFLoKCjzv88bDK9+MxMLxbfvQixIymbtn/H8yBTWT6DR4IcoJ14VJlOsy0vfRyEP7HtjpP/EptHBXKuWYVQ==
   dependencies:
     cartesian-product-generator "^1.1.0"
     combinations-generator "^1.0.1"
-    flow "^0.2.3"
     parsimmon "^1.12.0"
 
 encodeurl@~1.0.2:
@@ -4061,11 +4060,6 @@ flatted@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-2.0.0.tgz#55122b6536ea496b4b44893ee2608141d10d9916"
   integrity sha512-R+H8IZclI8AAkSBRQJLVOsxwAoHd6WC40b4QTNWIjzAa6BXOBfQcM587MXDTVPeYaopFNWHUFLx7eNmHDSxMWg==
-
-flow@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/flow/-/flow-0.2.3.tgz#f8da65efa249127ec99376a28896572a9795d1af"
-  integrity sha1-+Npl76JJEn7Jk3aiiJZXKpeV0a8=
 
 flush-write-stream@^1.0.0:
   version "1.0.3"

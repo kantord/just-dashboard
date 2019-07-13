@@ -43,6 +43,7 @@ test-build:
 semantic-release:
   stage: publish
   script:
+    - yarn build
     - yarn semantic-release
   only:
     - master

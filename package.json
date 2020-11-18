@@ -70,7 +70,7 @@
     "postcss-loader": "^3.0.0",
     "sass-loader": "^7.1.0",
     "selenium-webdriver": "^4.0.0-alpha.1",
-    "semantic-release": "^15.13.3",
+    "semantic-release": "^17.2.3",
     "should": "^13.2.3",
     "should-sinon": "0.0.6",
     "sinon": "^7.3.1",

@@ -25,8 +25,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "billboard.js": "^1.4.1",
-    "d3": "4.10.0",
+    "billboard.js": "^1.11.0",
+    "d3": "7.0.0",
     "emuto": "^1.37.1",
     "fast-deep-equal": "^2.0.1",
     "fd-slicer": "^1.1.0",

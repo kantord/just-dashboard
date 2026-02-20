@@ -1,6 +1,6 @@
-import TextComponent from './Text'
-import assert from 'assert'
+import assert from 'node:assert'
 import * as d3 from 'd3'
+import TextComponent from './Text'
 
 describe('Text component', () => {
   beforeEach(() => {
@@ -14,60 +14,54 @@ describe('Text component', () => {
   }
 
   it('should throw on invalid tag name', () => {
-    expect(() => { (TextComponent({'tagName': 'foo bar'}) as any)()(undefined as any) })
-      .toThrow('Argument \'tagName\' is invalid')
+    expect(() => {
+      ;(TextComponent({ tagName: 'foo bar' }) as any)()(undefined as any)
+    }).toThrow("Argument 'tagName' is invalid")
   })
 
   it('text is rendered', () => {
-    const { render, d3 } = get_render_function({'tagName': 'span'})
+    const { render, d3 } = get_render_function({ tagName: 'span' })
     render('Hello World from TextComponent')
-    assert.equal(d3.selection().select('span').text(),
-      'Hello World from TextComponent')
+    assert.equal(d3.selection().select('span').text(), 'Hello World from TextComponent')
   })
 
   it('update function updates text', () => {
-    const { render, d3 } = get_render_function({'tagName': 'span'})
+    const { render, d3 } = get_render_function({ tagName: 'span' })
     render('Hello World from TextComponent')
     render('Second version')
     assert.equal(d3.selection().select('span').text(), 'Second version')
   })
 
   it('text align center', () => {
-    const { render, d3 } = get_render_function(
-      {'tagName': 'span', 'align': 'center'})
+    const { render, d3 } = get_render_function({ tagName: 'span', align: 'center' })
     render('Second version')
-    assert.equal(d3.selection().select('[data-align="center"]').text(),
-      'Second version')
+    assert.equal(d3.selection().select('[data-align="center"]').text(), 'Second version')
   })
 
   it('align only if attr is supplied', () => {
-    const { render, d3 } = get_render_function({'tagName': 'span'})
+    const { render, d3 } = get_render_function({ tagName: 'span' })
     render('Second version')
     assert.equal(d3.selection().select('[data-align]').size(), 0)
   })
 
   it('text align right', () => {
-    const { render, d3 } = get_render_function(
-      {'tagName': 'span', 'align': 'right'})
+    const { render, d3 } = get_render_function({ tagName: 'span', align: 'right' })
     render('Second version')
-    assert.equal(d3.selection().select('[data-align="right"]').text(),
-      'Second version')
+    assert.equal(d3.selection().select('[data-align="right"]').text(), 'Second version')
   })
 
   it('proper class attached', () => {
-    const { render, d3 } = get_render_function({'tagName': 'span'})
+    const { render, d3 } = get_render_function({ tagName: 'span' })
     render('Second version')
     assert.equal(d3.selection().select('.ds--text').size(), 1)
   })
 
   it('proper item is updated', () => {
-    const render1 = TextComponent({'tagName': 'h4'})(d3.selection())
-    const render2 = TextComponent({'tagName': 'h4'})(d3.selection())
+    const render1 = TextComponent({ tagName: 'h4' })(d3.selection())
+    const render2 = TextComponent({ tagName: 'h4' })(d3.selection())
     render1('a')
     render2('b')
-    assert.equal(
-      d3.select(d3.selection().selectAll('.ds--text').nodes()[0] as any).text(), 'a')
-    assert.equal(
-      d3.select(d3.selection().selectAll('.ds--text').nodes()[1] as any).text(), 'b')
+    assert.equal(d3.select(d3.selection().selectAll('.ds--text').nodes()[0] as any).text(), 'a')
+    assert.equal(d3.select(d3.selection().selectAll('.ds--text').nodes()[1] as any).text(), 'b')
   })
 })

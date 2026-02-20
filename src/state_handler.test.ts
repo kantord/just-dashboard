@@ -1,21 +1,18 @@
-import { vi } from 'vitest'
 import sinon from 'sinon'
+import { vi } from 'vitest'
 
 const mocks = vi.hoisted(() => ({
-  isEqual: null as ((...args: unknown[]) => boolean) | null
+  isEqual: null as ((...args: unknown[]) => boolean) | null,
 }))
 
 vi.mock('fast-deep-equal', async () => {
   const actual = await vi.importActual<{ default: (...args: unknown[]) => boolean }>('fast-deep-equal')
   return {
-    default: (...args: unknown[]) => mocks.isEqual
-      ? mocks.isEqual(...args)
-      : actual.default(...args)
+    default: (...args: unknown[]) => (mocks.isEqual ? mocks.isEqual(...args) : actual.default(...args)),
   }
 })
 
 import create_state_handler from './state_handler'
-
 
 describe('state handler', () => {
   beforeEach(() => {
@@ -42,7 +39,7 @@ describe('state handler', () => {
     const state_handler = create_state_handler()
     state_handler.init_variable('foo', 42)
     expect(state_handler.get_state()).toEqual({
-      'foo': 42
+      foo: 42,
     })
   })
 
@@ -51,8 +48,8 @@ describe('state handler', () => {
     state_handler.init_variable('bar', false)
     state_handler.init_variable('pi', 3.14)
     expect(state_handler.get_state()).toEqual({
-      'bar': false,
-      'pi': 3.14
+      bar: false,
+      pi: 3.14,
     })
   })
 
@@ -62,8 +59,8 @@ describe('state handler', () => {
     state_handler.init_variable('pi', 3.14)
     state_handler.init_variable('pi', -3.14)
     expect(state_handler.get_state()).toEqual({
-      'bar': false,
-      'pi': 3.14
+      bar: false,
+      pi: 3.14,
     })
   })
 
@@ -71,7 +68,7 @@ describe('state handler', () => {
     const state_handler = create_state_handler()
     state_handler.set_variable('foo', 42)
     expect(state_handler.get_state()).toEqual({
-      'foo': 42
+      foo: 42,
     })
   })
 
@@ -80,8 +77,8 @@ describe('state handler', () => {
     state_handler.set_variable('bar', false)
     state_handler.set_variable('pi', 3.14)
     expect(state_handler.get_state()).toEqual({
-      'bar': false,
-      'pi': 3.14
+      bar: false,
+      pi: 3.14,
     })
   })
 
@@ -102,10 +99,9 @@ describe('state handler', () => {
     expect(my_callback.called).toBe(false)
   })
 
-
   const methods_that_update_state = ['init_variable', 'set_variable'] as const
 
-  methods_that_update_state.forEach(method => {
+  methods_that_update_state.forEach((method) => {
     it(`callback should be called when variables change - ${method}`, () => {
       const my_callback = sinon.spy()
       const state_handler = create_state_handler()
@@ -126,11 +122,12 @@ describe('state handler', () => {
     it(`callback should retrieve collect state - ${method}`, () => {
       let retrieved_state = null
       const my_callback = (handler: any) => {
-        retrieved_state = Object.assign({}, handler.get_state())}
+        retrieved_state = Object.assign({}, handler.get_state())
+      }
       const state_handler = create_state_handler()
       state_handler.subscribe(my_callback)
       state_handler[method]('foo', 42)
-      expect(retrieved_state).toEqual({'foo': 42})
+      expect(retrieved_state).toEqual({ foo: 42 })
     })
   })
 
@@ -144,8 +141,9 @@ describe('state handler', () => {
   })
 
   it('no state change if init_variable called 2x on the same variable', () => {
-    const my_callback = sinon.spy(
-      function() {state_handler.subscribe(my_callback)})
+    const my_callback = sinon.spy(() => {
+      state_handler.subscribe(my_callback)
+    })
     const state_handler = create_state_handler()
     state_handler.subscribe(my_callback)
     state_handler.init_variable('foo', 42)
@@ -154,8 +152,9 @@ describe('state handler', () => {
   })
 
   it('callback should be called again with re-subscribe', () => {
-    const my_callback = sinon.spy(
-      function() {state_handler.subscribe(my_callback)})
+    const my_callback = sinon.spy(() => {
+      state_handler.subscribe(my_callback)
+    })
     mocks.isEqual = () => false
     const state_handler = create_state_handler()
     state_handler.subscribe(my_callback)
@@ -163,5 +162,4 @@ describe('state handler', () => {
     state_handler.set_variable('foo', 42)
     expect(my_callback.calledTwice).toBe(true)
   })
-
 })

@@ -1,6 +1,6 @@
-import * as validators from '../validators'
 import create_state_handler from '../state_handler'
-import type { D3Selection, ComponentArgs, FileLoader } from '../types'
+import type { ComponentArgs, D3Selection, FileLoader } from '../types'
+import * as validators from '../validators'
 
 type ComponentFunction = (args: ComponentArgs) => (selection: D3Selection) => (data: unknown) => void
 type ComponentLoader = (name: string) => ComponentFunction

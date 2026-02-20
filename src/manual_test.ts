@@ -1,6 +1,7 @@
 /* eslint-disable */
-import {json_parser, yaml_parser} from './index'
+
 import * as d3 from 'd3'
+import { json_parser, yaml_parser } from './index'
 
 const cereals_csv = `name,calories,protein,fat,carbo
 Corn Flakes,100,2,0,21

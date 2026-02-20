@@ -1,5 +1,5 @@
-import loader from './loader'
 import sinon from 'sinon'
+import loader from './loader'
 
 describe('Loader', () => {
   it('calls require with correct argument', () => {

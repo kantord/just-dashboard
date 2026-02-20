@@ -1,9 +1,6 @@
 [
   {
-    "data": [
-      {"value": "male", "text": "Male"},
-      {"value": "female", "text": "Female"}
-    ],
+    "data": [{ "value": "male", "text": "Male" }, { "value": "female", "text": "Female" }],
     "category": "Controls",
     "examples": {
       "dropdown": "dropdown gender=male"

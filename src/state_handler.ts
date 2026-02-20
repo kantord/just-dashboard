@@ -18,25 +18,25 @@ const create_state_handler = (): StateHandler => {
     if (!update_state(variable, value)) return
     const old_subscriptions = subscriptions.slice()
     subscriptions = []
-    old_subscriptions.map(callback => callback(state_handler, callback))
+    old_subscriptions.map((callback) => callback(state_handler, callback))
   }
 
   const state_handler: StateHandler = {
-    'get_state': () => state,
-    'reset': () => {
+    get_state: () => state,
+    reset: () => {
       subscriptions = []
     },
-    'init_variable': (variable: string, value: unknown) => {
+    init_variable: (variable: string, value: unknown) => {
       if (state[variable] === undefined) {
         handle_change(variable, value)
       }
     },
-    'set_variable': (variable: string, value: unknown) => {
+    set_variable: (variable: string, value: unknown) => {
       handle_change(variable, value)
     },
-    'subscribe': (callback: SubscriptionCallback) => {
+    subscribe: (callback: SubscriptionCallback) => {
       subscriptions.push(callback)
-    }
+    },
   }
 
   return state_handler

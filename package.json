@@ -10,8 +10,8 @@
     "build": "vite build",
     "dev": "vite",
     "html-coverage": "vitest run --coverage",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix",
+    "lint": "biome check src",
+    "lint:fix": "biome check --write src",
     "coverage": "vitest run --coverage",
     "semantic-release": "semantic-release",
     "type-check": "tsc --noEmit"
@@ -29,11 +29,11 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.3",
     "@types/d3": "^4.13.15",
     "@types/sinon": "^21.0.0",
     "@types/yamljs": "^0.2.34",
     "@vitest/coverage-v8": "^4.0.18",
-    "eslint": "^5.16.0",
     "jsdom": "^14.0.0",
     "sass": "^1.86.0",
     "semantic-release": "^15.13.3",

@@ -9,7 +9,7 @@
     "types": ["vitest/globals"],
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"]
+    "lib": ["ES2022", "DOM", "DOM.Iterable"]
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]

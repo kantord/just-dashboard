@@ -1,5 +1,5 @@
-@import "~sassline/assets/sass/sassline-base/_variables.scss";
-@import "~sassline/assets/sass/sassline-base/_mixins.scss";
+@import "sassline/assets/sass/sassline-base/_variables.scss";
+@import "sassline/assets/sass/sassline-base/_mixins.scss";
 
 .ds--board {
   margin-left: -(map-get($gutterwidths, medium));

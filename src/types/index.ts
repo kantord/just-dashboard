@@ -28,7 +28,7 @@ export interface ComponentDef {
 
 export interface ComponentConfig {
   validators?: Array<(args: Record<string, unknown>) => void>
-  init?: (args: ComponentArgs, selection: D3Selection) => D3Selection | void
+  init?: (args: ComponentArgs, selection: D3Selection) => D3Selection | undefined
   render: (args: ComponentArgs, selection: D3Selection, data: unknown, element: D3Selection, rawData?: unknown) => void
 }
 

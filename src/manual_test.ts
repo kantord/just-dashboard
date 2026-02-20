@@ -34,10 +34,6 @@ dashboard "Cereals":
     - p text: "foo \${my_var} bar"
     - p text: "foo \${my_var} bar"
   - bar chart:
-    - attr:query: 'map ($ => [$.name, $.calories * 1]) | sortBy ($ => $[1] * -1) | { "columns": $ }'
-    - data: file:///cereals.csv
-  - h2 text: "By nutritional profile"
-  - 4 columns:
-    - attr:query: 'map ($ => {"component": "rows", "data": [{"component": "text", "args": {"tagName": "h3"}, "data": .name}, {"component": "chart", "args": {"type": "pie"}, "data": {"columns": ["protein": .protein, "fat": .fat, "carbo": .carbo]}}]})'
+    - attr:query: 'map ($ => {"x": $.name, "y": $.calories * 1}) | sortBy ($ => $.y * -1)'
     - data: file:///cereals.csv
 `)

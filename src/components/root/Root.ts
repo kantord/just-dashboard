@@ -7,6 +7,7 @@ const RootComponent = Component({
   validators: [required('title')],
   init: (args, selection) => {
     selection.select('title').text(args.title as string)
+    return undefined
   },
   render: (args, selection, data) => {
     const body = selection.select('body')

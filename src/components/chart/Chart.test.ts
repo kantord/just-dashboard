@@ -1,15 +1,4 @@
 import * as d3 from 'd3'
-import sinon from 'sinon'
-import { vi } from 'vitest'
-
-const mocks = vi.hoisted(() => ({
-  bb_generate: vi.fn() as any,
-}))
-
-vi.mock('billboard.js', () => ({
-  bb: { generate: (...args: any[]) => mocks.bb_generate(...args) },
-}))
-
 import ChartComponent from './Chart'
 
 describe('ChartComponent', () => {
@@ -17,211 +6,99 @@ describe('ChartComponent', () => {
     document.documentElement.innerHTML = '<head><title></title></head><body></body>'
   })
 
-  const call_render_with = (args: { component_args: any; render_args: any }) => {
-    const fake_generate = sinon.spy()
-    mocks.bb_generate = fake_generate
-    const bind = ChartComponent(args.component_args)
-    const selection = d3.selection()
-    ;(selection as any).append = () => ({
-      node: () => 'magic',
-      attr: () => ({
-        node: () => 'magic',
-      }),
-    })
-    const render = bind(selection as any)
-    render(args.render_args)
-
-    return { fake_generate, selection }
+  const renderChart = (componentArgs: Record<string, unknown>, data: unknown) => {
+    const bind = ChartComponent(componentArgs)
+    const render = bind(d3.selection())
+    render(data)
+    return d3.selection()
   }
 
-  it('billboard called', () => {
-    const { fake_generate } = call_render_with({
-      component_args: { type: 'spline' },
-      render_args: {
-        columns: [
-          ['x', 1, 2, 3],
-          ['y', 1, 2, 3],
-        ],
-      },
-    })
-    expect(fake_generate.called).toBe(true)
+  it('renders an SVG element', () => {
+    renderChart({ type: 'bar' }, [
+      { x: 'Apples', y: 3 },
+      { x: 'Oranges', y: 2 },
+    ])
+    expect(d3.selection().select('.ds--chart svg').size()).toBe(1)
   })
 
-  it('billboard called with correct arguments', () => {
-    const { fake_generate, selection } = call_render_with({
-      component_args: { type: 'spline' },
-      render_args: {
-        columns: [
-          ['x', 1, 2, 3],
-          ['y', 1, 2, 3],
-        ],
-      },
-    })
-    expect(
-      fake_generate.calledWith({
-        bindto: (selection as any).append().node(),
-        data: {
-          type: 'spline',
-          columns: [
-            ['x', 1, 2, 3],
-            ['y', 1, 2, 3],
-          ],
-        },
-      }),
-    ).toBe(true)
+  it('renders a bar chart', () => {
+    renderChart({ type: 'bar' }, [
+      { x: 'Apples', y: 3 },
+      { x: 'Oranges', y: 2 },
+    ])
+    expect(d3.selection().select('.ds--chart svg').size()).toBe(1)
   })
 
-  it('billboard called with correct arguments 2', () => {
-    const { fake_generate, selection } = call_render_with({
-      component_args: { type: 'pie' },
-      render_args: {
-        columns: [
-          ['a', 1, 2, 3],
-          ['b', 1, 2, 3],
-        ],
-      },
-    })
-    expect(
-      fake_generate.calledWith({
-        bindto: (selection as any).append().node(),
-        data: {
-          type: 'pie',
-          columns: [
-            ['a', 1, 2, 3],
-            ['b', 1, 2, 3],
-          ],
-        },
-      }),
-    ).toBe(true)
+  it('renders a line chart', () => {
+    renderChart({ type: 'line' }, [
+      { x: 0, y: 1 },
+      { x: 1, y: 3 },
+      { x: 2, y: 2 },
+    ])
+    expect(d3.selection().select('.ds--chart svg').size()).toBe(1)
   })
 
-  it('billboard called with correct arguments (stacked)', () => {
-    const { fake_generate, selection } = call_render_with({
-      component_args: { type: 'pie', stacked: true },
-      render_args: {
-        columns: [
-          ['a', 1, 2, 3],
-          ['b', 1, 2, 3],
-        ],
-      },
-    })
-    expect(
-      fake_generate.calledWith({
-        bindto: (selection as any).append().node(),
-        data: {
-          type: 'pie',
-          groups: [['a', 'b']],
-          columns: [
-            ['a', 1, 2, 3],
-            ['b', 1, 2, 3],
-          ],
-        },
-      }),
-    ).toBe(true)
+  it('renders a scatter chart', () => {
+    renderChart({ type: 'scatter' }, [
+      { x: 1, y: 2 },
+      { x: 3, y: 4 },
+    ])
+    expect(d3.selection().select('.ds--chart svg').size()).toBe(1)
   })
 
-  it('billboard called with correct arguments (horizontal)', () => {
-    const { fake_generate, selection } = call_render_with({
-      component_args: { type: 'pie', axis: { rotated: true } },
-      render_args: {
-        columns: [
-          ['bar', 1, 2, 3],
-          ['foo', 1, 2, 3],
-          ['x', 1, 2, 3],
-        ],
-      },
-    })
-    expect(
-      fake_generate.calledWith({
-        bindto: (selection as any).append().node(),
-        axis: {
-          rotated: true,
-        },
-        data: {
-          type: 'pie',
-          columns: [
-            ['bar', 1, 2, 3],
-            ['foo', 1, 2, 3],
-            ['x', 1, 2, 3],
-          ],
-        },
-      }),
-    ).toBe(true)
+  it('renders a stacked bar chart', () => {
+    renderChart({ type: 'bar', stacked: true }, [
+      { x: 'A', y: 1 },
+      { x: 'A', y: 2 },
+      { x: 'B', y: 3 },
+    ])
+    expect(d3.selection().select('.ds--chart svg').size()).toBe(1)
   })
 
-  it('billboard called with correct arguments (stacked 2)', () => {
-    const { fake_generate, selection } = call_render_with({
-      component_args: { type: 'pie', stacked: true },
-      render_args: {
-        columns: [
-          ['bar', 1, 2, 3],
-          ['foo', 1, 2, 3],
-          ['x', 1, 2, 3],
-        ],
-      },
-    })
-    expect(
-      fake_generate.calledWith({
-        bindto: (selection as any).append().node(),
-        data: {
-          type: 'pie',
-          groups: [['bar', 'foo', 'x']],
-          columns: [
-            ['bar', 1, 2, 3],
-            ['foo', 1, 2, 3],
-            ['x', 1, 2, 3],
-          ],
-        },
-      }),
-    ).toBe(true)
+  it('re-rendering replaces previous chart', () => {
+    const bind = ChartComponent({ type: 'bar' })
+    const render = bind(d3.selection())
+    render([{ x: 'A', y: 1 }])
+    render([{ x: 'B', y: 2 }])
+    expect(d3.selection().selectAll('.ds--chart svg').size()).toBe(1)
   })
 
-  it('billboard called with correct arguments (stacked, rows)', () => {
-    const { fake_generate, selection } = call_render_with({
-      component_args: { type: 'pie', stacked: true },
-      render_args: {
-        rows: [
-          ['foo', 'bar'],
-          [0, 1],
-        ],
-      },
-    })
-    expect(
-      fake_generate.calledWith({
-        bindto: (selection as any).append().node(),
-        data: {
-          type: 'pie',
-          groups: [['foo', 'bar']],
-          rows: [
-            ['foo', 'bar'],
-            [0, 1],
-          ],
-        },
-      }),
-    ).toBe(true)
+  it('renders an area chart', () => {
+    renderChart({ type: 'area' }, [
+      { x: 0, y: 1 },
+      { x: 1, y: 3 },
+    ])
+    expect(d3.selection().select('.ds--chart svg').size()).toBe(1)
   })
 
-  it('should take rows as well', () => {
-    const { fake_generate, selection } = call_render_with({
-      component_args: { type: 'bar' },
-      render_args: {
-        rows: [
-          [1, 2, 3],
-          [1, 2, 3],
-        ],
-      },
-    })
-    expect(
-      fake_generate.calledWith({
-        bindto: (selection as any).append().node(),
-        data: {
-          type: 'bar',
-          rows: [
-            [1, 2, 3],
-            [1, 2, 3],
-          ],
-        },
-      }),
-    ).toBe(true)
+  it('renders a step chart', () => {
+    renderChart({ type: 'step' }, [
+      { x: 0, y: 1 },
+      { x: 1, y: 3 },
+    ])
+    expect(d3.selection().select('.ds--chart svg').size()).toBe(1)
+  })
+
+  it('renders a spline chart', () => {
+    renderChart({ type: 'spline' }, [
+      { x: 0, y: 1 },
+      { x: 1, y: 3 },
+      { x: 2, y: 2 },
+    ])
+    expect(d3.selection().select('.ds--chart svg').size()).toBe(1)
+  })
+
+  it('renders a bubble chart', () => {
+    renderChart({ type: 'bubble' }, [
+      { x: 1, y: 2, r: 5 },
+      { x: 3, y: 4, r: 10 },
+    ])
+    expect(d3.selection().select('.ds--chart svg').size()).toBe(1)
+  })
+
+  it('should throw on missing type', () => {
+    expect(() => {
+      ChartComponent({} as any)
+    }).toThrow("Argument 'type' is required but not supplied.")
   })
 })

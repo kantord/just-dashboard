@@ -1,15 +1,10 @@
-/dist/bundle.js
 coverage/
-.nyc_output/
 out/
 dist/
 lib/
 /coverage.lcov
-/stats.json
-mochawesome-report/
 /component_gallery/gallery.csv
 /component_gallery/gallery.json
-/src/_temp.js
 docs/_site/
 docs/.sass-cache/
 docs/.jekyll-cache/

@@ -3,7 +3,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   build: {
     lib: {
-      entry: 'src/index.js',
+      entry: 'src/index.ts',
       name: 'dashboard',
       formats: ['umd', 'es'],
       fileName: (format) => format === 'umd' ? 'dashboard.js' : 'dashboard.es.js',
@@ -17,7 +17,7 @@ export default defineConfig({
         url: 'https://fake.url.com'
       }
     },
-    include: ['src/**/*.test.js'],
+    include: ['src/**/*.test.ts'],
     css: false,
     coverage: {
       provider: 'v8',

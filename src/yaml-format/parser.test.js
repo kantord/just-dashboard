@@ -1,71 +1,72 @@
-import should from 'should' // eslint-disable-line no-unused-vars
+import { vi } from 'vitest'
 import assert from 'assert'
 import sinon from 'sinon'
 
+const mocks = vi.hoisted(() => ({
+  yamlParse: vi.fn()
+}))
 
-describe('yaml format - parser', function() {
+vi.mock('yamljs', () => ({
+  default: { parse: (...args) => mocks.yamlParse(...args) },
+}))
 
-  const set_up = function({parseSpyReturns, parseSpyThrows}) {
-    const injector = require('inject-loader!./parser.js')
+import parser, { error_message } from './parser.js'
+
+
+describe('yaml format - parser', () => {
+
+  const set_up = ({parseSpyReturns, parseSpyThrows}) => {
     let parseSpy = sinon.stub().returns(parseSpyReturns)
     if (parseSpyThrows)
       parseSpy = parseSpy.throws(new Error(parseSpyThrows))
-    const injected = injector({
-      'yamljs': {parse: parseSpy},
-    })
-
-    const parser = injected.default
-    const error_message = injected.error_message
+    mocks.yamlParse = parseSpy
 
     return { parser, parseSpy, error_message }
   }
 
-  it('should display error for empty input', function() {
+  it('should display error for empty input', () => {
     const { parser, error_message } = set_up({'parseSpyReturns': undefined})
-    parser('').should.deepEqual(
+    expect(parser('')).toEqual(
       error_message('A non-empty input file is required'))
   })
 
-  it('should display error thrown by safeLoad', function() {
+  it('should display error thrown by safeLoad', () => {
     const error = 'foo bar baz!'
     const { parser, error_message } = set_up({'parseSpyThrows': error})
-    parser('').should.deepEqual(
+    expect(parser('')).toEqual(
       error_message('Error: ' + error))
   })
 
-  it('should not display error for valid input', function() {
+  it('should not display error for valid input', () => {
     const { parser, error_message } = set_up({'parseSpyReturns': {
       'dashboard "Hello World"': []
     }})
-    parser('dashboard "Hello World": []').should.not.deepEqual(
+    expect(parser('dashboard "Hello World": []')).not.toEqual(
       error_message('A non-empty input file is required'))
   })
 
-  it('yaml is only parsed if input is a string', function() {
+  it('yaml is only parsed if input is a string', () => {
     const { parser, parseSpy } = set_up({'parseSpyReturns': []})
     parser({'h1 text': ''})
-    parseSpy.should.not.be.called()
+    expect(parseSpy.called).toBe(false)
   })
 
   const inputs = ['foo', 'bar']
 
   inputs.forEach((arg) =>
-    it(`yaml called with input - ${arg}`, function() {
+    it(`yaml called with input - ${arg}`, () => {
       const { parser, parseSpy } = set_up(
         {'parseSpyReturns': {'dashboard "a"': []}})
       parser(arg)
-      parseSpy.should.be.calledWith(arg)
+      expect(parseSpy.calledWith(arg)).toBe(true)
     })
   )
 })
 
-describe('yaml format - root component', function() {
-  const set_up = function() {
-    const injector = require('inject-loader!./parser.js')
+describe('yaml format - root component', () => {
+  const set_up = () => {
     const parseSpy = sinon.spy(x => x)
-    const parser = injector({
-      'yamljs': {parse: parseSpy},
-    }).default
+    mocks.yamlParse = parseSpy
 
     return { parser }
   }
@@ -136,7 +137,7 @@ describe('yaml format - root component', function() {
   ]
 
 
-  tests.forEach(function({input, output}) {
+  tests.forEach(({input, output}) => {
     it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]].length}`,
       () => {
         const { parser } = set_up(input)
@@ -146,13 +147,10 @@ describe('yaml format - root component', function() {
 })
 
 
-describe('yaml format - text component', function() {
-  const set_up = function(parseSpyReturns) {
-    const injector = require('inject-loader!./parser.js')
+describe('yaml format - text component', () => {
+  const set_up = (parseSpyReturns) => {
     const parseSpy = sinon.stub().returns(parseSpyReturns)
-    const parser = injector({
-      'yamljs': {parse: parseSpy},
-    }).default
+    mocks.yamlParse = parseSpy
 
     return { parser }
   }
@@ -185,7 +183,7 @@ describe('yaml format - text component', function() {
   ]
 
 
-  tests.forEach(function({input, output}) {
+  tests.forEach(({input, output}) => {
     it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]]}`, () => {
       const { parser } = set_up(input)
       assert.deepEqual(parser(''), output)
@@ -194,13 +192,10 @@ describe('yaml format - text component', function() {
 })
 
 
-describe('yaml format - board component', function() {
-  const set_up = function() {
-    const injector = require('inject-loader!./parser.js')
+describe('yaml format - board component', () => {
+  const set_up = () => {
     const parseSpy = sinon.spy(x => x)
-    const parser = injector({
-      'yamljs': {parse: parseSpy},
-    }).default
+    mocks.yamlParse = parseSpy
 
     return { parser }
   }
@@ -237,7 +232,7 @@ describe('yaml format - board component', function() {
   ]
 
 
-  tests.forEach(function({input, output}) {
+  tests.forEach(({input, output}) => {
     it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]].length}`,
       () => {
         const { parser } = set_up(input)
@@ -249,13 +244,10 @@ describe('yaml format - board component', function() {
 
 
 
-describe('yaml format - rows component', function() {
-  const set_up = function() {
-    const injector = require('inject-loader!./parser.js')
+describe('yaml format - rows component', () => {
+  const set_up = () => {
     const parseSpy = sinon.spy(x => x)
-    const parser = injector({
-      'yamljs': {parse: parseSpy},
-    }).default
+    mocks.yamlParse = parseSpy
 
     return { parser }
   }
@@ -292,7 +284,7 @@ describe('yaml format - rows component', function() {
   ]
 
 
-  tests.forEach(function({input, output}) {
+  tests.forEach(({input, output}) => {
     it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]].length}`,
       () => {
         const { parser } = set_up(input)
@@ -301,13 +293,10 @@ describe('yaml format - rows component', function() {
   })
 })
 
-describe('yaml format - columns component', function() {
-  const set_up = function() {
-    const injector = require('inject-loader!./parser.js')
+describe('yaml format - columns component', () => {
+  const set_up = () => {
     const parseSpy = sinon.spy(x => x)
-    const parser = injector({
-      'yamljs': {parse: parseSpy},
-    }).default
+    mocks.yamlParse = parseSpy
 
     return { parser }
   }
@@ -371,7 +360,7 @@ describe('yaml format - columns component', function() {
   ]
 
 
-  tests.forEach(function({input, output}) {
+  tests.forEach(({input, output}) => {
     it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]].length}`,
       () => {
         const { parser } = set_up(input)
@@ -380,13 +369,10 @@ describe('yaml format - columns component', function() {
   })
 })
 
-describe('yaml format - chart component', function() {
-  const set_up = function() {
-    const injector = require('inject-loader!./parser.js')
+describe('yaml format - chart component', () => {
+  const set_up = () => {
     const parseSpy = sinon.spy(x => x)
-    const parser = injector({
-      'yamljs': {parse: parseSpy},
-    }).default
+    mocks.yamlParse = parseSpy
 
     return { parser }
   }
@@ -412,7 +398,7 @@ describe('yaml format - chart component', function() {
       'input': {'horizontal bar chart': []},
       'output': {
         'component': 'chart',
-        'args': {'type': 'bar', 'stacked': false, 
+        'args': {'type': 'bar', 'stacked': false,
           'axis': {
             'rotated': true
           },
@@ -424,7 +410,7 @@ describe('yaml format - chart component', function() {
       'input': {'rotated line chart': []},
       'output': {
         'component': 'chart',
-        'args': {'type': 'line', 'stacked': false, 
+        'args': {'type': 'line', 'stacked': false,
           'axis': {
             'rotated': true
           },
@@ -475,7 +461,7 @@ describe('yaml format - chart component', function() {
   ]
 
 
-  tests.forEach(function({input, output}) {
+  tests.forEach(({input, output}) => {
     it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]]}`, () => {
       const { parser } = set_up(input)
       assert.deepEqual(parser(input), output)
@@ -483,13 +469,10 @@ describe('yaml format - chart component', function() {
   })
 })
 
-describe('yaml format - handling file', function() {
-  const set_up = function() {
-    const injector = require('inject-loader!./parser.js')
+describe('yaml format - handling file', () => {
+  const set_up = () => {
     const parseSpy = sinon.spy(x => x)
-    const parser = injector({
-      'yamljs': {parse: parseSpy},
-    }).default
+    mocks.yamlParse = parseSpy
 
     return { parser }
   }
@@ -525,7 +508,7 @@ describe('yaml format - handling file', function() {
   ]
 
 
-  tests.forEach(function({input, output}) {
+  tests.forEach(({input, output}) => {
     it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]]}`, () => {
       const { parser } = set_up(input)
       assert.deepEqual(parser(input), output)
@@ -534,13 +517,10 @@ describe('yaml format - handling file', function() {
 })
 
 
-describe('yaml format - handling URL', function() {
-  const set_up = function() {
-    const injector = require('inject-loader!./parser.js')
+describe('yaml format - handling URL', () => {
+  const set_up = () => {
     const parseSpy = sinon.spy(x => x)
-    const parser = injector({
-      'yamljs': {parse: parseSpy},
-    }).default
+    mocks.yamlParse = parseSpy
 
     return { parser }
   }
@@ -576,7 +556,7 @@ describe('yaml format - handling URL', function() {
   ]
 
 
-  tests.forEach(function({input, output}) {
+  tests.forEach(({input, output}) => {
     it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]]}`, () => {
       const { parser } = set_up(input)
       assert.deepEqual(parser(input), output)
@@ -585,13 +565,10 @@ describe('yaml format - handling URL', function() {
 })
 
 
-describe('yaml format - attr: syntax', function() {
-  const set_up = function() {
-    const injector = require('inject-loader!./parser.js')
+describe('yaml format - attr: syntax', () => {
+  const set_up = () => {
     const parseSpy = sinon.spy(x => x)
-    const parser = injector({
-      'yamljs': {parse: parseSpy},
-    }).default
+    mocks.yamlParse = parseSpy
 
     return { parser }
   }
@@ -664,7 +641,7 @@ describe('yaml format - attr: syntax', function() {
       ]},
       'output': {
         'component': 'chart',
-        'args': {'loader': 'json', 'type': '${var_Name1}', 
+        'args': {'loader': 'json', 'type': '${var_Name1}',
           'title': 'Hello World', 'pi': 3.14, 'stacked': false},
         'data': 'https://example.com/text.json'
       }
@@ -672,9 +649,9 @@ describe('yaml format - attr: syntax', function() {
   ]
 
 
-  tests.forEach(function({input, output}) {
+  tests.forEach(({input, output}) => {
     it(`${Object.keys(input)[0]} - ${Object.values(input)[0].map(Object.keys)}`,
-      function() {
+      () => {
         const { parser } = set_up(input)
         assert.deepEqual(parser(input), output)
       })
@@ -682,8 +659,11 @@ describe('yaml format - attr: syntax', function() {
 })
 
 describe('integration tests', () => {
-  it('integration test', () => {
-    const parser = require('./parser.js').default
+  it('integration test', async () => {
+    const realYamljs = await vi.importActual('yamljs')
+    mocks.yamlParse = realYamljs.default
+      ? realYamljs.default.parse
+      : realYamljs.parse
     const text = `dashboard "asd":
     - h1 text: asd
     - 3 columns:
@@ -723,13 +703,10 @@ describe('integration tests', () => {
   })
 })
 
-describe('yaml format - dropdown component', function() {
-  const set_up = function(parseSpyReturns) {
-    const injector = require('inject-loader!./parser.js')
+describe('yaml format - dropdown component', () => {
+  const set_up = (parseSpyReturns) => {
     const parseSpy = sinon.stub().returns(parseSpyReturns)
-    const parser = injector({
-      'yamljs': {parse: parseSpy},
-    }).default
+    mocks.yamlParse = parseSpy
 
     return { parser }
   }
@@ -778,13 +755,10 @@ describe('yaml format - dropdown component', function() {
   ]
 
 
-  tests.forEach(function({input, output}) {
+  tests.forEach(({input, output}) => {
     it(`${Object.keys(input)[0]} - ${input[Object.keys(input)[0]]}`, () => {
       const { parser } = set_up(input)
       assert.deepEqual(parser(''), output)
     })
   })
 })
-
-
-

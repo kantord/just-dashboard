@@ -1,18 +1,13 @@
-import should from 'should' // eslint-disable-line no-unused-vars
 import * as d3 from 'd3'
 import assert from 'assert'
+import test_parser from '../../test_parser.js'
 
-describe('Columns component', function() {
-  beforeEach(function () {
-    this.jsdom = require('jsdom-global')(undefined, {'url': 'https://fake.url.com'})
-  })
-
-  afterEach(function () {
-    this.jsdom()
+describe('Columns component', () => {
+  beforeEach(() => {
+    document.documentElement.innerHTML = '<head><title></title></head><body></body>'
   })
 
   it('integration test', () => {
-    const test_parser = require('../../test_parser.js').default
     const bind = test_parser({
       'component': 'root', 'args': { 'title': '', 'state_handler': {} },
       'data': [
@@ -30,7 +25,6 @@ describe('Columns component', function() {
   })
 
   it('integration test - non default column count', () => {
-    const test_parser = require('../../test_parser.js').default
     const bind = test_parser({
       'component': 'root', 'args': { 'title': '', 'state_handler': {} },
       'data': [
@@ -46,5 +40,4 @@ describe('Columns component', function() {
     assert.equal(d3.selection().select(
       '.ds--columns[data-ds--columns="3"] .ds--column h4').text(), 'foobar')
   })
-
 })

@@ -1,39 +1,37 @@
-import { required } from './validators'
-import { regexp } from './validators'
+import { required, regexp } from './validators'
 
-describe('require validator', function() {
+describe('require validator', () => {
   it('should throw message when argument is not supplied', () => {
-    (() => {required('title')({})})
-      .should.throw('Argument \'title\' is required but not supplied.')
+    expect(() => { required('title')({}) })
+      .toThrow('Argument \'title\' is required but not supplied.')
   })
 
   it('should not throw when argument is supplied', () => {
-    (() => {required('title')({'title': 'asdf'})}).should.not.throw()
+    expect(() => { required('title')({ 'title': 'asdf' }) }).not.toThrow()
   })
 
   it('should throw message when argument is not supplied', () => {
-    (() => {required('foo')({'title': ''})})
-      .should.throw('Argument \'foo\' is required but not supplied.')
+    expect(() => { required('foo')({ 'title': '' }) })
+      .toThrow('Argument \'foo\' is required but not supplied.')
   })
 })
 
-describe('regexp validator', function() {
+describe('regexp validator', () => {
   it('should throw error when argument doesn\'t match regexp', () => {
-    (() => {regexp('title', /bar/)({'title': 'foo'})})
-      .should.throw('Argument \'title\' is invalid')
+    expect(() => { regexp('title', /bar/)({ 'title': 'foo' }) })
+      .toThrow('Argument \'title\' is invalid')
   })
 
   it('doesn\'t throw when format is valid', () => {
-    (() => {regexp('title', /bar/)({'title': 'bar'})}).should.not.throw()
+    expect(() => { regexp('title', /bar/)({ 'title': 'bar' }) }).not.toThrow()
   })
 
   it('correct error message is shown', () => {
-    (() => {regexp('class', /bar/)({'class': 'foo'})})
-      .should.throw('Argument \'class\' is invalid')
+    expect(() => { regexp('class', /bar/)({ 'class': 'foo' }) })
+      .toThrow('Argument \'class\' is invalid')
   })
 
   it('correct regexp is used', () => {
-    (() => {regexp('title', /[0-9]+/)({'title': '145'})}).should.not.throw()
+    expect(() => { regexp('title', /[0-9]+/)({ 'title': '145' }) }).not.toThrow()
   })
-
 })

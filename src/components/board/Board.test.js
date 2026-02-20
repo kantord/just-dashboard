@@ -1,18 +1,13 @@
-import should from 'should' // eslint-disable-line no-unused-vars
 import * as d3 from 'd3'
 import assert from 'assert'
+import test_parser from '../../test_parser.js'
 
-describe('Board component', function() {
-  beforeEach(function () {
-    this.jsdom = require('jsdom-global')(undefined, {'url': 'https://fake.url.com'})
-  })
-
-  afterEach(function () {
-    this.jsdom()
+describe('Board component', () => {
+  beforeEach(() => {
+    document.documentElement.innerHTML = '<head><title></title></head><body></body>'
   })
 
   it('integration test', () => {
-    const test_parser = require('../../test_parser.js').default
     const bind = test_parser({
       'component': 'root', 'args': { 'title': '', 'state_handler': {} },
       'data': [
@@ -27,5 +22,4 @@ describe('Board component', function() {
     bind(d3.selection())
     assert.equal(d3.selection().select('.ds--board').size(), 1)
   })
-
 })

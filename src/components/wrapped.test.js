@@ -1,19 +1,14 @@
-import should from 'should' // eslint-disable-line no-unused-vars
 import sinon from 'sinon'
 import Wrapped from './wrapped'
 import assert from 'assert'
+import * as d3 from 'd3'
 
-describe('Wrapped', function() {
-  beforeEach(function () {
-    this.jsdom = require('jsdom-global')(undefined, {'url': 'https://fake.url.com'})
-  })
-
-  afterEach(function () {
-    this.jsdom()
+describe('Wrapped', () => {
+  beforeEach(() => {
+    document.documentElement.innerHTML = '<head><title></title></head><body></body>'
   })
 
   const call_render_with = () => {
-    const d3 = require('d3')
     const selection = d3.selection()
     const render = sinon.stub()
     const wrapped_selection = 'masdfsdafdsf'
@@ -30,49 +25,48 @@ describe('Wrapped', function() {
       fake_component, wrapped_render, fake_render }
   }
 
-  it('requires wrapper function', function() {
-    (() => {
+  it('requires wrapper function', () => {
+    expect(() => {
       Wrapped()()
-    }).should.throw('Invalid wrapper function')
+    }).toThrow('Invalid wrapper function')
   })
 
-  it('requires component to wrap', function() {
-    (() => {
+  it('requires component to wrap', () => {
+    expect(() => {
       Wrapped(() => null)()
-    }).should.throw('A component is required')
+    }).toThrow('A component is required')
   })
 
-  it('accepts function as component', function() {
-    (() => {
+  it('accepts function as component', () => {
+    expect(() => {
       Wrapped(() => null)(() => null)
-    }).should.not.throw('A component is required')
+    }).not.toThrow('A component is required')
   })
 
   it('returns a component', () => {
     const wrapped_component = Wrapped(() => null)(() => () => () => null)
-    wrapped_component.should.be.a.Function()
-    wrapped_component({}).should.be.a.Function() // bind
-    wrapped_component({})(null).should.be.a.Function() //render
+    expect(typeof wrapped_component).toBe('function')
+    expect(typeof wrapped_component({})).toBe('function')
+    expect(typeof wrapped_component({})(null)).toBe('function')
   })
 
-  it('wrapper function called with selection', function() {
+  it('wrapper function called with selection', () => {
     const { wrapper, selection, args } = call_render_with()
-    wrapper.should.be.calledWith(args, selection)
+    expect(wrapper.calledWith(args, selection)).toBe(true)
   })
 
-  it('bind is called with wrapped selection', function() {
+  it('bind is called with wrapped selection', () => {
     const { fake_bind, wrapped_selection } = call_render_with()
-    fake_bind.should.be.calledWith(wrapped_selection)
+    expect(fake_bind.calledWith(wrapped_selection)).toBe(true)
   })
 
-  it('should be called with correct args', function() {
+  it('should be called with correct args', () => {
     const { args, fake_component } = call_render_with()
-    fake_component.should.be.calledWith(args)
+    expect(fake_component.calledWith(args)).toBe(true)
   })
 
-  it('should return correct render function', function() {
+  it('should return correct render function', () => {
     const { fake_render, wrapped_render } = call_render_with()
     assert.equal(fake_render, wrapped_render)
   })
-
 })

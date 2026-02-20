@@ -1,5 +1,6 @@
 import Component from '../base'
 import { required } from '../../validators'
+import { bb } from 'billboard.js'
 import './Chart.scss'
 
 
@@ -37,7 +38,6 @@ const ChartComponent = Component({
   'init': (args, selection) => selection
     .append('div').attr('class', 'ds--chart'),
   'render': (args, selection, data, element) => {
-    const {bb} = require('billboard.js')
     const configuration = {
       'bindto': element.node(),
       'data': Object.assign(data, {'type': args.type})

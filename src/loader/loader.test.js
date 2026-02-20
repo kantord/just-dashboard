@@ -1,25 +1,23 @@
-import should from 'should' // eslint-disable-line no-unused-vars
 import loader from './loader'
 import sinon from 'sinon'
 
-
-describe('Loader', function() {
+describe('Loader', () => {
   it('calls require with correct argument', () => {
     const fake_require = sinon.spy()
     loader(fake_require)('root')
-    fake_require.should.be.calledWith('../components/root')
+    expect(fake_require.calledWith('../components/root')).toBe(true)
   })
 
   it('calls require with correct argument 2', () => {
     const fake_require = sinon.spy()
     loader(fake_require)('MyFancyComponent2')
-    fake_require.should.be.calledWith('../components/MyFancyComponent2')
+    expect(fake_require.calledWith('../components/MyFancyComponent2')).toBe(true)
   })
 
   it('component returned', () => {
     const fake_component = sinon.spy()
     const fake_require = () => fake_component
     const component = loader(fake_require)('MyFancyComponent2')
-    component.should.equal(fake_component)
+    expect(component).toBe(fake_component)
   })
 })

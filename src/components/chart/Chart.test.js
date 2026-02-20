@@ -1,23 +1,26 @@
-import should from 'should' // eslint-disable-line no-unused-vars
+import { vi } from 'vitest'
 import sinon from 'sinon'
-const ChartComponentInjector = require('inject-loader!./Chart')
+import * as d3 from 'd3'
 
+const mocks = vi.hoisted(() => ({
+  bb_generate: vi.fn()
+}))
 
-describe('ChartComponent', function() {
-  beforeEach(function () {
-    this.jsdom = require('jsdom-global')(undefined, {'url': 'https://fake.url.com'})
-  })
+vi.mock('billboard.js', () => ({
+  bb: { generate: (...args) => mocks.bb_generate(...args) }
+}))
 
-  afterEach(function () {
-    this.jsdom()
+import ChartComponent from './Chart'
+
+describe('ChartComponent', () => {
+  beforeEach(() => {
+    document.documentElement.innerHTML = '<head><title></title></head><body></body>'
   })
 
   const call_render_with = (args) => {
     const fake_generate = sinon.spy()
-    const ChartComponent = ChartComponentInjector(
-      {'billboard.js': {'bb': {'generate': fake_generate}}}).default
+    mocks.bb_generate = fake_generate
     const bind = ChartComponent(args.component_args)
-    const d3 = require('d3')
     const selection = d3.selection()
     selection.append = () => ({
       'node': () => 'magic',
@@ -31,7 +34,7 @@ describe('ChartComponent', function() {
     return { fake_generate, selection }
   }
 
-  it('billboard called', function() {
+  it('billboard called', () => {
     const { fake_generate } = call_render_with({
       'component_args': {'type': 'spline'},
       'render_args': {'columns': [
@@ -39,10 +42,10 @@ describe('ChartComponent', function() {
         ['y', 1, 2, 3],
       ]}
     })
-    fake_generate.should.be.called()
+    expect(fake_generate.called).toBe(true)
   })
 
-  it('billboard called with correct arguments', function() {
+  it('billboard called with correct arguments', () => {
     const { fake_generate, selection } = call_render_with({
       'component_args': {'type': 'spline'},
       'render_args': {'columns': [
@@ -50,7 +53,7 @@ describe('ChartComponent', function() {
         ['y', 1, 2, 3],
       ]}
     })
-    fake_generate.should.be.calledWith({
+    expect(fake_generate.calledWith({
       'bindto': selection.append().node(),
       'data': {
         'type': 'spline',
@@ -59,10 +62,10 @@ describe('ChartComponent', function() {
           ['y', 1, 2, 3],
         ]
       }
-    })
+    })).toBe(true)
   })
 
-  it('billboard called with correct arguments 2', function() {
+  it('billboard called with correct arguments 2', () => {
     const { fake_generate, selection } = call_render_with({
       'component_args': {'type': 'pie'},
       'render_args': {'columns': [
@@ -70,7 +73,7 @@ describe('ChartComponent', function() {
         ['b', 1, 2, 3],
       ]}
     })
-    fake_generate.should.be.calledWith({
+    expect(fake_generate.calledWith({
       'bindto': selection.append().node(),
       'data': {
         'type': 'pie',
@@ -79,10 +82,10 @@ describe('ChartComponent', function() {
           ['b', 1, 2, 3],
         ]
       }
-    })
+    })).toBe(true)
   })
 
-  it('billboard called with correct arguments (stacked)', function() {
+  it('billboard called with correct arguments (stacked)', () => {
     const { fake_generate, selection } = call_render_with({
       'component_args': {'type': 'pie', 'stacked': true},
       'render_args': {'columns': [
@@ -90,7 +93,7 @@ describe('ChartComponent', function() {
         ['b', 1, 2, 3],
       ]}
     })
-    fake_generate.should.be.calledWith({
+    expect(fake_generate.calledWith({
       'bindto': selection.append().node(),
       'data': {
         'type': 'pie',
@@ -100,10 +103,10 @@ describe('ChartComponent', function() {
           ['b', 1, 2, 3],
         ]
       }
-    })
+    })).toBe(true)
   })
 
-  it('billboard called with correct arguments (horizontal)', function() {
+  it('billboard called with correct arguments (horizontal)', () => {
     const { fake_generate, selection } = call_render_with({
       'component_args': {'type': 'pie', 'axis': {'rotated': true}},
       'render_args': {'columns': [
@@ -112,7 +115,7 @@ describe('ChartComponent', function() {
         ['x', 1, 2, 3],
       ]}
     })
-    fake_generate.should.be.calledWith({
+    expect(fake_generate.calledWith({
       'bindto': selection.append().node(),
       'axis': {
         'rotated': true
@@ -125,10 +128,10 @@ describe('ChartComponent', function() {
           ['x', 1, 2, 3],
         ]
       }
-    })
+    })).toBe(true)
   })
 
-  it('billboard called with correct arguments (stacked 2)', function() {
+  it('billboard called with correct arguments (stacked 2)', () => {
     const { fake_generate, selection } = call_render_with({
       'component_args': {'type': 'pie', 'stacked': true},
       'render_args': {'columns': [
@@ -137,7 +140,7 @@ describe('ChartComponent', function() {
         ['x', 1, 2, 3],
       ]}
     })
-    fake_generate.should.be.calledWith({
+    expect(fake_generate.calledWith({
       'bindto': selection.append().node(),
       'data': {
         'type': 'pie',
@@ -148,10 +151,10 @@ describe('ChartComponent', function() {
           ['x', 1, 2, 3],
         ]
       }
-    })
+    })).toBe(true)
   })
 
-  it('billboard called with correct arguments (stacked, rows)', function() {
+  it('billboard called with correct arguments (stacked, rows)', () => {
     const { fake_generate, selection } = call_render_with({
       'component_args': {'type': 'pie', 'stacked': true},
       'render_args': {'rows': [
@@ -159,7 +162,7 @@ describe('ChartComponent', function() {
         [0, 1]
       ]}
     })
-    fake_generate.should.be.calledWith({
+    expect(fake_generate.calledWith({
       'bindto': selection.append().node(),
       'data': {
         'type': 'pie',
@@ -169,10 +172,10 @@ describe('ChartComponent', function() {
           [0, 1]
         ]
       }
-    })
+    })).toBe(true)
   })
 
-  it('should take rows as well', function() {
+  it('should take rows as well', () => {
     const { fake_generate, selection } = call_render_with({
       'component_args': {'type': 'bar'},
       'render_args': {'rows': [
@@ -180,7 +183,7 @@ describe('ChartComponent', function() {
         [1, 2, 3],
       ]}
     })
-    fake_generate.should.be.calledWith({
+    expect(fake_generate.calledWith({
       'bindto': selection.append().node(),
       'data': {
         'type': 'bar',
@@ -189,7 +192,7 @@ describe('ChartComponent', function() {
           [1, 2, 3],
         ]
       }
-    })
+    })).toBe(true)
   })
 
 })

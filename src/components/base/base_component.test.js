@@ -1,20 +1,47 @@
-import Component from './index.js'
 import sinon from 'sinon'
 import assert from 'assert'
+
+const mocks = vi.hoisted(() => ({
+  format_value: vi.fn(),
+  jq: vi.fn(),
+  d3Overrides: {},
+}))
+
+vi.mock('../../interpolation.js', () => ({
+  format_value: (...args) => mocks.format_value(...args),
+}))
+
+vi.mock('../../jq-web.js', () => ({
+  default: (...args) => mocks.jq(...args),
+}))
+
+vi.mock('d3', async (importOriginal) => {
+  const real = await importOriginal()
+  return {
+    ...real,
+    get json() { return mocks.d3Overrides.json || real.json },
+    get csv() { return mocks.d3Overrides.csv || real.csv },
+    get text() { return mocks.d3Overrides.text || real.text },
+    get tsv() { return mocks.d3Overrides.tsv || real.tsv },
+    get csvParse() { return mocks.d3Overrides.csvParse || real.csvParse },
+    get tsvParse() { return mocks.d3Overrides.tsvParse || real.tsvParse },
+  }
+})
+
+import Component from './index.js'
+import { execute_query } from './render.js'
 import * as d3 from 'd3'
 
-describe('Component', function() {
+describe('Component', () => {
 
-  beforeEach(function () {
-    this.jsdom = require('jsdom-global')(undefined, {'url': 'https://fake.url.com'})
-  })
-
-  afterEach(function () {
-    this.jsdom()
+  beforeEach(() => {
+    document.documentElement.innerHTML = '<head><title></title></head><body></body>'
+    mocks.format_value = vi.fn()
+    mocks.jq = vi.fn()
+    mocks.d3Overrides = {}
   })
 
   const call_test_component_with = (args) => {
-    const injector = require('inject-loader!./index.js')
     const jq = sinon.stub().returns(
       (args.dont_execute_query === true) ? {
         'then': () => ({'catch': () => null})}
@@ -27,27 +54,9 @@ describe('Component', function() {
     const format_value = sinon.stub()
       .onCall(0).returns(args.format_value_return)
       .returns(args.format_value_return2)
-    const Component = injector({
-      './state_handling': (
-        require('inject-loader!./state_handling.js')({
-          '../../interpolation.js': {'format_value': format_value}
-        })),
-      './bind': (
-        require('inject-loader!./bind.js')({
-          './state_handling': (
-            require('inject-loader!./state_handling.js')({
-              '../../interpolation.js': {'format_value': format_value}
-            })),
-          './render': (
-            require('inject-loader!./render.js')({
-              '../../jq-web.js': jq,
-              './state_handling': (
-                require('inject-loader!./state_handling.js')({
-                  '../../interpolation.js': {'format_value': format_value}
-                })),
-            })),
-        }))
-    }).default
+
+    mocks.jq = jq
+    mocks.format_value = format_value
 
     const my_init = sinon.stub()
       .onCall(1).returns(args.element2)
@@ -63,7 +72,6 @@ describe('Component', function() {
       'render': my_render, 'validators': validators
     })
     const bind = my_component(args.instance_args)
-    const d3 = require('d3')
     const my_selection = d3.selection()
     const render = bind(my_selection)
     render(args.data)
@@ -72,16 +80,16 @@ describe('Component', function() {
   }
 
   it('should require a render function', () => {
-    (() => {Component({})}).should.throw('A render() function is required')
+    expect(() => { Component({}) }).toThrow('A render() function is required')
   })
 
   it('should not complain about render function if it\'s provided', () => {
-    (() => {Component({'render': () => 0})})
-      .should.not.throw('A render() function is required')
+    expect(() => { Component({'render': () => 0}) })
+      .not.toThrow('A render() function is required')
   })
 
   it('should return a function', () => {
-    Component({'render': () => 0}).should.be.a.Function()
+    expect(typeof Component({'render': () => 0})).toBe('function')
   })
 
   it('returned component should call args validator', () => {
@@ -92,7 +100,7 @@ describe('Component', function() {
     })
 
     my_component()
-    my_validator.should.be.called()
+    expect(my_validator.called).toBe(true)
   })
 
   it('returned component calls args validator with the correct args', () => {
@@ -103,7 +111,7 @@ describe('Component', function() {
     })
 
     my_component(42)
-    my_validator.should.be.calledWith(42)
+    expect(my_validator.calledWith(42)).toBe(true)
   })
 
   it('every validator should be called', () => {
@@ -115,18 +123,18 @@ describe('Component', function() {
     })
 
     my_component({'title': 42})
-    my_validator.should.be.calledWith({'title': 42})
-    my_validator2.should.be.calledWith({'title': 42})
+    expect(my_validator.calledWith({'title': 42})).toBe(true)
+    expect(my_validator2.calledWith({'title': 42})).toBe(true)
   })
 
   it('validation fail should not be caught', () => {
-    (() => {
+    expect(() => {
       const my_component = Component({
         'render': () => 0, 'validators': [() => {throw new Error('Foo bar')}],
       })
 
       my_component({'title': 42})
-    }).should.throw('Foo bar')
+    }).toThrow('Foo bar')
   })
 
   it('there should be a bind function', () => {
@@ -135,107 +143,105 @@ describe('Component', function() {
     })
 
     const bind = my_component({'title': 42})
-    bind.should.be.a.Function()
+    expect(typeof bind).toBe('function')
   })
 
   it('bind function should throw when called without arguments', () => {
-    (() => {
+    expect(() => {
       const my_component = Component({
         'render': () => 0, 'validators': []
       })
       const bind = my_component({'title': 42})
       bind()
-    }).should.throw('A d3 selection is required')
+    }).toThrow('A d3 selection is required')
   })
 
   it('bind function throws selection error if selection is supplied', () => {
-    (() => {
+    expect(() => {
       const my_component = Component({
         'render': () => 0, 'validators': []
       })
       const bind = my_component({'title': 42})
-      const d3 = require('d3')
       bind(d3.selection())
-    }).should.not.throw('A d3 selection is required')
+    }).not.toThrow('A d3 selection is required')
   })
 
   it('bind function throws selection error if bad selection is given', () => {
-    (() => {
+    expect(() => {
       const my_component = Component({
         'render': () => 0, 'validators': []
       })
       const bind = my_component({'title': 42})
       const bad_selection = 'not a selection'
       bind(bad_selection)
-    }).should.throw('A d3 selection is required')
+    }).toThrow('A d3 selection is required')
   })
 
   it('render() is called when the component is rendered', () => {
     const { my_render } = call_test_component_with({'instance_args': {}})
-    my_render.should.be.called()
+    expect(my_render.called).toBe(true)
   })
 
   it('render() is called with correct arguments', () => {
     const { my_render, my_selection } = call_test_component_with(
       {'instance_args': {'title': 42}, 'data': 'almafa'})
-    my_render.should.be.calledWith({'title': 42}, my_selection, 'almafa')
+    expect(my_render.calledWith({'title': 42}, my_selection, 'almafa')).toBe(true)
   })
 
   it('render() is called with correct arguments 2', () => {
     const { my_render, my_selection } = call_test_component_with(
       {'instance_args': {}, 'data': [1]})
-    my_render.should.be.calledWith({}, my_selection, [1])
+    expect(my_render.calledWith({}, my_selection, [1])).toBe(true)
   })
 
   it('if there is no init() function, a <span> is created', () => {
     call_test_component_with(
       {'instance_args': {}, 'has_init': false})
-    d3.selectAll('span').size().should.equal(1)
+    expect(d3.selectAll('span').size()).toBe(1)
   })
 
   it('if there is an init() function, it should be called', () => {
     const { my_init } = call_test_component_with(
       {'instance_args': {}, 'has_init': true})
-    my_init.should.be.called()
+    expect(my_init.called).toBe(true)
   })
 
   it('if there is an init(), it is called with the correct arguments', () => {
     const { my_init, my_selection } = call_test_component_with(
       {'instance_args': {'shit': 'happens'}, 'has_init': true})
-    my_init.should.be.calledWith({'shit': 'happens'}, my_selection)
+    expect(my_init.calledWith({'shit': 'happens'}, my_selection)).toBe(true)
   })
-
 
   it('if there is an init(), it is called with the correct arguments 2', () => {
     const { my_init, my_selection } = call_test_component_with(
       {'instance_args': {'bull': 'shit'}, 'has_init': true})
-    my_init.should.be.calledWith({'bull': 'shit'}, my_selection)
+    expect(my_init.calledWith({'bull': 'shit'}, my_selection)).toBe(true)
   })
 
   it('if query is supplied, jq should be called', () => {
     const { jq } = call_test_component_with(
       {'instance_args': {'query': ''}, 'render_func': () => null})
-    jq.should.be.called()
+    expect(jq.called).toBe(true)
   })
 
   it('jq should be called only if query is supplied', () => {
     const { jq } = call_test_component_with(
       {'instance_args': {}, 'render_func': () => null})
-    jq.should.not.be.called()
+    expect(jq.called).toBe(false)
   })
 
   it('if query is supplied, jq should be called with data and query', () => {
     const { jq } = call_test_component_with({
       'instance_args': {
         'query': 'foo'}, 'data': 'bar', 'render_func': () => null})
-    jq.should.be.calledWith('bar', 'foo')
+    expect(jq.calledWith('bar', 'foo')).toBe(true)
   })
 
   it('if query is supplied, jq should be called with data and query 2', () => {
     const { jq } = call_test_component_with({
       'instance_args': {'query': '. | foo'},
       'data': 4, 'render_func': () => null})
-    jq.should.be.calledWith(4, '. | foo')
+    expect(jq.calledWith(4, '. | foo')).toBe(true)
   })
 
   it('render should be called with query return value', () => {
@@ -244,8 +250,8 @@ describe('Component', function() {
     call_test_component_with({
       'instance_args': {'query': '. | foo'}, 'data': 4, jq_return_value,
       'render_func': render_func})
-    render_func.should.be.calledWith(sinon.match.any, sinon.match.any,
-      jq_return_value)
+    expect(render_func.calledWith(sinon.match.any, sinon.match.any,
+      jq_return_value)).toBe(true)
   })
 
   it('render should be called with query return value 2', () => {
@@ -254,55 +260,36 @@ describe('Component', function() {
     call_test_component_with({
       'instance_args': {'query': '. | asd'}, 'data': 4, jq_return_value,
       'render_func': render_func})
-    render_func.should.be.calledWith(sinon.match.any, sinon.match.any,
-      jq_return_value)
+    expect(render_func.calledWith(sinon.match.any, sinon.match.any,
+      jq_return_value)).toBe(true)
   })
 
   it('execute_query calls reject', () => {
-    const injector = require('inject-loader!./render.js')
     const jq_error = new Error('Random error')
-    const execute_query = injector({
-      '../../jq-web.js': () => ({
-        'then': () => ({
-          'catch': (x) => x(jq_error)
-        })
+    mocks.jq = () => ({
+      'then': () => ({
+        'catch': (x) => x(jq_error)
       })
-    }).execute_query
+    })
     const fail_handler = sinon.spy()
     execute_query(null, null)(fail_handler)(() => null)
-    fail_handler.should.be.calledWith(jq_error)
+    expect(fail_handler.calledWith(jq_error)).toBe(true)
   })
 
   const loader_test = (args) => {
-    const injector = require('inject-loader!./index.js')
     const jq = sinon.stub().resolves(args.jq_return_value)
     const my_loader = sinon.spy(function(url, callback) {
       if (args.no_resolve !== true)
         callback(null, args.fetched_value)
     })
-    const Component = injector({
-      './bind': (
-        require('inject-loader!./bind.js')({
-          './render': (
-            require('inject-loader!./render.js')({
-              '../../jq-web.js': jq
-            })
-          ),
-          './external_data': (
-            require('inject-loader!./external_data.js')({
-              './loaders': (
-                require('inject-loader!./loaders.js')({
-                  'd3': Object.assign({
-                    'json': my_loader, 'selection': d3.selection,
-                    'csv': () => null}, args.d3)
-                })
-              )
-            })
-          )
-        })
-      ),
-      
-    }).default
+
+    mocks.jq = jq
+    mocks.d3Overrides = {
+      json: my_loader,
+      csv: () => null,
+      ...args.d3,
+    }
+
     const my_render = (args.render_func === undefined )
       ? sinon.spy() : args.render_func
     const my_component = Component({
@@ -319,42 +306,42 @@ describe('Component', function() {
       'instance_args': args.instance_args }
   }
 
-  it('throws if invalid loader supplied', function() {
-    (() => {
+  it('throws if invalid loader supplied', () => {
+    expect(() => {
       loader_test({'loader': 'asdasdasd'})
-    }).should.throw('Invalid loader')
+    }).toThrow('Invalid loader')
   })
 
-  it('doesnt throw if valid loader is supplied', function() {
-    (() => {
+  it('doesnt throw if valid loader is supplied', () => {
+    expect(() => {
       loader_test({'loader': 'csv'})
-    }).should.not.throw('Invalid loader')
+    }).not.toThrow('Invalid loader')
   })
 
-  it('doesnt throw if valid loader is supplied 2', function() {
-    (() => {
+  it('doesnt throw if valid loader is supplied 2', () => {
+    expect(() => {
       loader_test({'loader': 'json'})
-    }).should.not.throw('Invalid loader')
+    }).not.toThrow('Invalid loader')
   })
 
-  it('loader is called', function() {
+  it('loader is called', () => {
     const { my_loader } = loader_test({'loader': 'json'})
-    my_loader.should.be.called()
+    expect(my_loader.called).toBe(true)
   })
 
-  it('loader is called with render args', function() {
+  it('loader is called with render args', () => {
     const data = 'foo'
     const { my_loader } = loader_test({'loader': 'json', data})
-    my_loader.should.be.calledWith(data)
+    expect(my_loader.calledWith(data)).toBe(true)
   })
 
-  it('loader is called with render args 2', function() {
+  it('loader is called with render args 2', () => {
     const data = ['bar']
     const { my_loader } = loader_test({'loader': 'json', data})
-    my_loader.should.be.calledWith(data)
+    expect(my_loader.calledWith(data)).toBe(true)
   })
 
-  it('loader is called with render args - file loader 1', function() {
+  it('loader is called with render args - file loader 1', () => {
     const data = ['bar']
     const my_file_loader_return = 42
     const my_file_loader = (path, callback) => {
@@ -365,11 +352,11 @@ describe('Component', function() {
         'is_file': true,
         'file_loader': my_file_loader
       }})
-    my_render.should.be.calledWith(sinon.match.any, sinon.match.any,
-      my_file_loader_return, sinon.match.any)
+    expect(my_render.calledWith(sinon.match.any, sinon.match.any,
+      my_file_loader_return, sinon.match.any)).toBe(true)
   })
 
-  it('loader is called with render args - file loader 2', function() {
+  it('loader is called with render args - file loader 2', () => {
     const data = ['bar']
     const my_file_loader_return = '{"a": 42}'
     const my_file_loader = (path, callback) => {
@@ -380,11 +367,11 @@ describe('Component', function() {
         'is_file': true,
         'file_loader': my_file_loader
       }})
-    my_render.should.be.calledWith(sinon.match.any, sinon.match.any, 
-      {'a': 42},sinon.match.any)
+    expect(my_render.calledWith(sinon.match.any, sinon.match.any,
+      {'a': 42}, sinon.match.any)).toBe(true)
   })
 
-  it('loader is called with render args - file loader 3', function() {
+  it('loader is called with render args - file loader 3', () => {
     const data = ['bar']
     const my_file_loader_return = (
       'a,b\n' +
@@ -394,18 +381,18 @@ describe('Component', function() {
       callback(undefined, my_file_loader_return)
     }
     const { my_render } = loader_test({
-      'loader': 'csv', 
+      'loader': 'csv',
       'd3': {'csvParse': () => [{'a': 1, 'b': 2}]},
       data, instance_args: {
         'is_file': true,
         'file_loader': my_file_loader,
       }})
-    my_render.should.be.calledWith(sinon.match.any, sinon.match.any, [
+    expect(my_render.calledWith(sinon.match.any, sinon.match.any, [
       {'a': 1, 'b': 2}
-    ], sinon.match.any)
+    ], sinon.match.any)).toBe(true)
   })
 
-  it('loader is called with render args - file loader 4', function() {
+  it('loader is called with render args - file loader 4', () => {
     const data = ['bar']
     const my_file_loader_return = (
       'a\tb\n' +
@@ -415,37 +402,34 @@ describe('Component', function() {
       callback(undefined, my_file_loader_return)
     }
     const { my_render } = loader_test({
-      'loader': 'tsv', 
+      'loader': 'tsv',
       'd3': {'tsvParse': () => [{'a': 1, 'b': 2}]},
       data, instance_args: {
         'is_file': true,
         'file_loader': my_file_loader,
       }})
-    my_render.should.be.calledWith(sinon.match.any, sinon.match.any, [
+    expect(my_render.calledWith(sinon.match.any, sinon.match.any, [
       {'a': 1, 'b': 2}
-    ], sinon.match.any)
+    ], sinon.match.any)).toBe(true)
   })
 
-
-  it('loader is called with render args - text', function() {
+  it('loader is called with render args - text', () => {
     const data = ['bar']
     const { my_render } = loader_test({
-      'loader': 'text', 
+      'loader': 'text',
       'd3': {'text': (_, callback) => callback(undefined, 'Hello World')},
       data, instance_args: {
         'is_file': false
       }})
-    my_render.should.be.calledWith(sinon.match.any, sinon.match.any,
-      'Hello World', sinon.match.any)
+    expect(my_render.calledWith(sinon.match.any, sinon.match.any,
+      'Hello World', sinon.match.any)).toBe(true)
   })
 
-
-
-  it('render is called with fetched data', function() {
+  it('render is called with fetched data', () => {
     const fetched_value = {'hello': 'world'}
     const { my_render, instance_args, my_selection } = loader_test(
       {'loader': 'json', fetched_value})
-    my_render.should.be.calledWith(instance_args, my_selection, fetched_value)
+    expect(my_render.calledWith(instance_args, my_selection, fetched_value)).toBe(true)
   })
 
   it('should show a spinner while data is loading', () => {
@@ -474,8 +458,8 @@ describe('Component', function() {
     const my_element = 11
     const { my_render } = call_test_component_with(
       {'element': my_element, 'has_init': true})
-    my_render.should.be.calledWith(sinon.match.any, sinon.match.any,
-      sinon.match.any, my_element)
+    expect(my_render.calledWith(sinon.match.any, sinon.match.any,
+      sinon.match.any, my_element)).toBe(true)
   })
 
   it('calls format_value with proper arguments', () => {
@@ -488,10 +472,10 @@ describe('Component', function() {
         'state_handler': state_handler
       }
     })
-    format_value.should.be.calledWith({
+    expect(format_value.calledWith({
       '${x}2': ['${y}'],
       'state_handler': state_handler
-    }, {'x': '2'})
+    }, {'x': '2'})).toBe(true)
   })
 
   it('init should receive correct args', () => {
@@ -513,11 +497,10 @@ describe('Component', function() {
         'state_handler': state_handler
       }
     })
-    my_init.should.be.calledWith({
+    expect(my_init.calledWith({
       '22': ['foo'],
       'state_handler': sinon.match.any
-    },
-    )
+    })).toBe(true)
   })
 
   it('render should receive correct args', () => {
@@ -539,12 +522,11 @@ describe('Component', function() {
         'state_handler': state_handler
       }
     })
-    my_render.should.be.called()
-    my_render.should.be.calledWith({
+    expect(my_render.called).toBe(true)
+    expect(my_render.calledWith({
       '22': ['foo'],
       'state_handler': sinon.match.any
-    },
-    )
+    })).toBe(true)
   })
 
   it('subscribes to state changes', () => {
@@ -557,7 +539,7 @@ describe('Component', function() {
       },
       'has_init': true,
     })
-    state_handler.subscribe.should.be.called()
+    expect(state_handler.subscribe.called).toBe(true)
   })
 
   it('re-subscribes to state changes', () => {
@@ -573,7 +555,7 @@ describe('Component', function() {
       'has_init': true,
     })
     callback(state_handler, callback)
-    state_handler.subscribe.should.be.calledTwice()
+    expect(state_handler.subscribe.calledTwice).toBe(true)
   })
 
   it('calls init with new arguments when variables change', () => {
@@ -595,13 +577,13 @@ describe('Component', function() {
     })
     state_handler.get_state = () => ({'x': 'foo', 'y': 'bar'})
     callback(state_handler, callback)
-    my_init.should.be.calledWith(
+    expect(my_init.calledWith(
       {
         'foo': 'bar',
         'state_handler': sinon.match.any
       },
       sinon.match.any
-    )
+    )).toBe(true)
   })
 
   it('when re-init happens, old element is deleted', () => {
@@ -624,7 +606,7 @@ describe('Component', function() {
     })
     state_handler.get_state = () => ({'x': 'foo', 'y': 'bar'})
     callback(state_handler, callback)
-    element.remove.should.be.called()
+    expect(element.remove.called).toBe(true)
   })
 
   it('when re-init happens, re-render happens', () => {
@@ -647,7 +629,7 @@ describe('Component', function() {
     })
     state_handler.get_state = () => ({'x': 'foo', 'y': 'bar'})
     callback(state_handler, callback)
-    my_render.should.be.calledTwice()
+    expect(my_render.calledTwice).toBe(true)
   })
 
   it('correct element is passed to render when re-init happens', () => {
@@ -672,8 +654,8 @@ describe('Component', function() {
     })
     state_handler.get_state = () => ({'x': 'foo', 'y': 'bar'})
     callback(state_handler, callback)
-    my_render.should.be.calledWith(sinon.match.any, sinon.match.any,
-      sinon.match.any, element2)
+    expect(my_render.calledWith(sinon.match.any, sinon.match.any,
+      sinon.match.any, element2)).toBe(true)
   })
 
   it('returned component calls args validator with formatted args', () => {
@@ -686,7 +668,7 @@ describe('Component', function() {
       'format_value_return': format_value_return,
       'format_value_return2': format_value_return
     })
-    my_validator.should.be.alwaysCalledWith(format_value_return)
+    expect(my_validator.alwaysCalledWith(format_value_return)).toBe(true)
   })
 
   it('doesnt re-subscribe to state if element was deleted by parent', () => {
@@ -703,7 +685,7 @@ describe('Component', function() {
     })
     d3.select('div').remove()
     callback(state_handler, callback)
-    state_handler.subscribe.should.be.calledOnce()
+    expect(state_handler.subscribe.calledOnce).toBe(true)
   })
 
   it('doenst re-init if element was deleted by parent component', () => {
@@ -720,7 +702,7 @@ describe('Component', function() {
     })
     d3.select('div').remove()
     callback(state_handler, callback)
-    my_init.should.be.calledOnce()
+    expect(my_init.calledOnce).toBe(true)
   })
 
   it('calls format_value with proper data', () => {
@@ -735,11 +717,11 @@ describe('Component', function() {
       'instance_args': format_value_return,
       'format_value_return': format_value_return,
       'format_value_return2': format_value_return,
-      'data': my_data 
+      'data': my_data
     })
-    format_value.should.be.calledWith(my_data)
+    expect(format_value.calledWith(my_data)).toBe(true)
   })
-    
+
   it('calls render with formatted data', () => {
     const data = 'this is not formatted'
     const state_handler = {
@@ -754,8 +736,8 @@ describe('Component', function() {
       'format_value_return2': format_value_return,
       'data': data
     })
-    my_render.should.be.calledWith(sinon.match.any, sinon.match.any,
-      format_value_return, sinon.match.any, data)
+    expect(my_render.calledWith(sinon.match.any, sinon.match.any,
+      format_value_return, sinon.match.any, data)).toBe(true)
   })
 
   const test_error_messages = ['Totally random error', 'Another error here']
@@ -766,7 +748,7 @@ describe('Component', function() {
       const { d3 } = call_test_component_with({
         'render_func': my_render
       })
-      my_render.should.be.called()
+      expect(my_render.called).toBe(true)
       assert.equal(d3.select('p.error').text(), message + ' [render]')
     })
 
@@ -776,7 +758,7 @@ describe('Component', function() {
         'init_func': my_init,
         'has_init': true
       })
-      my_init.should.be.called()
+      expect(my_init.called).toBe(true)
       assert.equal(d3.select('p.error').text(), message + ' [bind]')
     })
   })

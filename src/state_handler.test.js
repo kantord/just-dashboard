@@ -1,28 +1,47 @@
-import create_state_handler from './state_handler.js'
+import { vi } from 'vitest'
 import sinon from 'sinon'
+
+const mocks = vi.hoisted(() => ({
+  isEqual: null
+}))
+
+vi.mock('fast-deep-equal', async () => {
+  const actual = await vi.importActual('fast-deep-equal')
+  return {
+    default: (...args) => mocks.isEqual
+      ? mocks.isEqual(...args)
+      : actual.default(...args)
+  }
+})
+
+import create_state_handler from './state_handler.js'
 
 
 describe('state handler', () => {
+  beforeEach(() => {
+    mocks.isEqual = null
+  })
+
   it('has a get_state method', () => {
-    create_state_handler().should.have.property('get_state')
+    expect(create_state_handler()).toHaveProperty('get_state')
   })
 
   it('has a set_variable method', () => {
-    create_state_handler().should.have.property('set_variable')
+    expect(create_state_handler()).toHaveProperty('set_variable')
   })
 
   it('has an init_variable method', () => {
-    create_state_handler().should.have.property('init_variable')
+    expect(create_state_handler()).toHaveProperty('init_variable')
   })
 
   it('has empty initial state', () => {
-    create_state_handler().get_state().should.deepEqual({})
+    expect(create_state_handler().get_state()).toEqual({})
   })
 
   it('init_variable should update state', () => {
     const state_handler = create_state_handler()
     state_handler.init_variable('foo', 42)
-    state_handler.get_state().should.deepEqual({
+    expect(state_handler.get_state()).toEqual({
       'foo': 42
     })
   })
@@ -31,7 +50,7 @@ describe('state handler', () => {
     const state_handler = create_state_handler()
     state_handler.init_variable('bar', false)
     state_handler.init_variable('pi', 3.14)
-    state_handler.get_state().should.deepEqual({
+    expect(state_handler.get_state()).toEqual({
       'bar': false,
       'pi': 3.14
     })
@@ -42,7 +61,7 @@ describe('state handler', () => {
     state_handler.init_variable('bar', false)
     state_handler.init_variable('pi', 3.14)
     state_handler.init_variable('pi', -3.14)
-    state_handler.get_state().should.deepEqual({
+    expect(state_handler.get_state()).toEqual({
       'bar': false,
       'pi': 3.14
     })
@@ -51,7 +70,7 @@ describe('state handler', () => {
   it('set_variable should update state', () => {
     const state_handler = create_state_handler()
     state_handler.set_variable('foo', 42)
-    state_handler.get_state().should.deepEqual({
+    expect(state_handler.get_state()).toEqual({
       'foo': 42
     })
   })
@@ -60,18 +79,18 @@ describe('state handler', () => {
     const state_handler = create_state_handler()
     state_handler.set_variable('bar', false)
     state_handler.set_variable('pi', 3.14)
-    state_handler.get_state().should.deepEqual({
+    expect(state_handler.get_state()).toEqual({
       'bar': false,
       'pi': 3.14
     })
   })
-  
+
   it('has a subscribe method', () => {
-    create_state_handler().subscribe.should.be.a.Function()
+    expect(typeof create_state_handler().subscribe).toBe('function')
   })
 
   it('has a reset method', () => {
-    create_state_handler().reset.should.be.a.Function()
+    expect(typeof create_state_handler().reset).toBe('function')
   })
 
   it('reset() undoes subscriptions', () => {
@@ -80,7 +99,7 @@ describe('state handler', () => {
     state_handler.subscribe(my_callback)
     state_handler.reset()
     state_handler.set_variable('foo', 42)
-    my_callback.should.not.be.called()
+    expect(my_callback.called).toBe(false)
   })
 
 
@@ -92,18 +111,16 @@ describe('state handler', () => {
       const state_handler = create_state_handler()
       state_handler.subscribe(my_callback)
       state_handler[method]('foo', 42)
-      my_callback.should.be.calledWith(state_handler, my_callback)
+      expect(my_callback.calledWith(state_handler, my_callback)).toBe(true)
     })
 
     it(`callback not called when no actual change happens - ${method}`, () => {
       const my_callback = sinon.spy()
-      const injector = require('inject-loader!./state_handler.js')
-      const state_handler = injector({
-        'fast-deep-equal': () => true
-      }).default()
+      mocks.isEqual = () => true
+      const state_handler = create_state_handler()
       state_handler.subscribe(my_callback)
       state_handler[method]('foo', 42)
-      my_callback.should.not.be.called()
+      expect(my_callback.called).toBe(false)
     })
 
     it(`callback should retrieve collect state - ${method}`, () => {
@@ -113,7 +130,7 @@ describe('state handler', () => {
       const state_handler = create_state_handler()
       state_handler.subscribe(my_callback)
       state_handler[method]('foo', 42)
-      retrieved_state.should.deepEqual({'foo': 42})
+      expect(retrieved_state).toEqual({'foo': 42})
     })
   })
 
@@ -123,7 +140,7 @@ describe('state handler', () => {
     state_handler.subscribe(my_callback)
     state_handler.set_variable('foo', 42)
     state_handler.set_variable('foo', 42)
-    my_callback.should.be.calledOnce()
+    expect(my_callback.calledOnce).toBe(true)
   })
 
   it('no state change if init_variable called 2x on the same variable', () => {
@@ -133,20 +150,18 @@ describe('state handler', () => {
     state_handler.subscribe(my_callback)
     state_handler.init_variable('foo', 42)
     state_handler.init_variable('foo', 42)
-    my_callback.should.be.calledOnce()
+    expect(my_callback.calledOnce).toBe(true)
   })
 
   it('callback should be called again with re-subscribe', () => {
     const my_callback = sinon.spy(
       function() {state_handler.subscribe(my_callback)})
-    const injector = require('inject-loader!./state_handler.js')
-    const state_handler = injector({
-      'fast-deep-equal': () => false
-    }).default()
+    mocks.isEqual = () => false
+    const state_handler = create_state_handler()
     state_handler.subscribe(my_callback)
     state_handler.set_variable('foo', 42)
     state_handler.set_variable('foo', 42)
-    my_callback.should.be.calledTwice()
+    expect(my_callback.calledTwice).toBe(true)
   })
 
 })

@@ -1,58 +1,53 @@
-import should from 'should' // eslint-disable-line no-unused-vars
+import { vi } from 'vitest'
 import * as d3 from 'd3'
 import assert from 'assert'
 import sinon from 'sinon'
+import test_parser from '../../test_parser.js'
 
-describe('Root component', function() {
-  beforeEach(function () {
-    this.jsdom = require('jsdom-global')(undefined, {'url': 'https://fake.url.com'})
-  })
+const mocks = vi.hoisted(() => ({
+  parser: null
+}))
 
-  afterEach(function () {
-    this.jsdom()
-  })
-
-  beforeEach(function () {
-    document.head.innerHTML = '<title>foobar</title>'
-  })
-
-  const RootComponentInjector = (args) => {
-    const injector = require('inject-loader!./Root')
-    return injector(args)
+vi.mock('../../default_parser.js', () => ({
+  default: (...args) => {
+    if (mocks.parser) return mocks.parser(...args)
+    return () => {}
   }
+}))
 
-  const get_component_with_parser = (parser) => {
-    return RootComponentInjector({
-      '../../default_parser.js': parser
-    }).default
-  }
+import RootComponent from './Root.js'
+
+describe('Root component', () => {
+  beforeEach(() => {
+    document.documentElement.innerHTML = '<head><title>foobar</title></head><body></body>'
+    mocks.parser = null
+  })
 
   const call_render_with = (args) => {
-    const RootComponent = get_component_with_parser(args.parser)
+    if (args.parser) mocks.parser = args.parser
     const bind = RootComponent(args.component_args)
-    const d3 = require('d3')
     const render = bind(d3.selection())
     render(args.render_args)
   }
 
-  it('title text is set', function() {
+  it('title text is set', () => {
     call_render_with({
       'component_args': {'title': 'My example title'}
     })
     assert.equal(d3.selection().select('title').text(), 'My example title')
   })
 
-  it('render child element', function() {
+  it('render child element', () => {
     call_render_with({
       'component_args': {'title': 'I don\'t care'},
       'parser': () => (selection) => selection.append('h1').text('My title'),
-      'render_args': [{'component': 'text', 'args': {'tagName': 'h1'}, 
+      'render_args': [{'component': 'text', 'args': {'tagName': 'h1'},
         'data': 'My title'}]
     })
     assert.equal(d3.selection().select('h1').text(), 'My title')
   })
 
-  it('render child element only if there is a child', function() {
+  it('render child element only if there is a child', () => {
     call_render_with({
       'component_args': {'title': 'I don\'t care'},
       'render_args': []
@@ -60,7 +55,7 @@ describe('Root component', function() {
     assert.equal(d3.selection().selectAll('h1').size(), 0)
   })
 
-  it('render each child', function() {
+  it('render each child', () => {
     call_render_with({
       'component_args': {'title': 'I don\'t care'},
       'parser': () => (selection) => selection.append('h1').text('My title'),
@@ -73,7 +68,7 @@ describe('Root component', function() {
     assert.equal(d3.selection().selectAll('h1').size(), 2)
   })
 
-  it('renders parsed component', function() {
+  it('renders parsed component', () => {
     call_render_with({
       'component_args': {'title': ''},
       'parser': () => (selection) => selection.append('b').text(''),
@@ -83,8 +78,9 @@ describe('Root component', function() {
     assert.equal(d3.selection().selectAll('b').size(), 1)
   })
 
-  it('integration test', () => {
-    const test_parser = require('../../test_parser.js').default
+  it('integration test', async () => {
+    const { default: realDefaultParser } = await vi.importActual('../../default_parser.js')
+    mocks.parser = realDefaultParser
     const bind = test_parser({
       'component': 'root',
       'args': {
@@ -102,7 +98,7 @@ describe('Root component', function() {
     assert.equal(d3.selection().select('body p').text(), 'Almafa')
   })
 
-  it('children are wrapped in child wrapper', function() {
+  it('children are wrapped in child wrapper', () => {
     call_render_with({
       'parser': () => (selection) => selection.append('h1').text('My title'),
       'component_args': {'title': ''},
@@ -115,7 +111,7 @@ describe('Root component', function() {
     assert.equal(d3.selection().selectAll('.ds--wrapper').size(), 2)
   })
 
-  it('variables are initialized in state', function() {
+  it('variables are initialized in state', () => {
     const state_handler = {'init_variable': sinon.spy(), 'reset': sinon.spy()}
     const my_default = sinon.spy()
     call_render_with({
@@ -128,10 +124,10 @@ describe('Root component', function() {
         }, 'data': [] }
       ]
     })
-    state_handler.init_variable.should.be.calledWith('foo', my_default)
+    expect(state_handler.init_variable.calledWith('foo', my_default)).toBe(true)
   })
 
-  it('calls state_handler\'s reset', function() {
+  it('calls state_handler\'s reset', () => {
     const state_handler = {'reset': sinon.spy()}
     const my_default = sinon.spy()
     call_render_with({
@@ -144,10 +140,10 @@ describe('Root component', function() {
         }, 'data': [] }
       ]
     })
-    state_handler.reset.should.be.called()
+    expect(state_handler.reset.called).toBe(true)
   })
 
-  it('variables are updated in state', function() {
+  it('variables are updated in state', () => {
     const state_handler = {'set_variable': sinon.spy(), 'reset': sinon.spy()}
     const my_default = sinon.spy()
     call_render_with({
@@ -160,10 +156,10 @@ describe('Root component', function() {
         }, 'data': [] }
       ]
     })
-    state_handler.set_variable.should.be.calledWith('foo', my_default)
+    expect(state_handler.set_variable.calledWith('foo', my_default)).toBe(true)
   })
 
-  it('superflous elements are removed', function() {
+  it('superflous elements are removed', () => {
     d3.select('body').append('div').attr('class', 'ds--wrapper')
     call_render_with({
       'parser': () => (selection) => selection.append('h1').text('My title'),
@@ -177,7 +173,7 @@ describe('Root component', function() {
     assert.equal(d3.selection().selectAll('.ds--wrapper').size(), 2)
   })
 
-  it('doesnt fail when component has no explicit args', function() {
+  it('doesnt fail when component has no explicit args', () => {
     d3.select('body').append('div').attr('class', 'ds--wrapper')
     call_render_with({
       'parser': () => (selection) => selection.append('h1').text('My title'),
@@ -187,7 +183,4 @@ describe('Root component', function() {
       ]
     })
   })
-
-
-
 })

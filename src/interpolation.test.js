@@ -1,4 +1,4 @@
-const module = require('./interpolation.js')
+import * as module from './interpolation.js'
 
 const string_tests = [
   ['foo', 'foo', {}],
@@ -53,11 +53,11 @@ const stringify = JSON.stringify
 tests.forEach(([test_suite_name, function_name, test_sets]) =>
   describe(test_suite_name, () => {
     test_sets.forEach(test_set =>
-      test_set.forEach(([input, output, state]) => 
+      test_set.forEach(([input, output, state]) =>
         it(
           `${[stringify(input), stringify(output), stringify(state)]}`,
           () => {
-            module[function_name](input, state).should.deepEqual(output)
+            expect(module[function_name](input, state)).toEqual(output)
           })
       )
     )

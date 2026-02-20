@@ -1,53 +1,56 @@
-import should from 'should' // eslint-disable-line no-unused-vars
+import { vi } from 'vitest'
 import * as d3 from 'd3'
 import assert from 'assert'
-import Component from '../components/base'
 import sinon from 'sinon'
+import test_parser from '../test_parser.js'
 
-describe('base container component', function() {
-  beforeEach(function () {
-    this.jsdom = require('jsdom-global')(undefined, {'url': 'https://fake.url.com'})
-  })
+const mocks = vi.hoisted(() => ({
+  parser: null,
+  componentSpy: null
+}))
 
-  afterEach(function () {
-    this.jsdom()
-  })
-
-  beforeEach(function () {
-    document.head.innerHTML = '<title>foobar</title>'
-  })
-
-  const base_container_componentInjector = (args) => {
-    const injector = require('inject-loader!./container_base.js')
-    return injector(args)
+vi.mock('../default_parser.js', () => ({
+  default: (...args) => {
+    if (mocks.parser) return mocks.parser(...args)
+    return () => {}
   }
+}))
 
-  const get_component_with_mocks = ({ parser, Component }) => {
-    return base_container_componentInjector({
-      '../default_parser.js': parser,
-      './base': Component
-    }).default
+vi.mock('./base', async () => {
+  const actual = await vi.importActual('./base')
+  return {
+    default: (...args) => {
+      if (mocks.componentSpy) mocks.componentSpy(...args)
+      return actual.default(...args)
+    }
   }
+})
+
+import ContainerComponent from './container_base.js'
+
+describe('base container component', () => {
+  beforeEach(() => {
+    document.documentElement.innerHTML = '<head><title>foobar</title></head><body></body>'
+    mocks.parser = null
+    mocks.componentSpy = null
+  })
 
   const call_render_with = (args) => {
-    const my_component_func = sinon.spy(Component)
-    const base_container_component = get_component_with_mocks({
-      'parser': args.parser,
-      'Component': my_component_func
-    })
-    const my_component = base_container_component({
+    const my_component_func = sinon.spy()
+    mocks.componentSpy = my_component_func
+    if (args.parser) mocks.parser = args.parser
+    const my_component = ContainerComponent({
       'wrapper_tag': args.wrapper_tag, 'wrapper_class': args.wrapper_class,
       'validators': args.validators, 'init': args.init
     })
     const bind = my_component(args.component_args)
-    const d3 = require('d3')
     const render = bind(d3.selection())
     render(args.render_args)
 
     return { my_component_func, render }
   }
 
-  it('render child element', function() {
+  it('render child element', () => {
     call_render_with({
       'component_args': {'title': 'I don\'t care'},
       'parser': () => (selection) => selection.append('h1').text('My title'),
@@ -57,7 +60,7 @@ describe('base container component', function() {
     assert.equal(d3.selection().select('h1').text(), 'My title')
   })
 
-  it('render child element only if there is a child', function() {
+  it('render child element only if there is a child', () => {
     call_render_with({
       'component_args': {'title': 'I don\'t care'},
       'render_args': []
@@ -65,7 +68,7 @@ describe('base container component', function() {
     assert.equal(d3.selection().selectAll('h1').size(), 0)
   })
 
-  it('render each child', function() {
+  it('render each child', () => {
     call_render_with({
       'component_args': {'title': 'I don\'t care'},
       'parser': () => (selection) => selection.append('h1').text('My title'),
@@ -78,7 +81,7 @@ describe('base container component', function() {
     assert.equal(d3.selection().selectAll('h1').size(), 2)
   })
 
-  it('renders parsed component', function() {
+  it('renders parsed component', () => {
     call_render_with({
       'component_args': {'title': ''},
       'parser': () => (selection) => selection.append('b').text(''),
@@ -88,8 +91,10 @@ describe('base container component', function() {
     assert.equal(d3.selection().selectAll('b').size(), 1)
   })
 
-  it('integration test', () => {
-    const test_parser = require('../test_parser.js').default
+  it('integration test', async () => {
+    const { default: realDefaultParser } = await vi.importActual('../default_parser.js')
+    mocks.parser = realDefaultParser
+    mocks.componentSpy = null
     const bind = test_parser({
       'component': 'root',
       'args': {
@@ -107,7 +112,7 @@ describe('base container component', function() {
     assert.equal(d3.selection().select('body p').text(), 'Almafa')
   })
 
-  it('children are wrapped in child wrapper', function() {
+  it('children are wrapped in child wrapper', () => {
     call_render_with({
       'parser': () => (selection) => selection.append('h1').text('My title'),
       'component_args': {'title': ''},
@@ -121,7 +126,7 @@ describe('base container component', function() {
     assert.equal(d3.selection().selectAll('div.foo').size(), 2)
   })
 
-  it('children are wrapped in child wrapper', function() {
+  it('children are wrapped in child wrapper 2', () => {
     call_render_with({
       'parser': () => (selection) => selection.append('h1').text('My title'),
       'component_args': {'title': ''},
@@ -148,11 +153,11 @@ describe('base container component', function() {
           'data': 'My secondary header' }
       ]
     })
-    my_component_func.should.be.calledWith({
+    expect(my_component_func.calledWith({
       'render': sinon.match.any,
       'init': sinon.match.any,
       'validators': my_validators
-    })
+    })).toBe(true)
   })
 
   it('calls component with actual init function', () => {
@@ -168,11 +173,11 @@ describe('base container component', function() {
           'data': 'My secondary header' }
       ]
     })
-    my_component_func.should.be.calledWith({
+    expect(my_component_func.calledWith({
       'render': sinon.match.any,
       'init': my_init,
       'validators': sinon.match.any
-    })
+    })).toBe(true)
   })
 
   it('only new component is visible after second render', () => {
@@ -205,11 +210,11 @@ describe('base container component', function() {
         { 'component': 'text', 'data': 'My title' },
       ]
     })
-    fake_parser.should.be.calledWith({
+    expect(fake_parser.calledWith({
       'component': sinon.match.any,
       'args': {'state_handler': state_handler, 'file_loader': sinon.match.any},
       'data': sinon.match.any,
-    })
+    })).toBe(true)
   })
 
   it('passes on file_loader', () => {
@@ -222,14 +227,14 @@ describe('base container component', function() {
         { 'component': 'text', 'data': 'My title' },
       ]
     })
-    fake_parser.should.be.calledWith({
+    expect(fake_parser.calledWith({
       'component': sinon.match.any,
       'args': {'file_loader': file_loader, 'state_handler': sinon.match.any},
       'data': sinon.match.any,
-    })
+    })).toBe(true)
   })
 
-  it('superfluous elements are removed', function() {
+  it('superfluous elements are removed', () => {
     d3.selection().append('h1')
     call_render_with({
       'parser': () => (selection) => selection.append('h1').text('My title'),

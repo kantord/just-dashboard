@@ -21,7 +21,7 @@
   "dependencies": {
     "@observablehq/plot": "^0.6.17",
     "emuto": "^1.37.1",
-    "yamljs": "^0.3.0"
+    "yaml": "^2.8.2"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
@@ -33,7 +33,6 @@
     "@testing-library/react": "^16.3.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@types/yamljs": "^0.2.34",
     "@vitejs/plugin-react": "^5.1.4",
     "@vitest/coverage-v8": "^4.0.18",
     "jsdom": "^28.1.0",

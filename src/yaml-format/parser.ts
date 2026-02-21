@@ -1,4 +1,4 @@
-import YAML from 'yamljs'
+import YAML from 'yaml'
 
 interface ComponentDef {
   component: string

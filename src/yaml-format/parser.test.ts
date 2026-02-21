@@ -4,7 +4,7 @@ const mocks = vi.hoisted(() => ({
   yamlParse: vi.fn() as any,
 }))
 
-vi.mock('yamljs', () => ({
+vi.mock('yaml', () => ({
   default: { parse: (...args: any[]) => mocks.yamlParse(...args) },
 }))
 
@@ -414,8 +414,8 @@ describe('yaml format - attr: syntax', () => {
 
 describe('integration tests', () => {
   it('integration test', async () => {
-    const realYamljs: any = await vi.importActual('yamljs')
-    mocks.yamlParse = realYamljs.default ? realYamljs.default.parse : realYamljs.parse
+    const realYaml: any = await vi.importActual('yaml')
+    mocks.yamlParse = realYaml.default ? realYaml.default.parse : realYaml.parse
     const text = `dashboard "asd":
     - h1 text: asd
     - 3 columns:

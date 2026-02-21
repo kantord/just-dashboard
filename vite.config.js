@@ -1,12 +1,23 @@
 import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
 export default defineConfig({
+  plugins: [react()],
   build: {
     lib: {
       entry: 'src/index.ts',
       name: 'dashboard',
       formats: ['umd', 'es'],
       fileName: (format) => format === 'umd' ? 'dashboard.js' : 'dashboard.es.js',
+    },
+    rollupOptions: {
+      external: ['react', 'react-dom'],
+      output: {
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM',
+        },
+      },
     },
   },
   test: {
@@ -17,7 +28,7 @@ export default defineConfig({
         url: 'https://fake.url.com'
       }
     },
-    include: ['src/**/*.test.ts'],
+    include: ['src/**/*.test.{ts,tsx}'],
     css: false,
     coverage: {
       provider: 'v8',

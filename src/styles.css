@@ -1,0 +1,112 @@
+/* Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  padding: 1rem;
+  color: #333;
+}
+
+/* Dashboard wrapper */
+.ds--wrapper {
+  margin-bottom: 1rem;
+}
+
+/* Text */
+.ds--text[data-align="center"] {
+  text-align: center;
+}
+.ds--text[data-align="right"] {
+  text-align: right;
+}
+.ds--text[data-align="justify"] {
+  text-align: justify;
+}
+
+/* Chart */
+.ds--chart {
+  background: white;
+}
+
+/* Columns */
+.ds--columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.ds--column {
+  flex: 1;
+  min-width: 0;
+  background: white;
+  padding: 1rem;
+}
+
+/* Rows */
+.ds--rows {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.ds--row {
+  background: white;
+}
+
+/* Board */
+.ds--board {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f0f4f8;
+  border-radius: 4px;
+}
+.ds--board > div {
+  flex: 1;
+  min-width: 200px;
+  background: white;
+  padding: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Dropdown */
+.ds--select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+/* Spinner */
+.ds--spinner {
+  width: 40px;
+  height: 40px;
+  background-color: #333;
+  border-radius: 100%;
+  animation: ds-pulse 1s infinite ease-in-out;
+}
+@keyframes ds-pulse {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+/* Error */
+.error {
+  color: #d32f2f;
+  padding: 0.5rem;
+  background: #ffeaea;
+  border-radius: 4px;
+}

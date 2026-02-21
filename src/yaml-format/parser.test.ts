@@ -1,5 +1,3 @@
-import assert from 'node:assert'
-import sinon from 'sinon'
 import { vi } from 'vitest'
 
 const mocks = vi.hoisted(() => ({
@@ -14,11 +12,14 @@ import parser, { error_message } from './parser'
 
 describe('yaml format - parser', () => {
   const set_up = ({ parseSpyReturns, parseSpyThrows }: { parseSpyReturns?: any; parseSpyThrows?: string }) => {
-    let parseSpy: sinon.SinonStub = sinon.stub().returns(parseSpyReturns)
-    if (parseSpyThrows) parseSpy = parseSpy.throws(new Error(parseSpyThrows))
-    mocks.yamlParse = parseSpy
-
-    return { parser, parseSpy, error_message }
+    if (parseSpyThrows) {
+      mocks.yamlParse = vi.fn(() => {
+        throw new Error(parseSpyThrows)
+      })
+    } else {
+      mocks.yamlParse = vi.fn(() => parseSpyReturns)
+    }
+    return { parser, parseSpy: mocks.yamlParse, error_message }
   }
 
   it('should display error for empty input', () => {
@@ -34,9 +35,7 @@ describe('yaml format - parser', () => {
 
   it('should not display error for valid input', () => {
     const { parser, error_message } = set_up({
-      parseSpyReturns: {
-        'dashboard "Hello World"': [],
-      },
+      parseSpyReturns: { 'dashboard "Hello World"': [] },
     })
     expect(parser('dashboard "Hello World": []')).not.toEqual(error_message('A non-empty input file is required'))
   })
@@ -44,7 +43,7 @@ describe('yaml format - parser', () => {
   it('yaml is only parsed if input is a string', () => {
     const { parser, parseSpy } = set_up({ parseSpyReturns: [] })
     parser({ 'h1 text': '' } as any)
-    expect(parseSpy.called).toBe(false)
+    expect(parseSpy).not.toHaveBeenCalled()
   })
 
   const inputs = ['foo', 'bar']
@@ -53,64 +52,40 @@ describe('yaml format - parser', () => {
     it(`yaml called with input - ${arg}`, () => {
       const { parser, parseSpy } = set_up({ parseSpyReturns: { 'dashboard "a"': [] } })
       parser(arg)
-      expect(parseSpy.calledWith(arg)).toBe(true)
+      expect(parseSpy).toHaveBeenCalledWith(arg)
     }),
   )
 })
 
 describe('yaml format - root component', () => {
-  const set_up = (_input?: any) => {
-    const parseSpy = sinon.spy((x: any) => x)
-    mocks.yamlParse = parseSpy
-
+  const set_up = () => {
+    mocks.yamlParse = vi.fn((x: any) => x)
     return { parser }
   }
 
   const tests = [
     {
       input: { 'dashboard "Foo"': [] },
-      output: {
-        component: 'root',
-        args: { title: 'Foo' },
-        data: [],
-      },
+      output: { component: 'root', args: { title: 'Foo' }, data: [] },
     },
     {
       input: { 'dashboard "Bar"': [] },
-      output: {
-        component: 'root',
-        args: { title: 'Bar' },
-        data: [],
-      },
+      output: { component: 'root', args: { title: 'Bar' }, data: [] },
     },
     {
       input: { "dashboard 'x'": [] },
-      output: {
-        component: 'root',
-        args: { title: 'x' },
-        data: [],
-      },
+      output: { component: 'root', args: { title: 'x' }, data: [] },
     },
     {
       input: { "dashboard 'Ba\"r'": [] },
-      output: {
-        component: 'root',
-        args: { title: 'Ba"r' },
-        data: [],
-      },
+      output: { component: 'root', args: { title: 'Ba"r' }, data: [] },
     },
     {
       input: { 'dashboard "Foo"': [{ 'b text': 'a' }] },
       output: {
         component: 'root',
         args: { title: 'Foo' },
-        data: [
-          {
-            component: 'text',
-            args: { tagName: 'b' },
-            data: 'a',
-          },
-        ],
+        data: [{ component: 'text', args: { tagName: 'b' }, data: 'a' }],
       },
     },
     {
@@ -119,16 +94,8 @@ describe('yaml format - root component', () => {
         component: 'root',
         args: { title: 'Foo' },
         data: [
-          {
-            component: 'text',
-            args: { tagName: 'p' },
-            data: 'x',
-          },
-          {
-            component: 'text',
-            args: { tagName: 'h1' },
-            data: 'p',
-          },
+          { component: 'text', args: { tagName: 'p' }, data: 'x' },
+          { component: 'text', args: { tagName: 'h1' }, data: 'p' },
         ],
       },
     },
@@ -136,200 +103,103 @@ describe('yaml format - root component', () => {
 
   tests.forEach(({ input, output }) => {
     it(`${Object.keys(input)[0]} - ${(input as any)[Object.keys(input)[0]].length}`, () => {
-      const { parser } = set_up(input)
-      assert.deepEqual(parser(input as any), output)
+      const { parser } = set_up()
+      expect(parser(input as any)).toEqual(output)
     })
   })
 })
 
 describe('yaml format - text component', () => {
   const set_up = (parseSpyReturns: any) => {
-    const parseSpy = sinon.stub().returns(parseSpyReturns)
-    mocks.yamlParse = parseSpy
-
+    mocks.yamlParse = vi.fn(() => parseSpyReturns)
     return { parser }
   }
 
   const tests = [
-    {
-      input: { 'h1 text': [] },
-      output: {
-        component: 'text',
-        args: { tagName: 'h1' },
-        data: [],
-      },
-    },
-    {
-      input: { 'p text': [] },
-      output: {
-        component: 'text',
-        args: { tagName: 'p' },
-        data: [],
-      },
-    },
-    {
-      input: { 'p text': 'foo' },
-      output: {
-        component: 'text',
-        args: { tagName: 'p' },
-        data: 'foo',
-      },
-    },
+    { input: { 'h1 text': [] }, output: { component: 'text', args: { tagName: 'h1' }, data: [] } },
+    { input: { 'p text': [] }, output: { component: 'text', args: { tagName: 'p' }, data: [] } },
+    { input: { 'p text': 'foo' }, output: { component: 'text', args: { tagName: 'p' }, data: 'foo' } },
   ]
 
   tests.forEach(({ input, output }) => {
     it(`${Object.keys(input)[0]} - ${(input as any)[Object.keys(input)[0]]}`, () => {
       const { parser } = set_up(input)
-      assert.deepEqual(parser(''), output)
+      expect(parser('')).toEqual(output)
     })
   })
 })
 
 describe('yaml format - board component', () => {
   const set_up = () => {
-    const parseSpy = sinon.spy((x: any) => x)
-    mocks.yamlParse = parseSpy
-
+    mocks.yamlParse = vi.fn((x: any) => x)
     return { parser }
   }
 
   const tests = [
-    {
-      input: { board: [] },
-      output: {
-        component: 'board',
-        data: [],
-      },
-    },
+    { input: { board: [] }, output: { component: 'board', data: [] } },
     {
       input: { board: [{ board: [] }] },
-      output: {
-        component: 'board',
-        data: [
-          {
-            component: 'board',
-            data: [],
-          },
-        ],
-      },
+      output: { component: 'board', data: [{ component: 'board', data: [] }] },
     },
     {
       input: { board: [{ 'attr:query': 'asd' }, { data: 'xxxxx' }] },
-      output: {
-        component: 'board',
-        args: { query: 'asd' },
-        data: 'xxxxx',
-      },
+      output: { component: 'board', args: { query: 'asd' }, data: 'xxxxx' },
     },
   ]
 
   tests.forEach(({ input, output }) => {
     it(`${Object.keys(input)[0]} - ${(input as any)[Object.keys(input)[0]].length}`, () => {
       const { parser } = set_up()
-      assert.deepEqual(parser(input as any), output)
+      expect(parser(input as any)).toEqual(output)
     })
   })
 })
 
 describe('yaml format - rows component', () => {
   const set_up = () => {
-    const parseSpy = sinon.spy((x: any) => x)
-    mocks.yamlParse = parseSpy
-
+    mocks.yamlParse = vi.fn((x: any) => x)
     return { parser }
   }
 
   const tests = [
-    {
-      input: { rows: [] },
-      output: {
-        component: 'rows',
-        data: [],
-      },
-    },
+    { input: { rows: [] }, output: { component: 'rows', data: [] } },
     {
       input: { rows: [{ rows: [] }] },
-      output: {
-        component: 'rows',
-        data: [
-          {
-            component: 'rows',
-            data: [],
-          },
-        ],
-      },
+      output: { component: 'rows', data: [{ component: 'rows', data: [] }] },
     },
     {
       input: { rows: [{ 'attr:query': 'asd' }, { data: 'xxxxx' }] },
-      output: {
-        component: 'rows',
-        args: { query: 'asd' },
-        data: 'xxxxx',
-      },
+      output: { component: 'rows', args: { query: 'asd' }, data: 'xxxxx' },
     },
   ]
 
   tests.forEach(({ input, output }) => {
     it(`${Object.keys(input)[0]} - ${(input as any)[Object.keys(input)[0]].length}`, () => {
       const { parser } = set_up()
-      assert.deepEqual(parser(input as any), output)
+      expect(parser(input as any)).toEqual(output)
     })
   })
 })
 
 describe('yaml format - columns component', () => {
   const set_up = () => {
-    const parseSpy = sinon.spy((x: any) => x)
-    mocks.yamlParse = parseSpy
-
+    mocks.yamlParse = vi.fn((x: any) => x)
     return { parser }
   }
 
   const tests = [
-    {
-      input: { columns: [] },
-      output: {
-        component: 'columns',
-        data: [],
-      },
-    },
+    { input: { columns: [] }, output: { component: 'columns', data: [] } },
     {
       input: { columns: [{ columns: [] }] },
-      output: {
-        component: 'columns',
-        data: [
-          {
-            component: 'columns',
-            data: [],
-          },
-        ],
-      },
+      output: { component: 'columns', data: [{ component: 'columns', data: [] }] },
     },
     {
       input: { '3 columns': [{ columns: [] }] },
-      output: {
-        component: 'columns',
-        args: { columns: 3 },
-        data: [
-          {
-            component: 'columns',
-            data: [],
-          },
-        ],
-      },
+      output: { component: 'columns', args: { columns: 3 }, data: [{ component: 'columns', data: [] }] },
     },
     {
       input: { '5 columns': [{ columns: [] }] },
-      output: {
-        component: 'columns',
-        args: { columns: 5 },
-        data: [
-          {
-            component: 'columns',
-            data: [],
-          },
-        ],
-      },
+      output: { component: 'columns', args: { columns: 5 }, data: [{ component: 'columns', data: [] }] },
     },
     {
       input: { '5 columns': [{ rows: [] }, { columns: [] }] },
@@ -337,14 +207,8 @@ describe('yaml format - columns component', () => {
         component: 'columns',
         args: { columns: 5 },
         data: [
-          {
-            component: 'rows',
-            data: [],
-          },
-          {
-            component: 'columns',
-            data: [],
-          },
+          { component: 'rows', data: [] },
+          { component: 'columns', data: [] },
         ],
       },
     },
@@ -353,119 +217,61 @@ describe('yaml format - columns component', () => {
   tests.forEach(({ input, output }) => {
     it(`${Object.keys(input)[0]} - ${(input as any)[Object.keys(input)[0]].length}`, () => {
       const { parser } = set_up()
-      assert.deepEqual(parser(input as any), output)
+      expect(parser(input as any)).toEqual(output)
     })
   })
 })
 
 describe('yaml format - chart component', () => {
   const set_up = () => {
-    const parseSpy = sinon.spy((x: any) => x)
-    mocks.yamlParse = parseSpy
-
+    mocks.yamlParse = vi.fn((x: any) => x)
     return { parser }
   }
 
   const tests = [
-    {
-      input: { 'pie chart': [] },
-      output: {
-        component: 'chart',
-        args: { type: 'pie', stacked: false },
-        data: [],
-      },
-    },
-    {
-      input: { 'bar chart': [] },
-      output: {
-        component: 'chart',
-        args: { type: 'bar', stacked: false },
-        data: [],
-      },
-    },
+    { input: { 'pie chart': [] }, output: { component: 'chart', args: { type: 'pie', stacked: false }, data: [] } },
+    { input: { 'bar chart': [] }, output: { component: 'chart', args: { type: 'bar', stacked: false }, data: [] } },
     {
       input: { 'horizontal bar chart': [] },
-      output: {
-        component: 'chart',
-        args: {
-          type: 'bar',
-          stacked: false,
-          axis: {
-            rotated: true,
-          },
-        },
-        data: [],
-      },
+      output: { component: 'chart', args: { type: 'bar', stacked: false, axis: { rotated: true } }, data: [] },
     },
     {
       input: { 'rotated line chart': [] },
-      output: {
-        component: 'chart',
-        args: {
-          type: 'line',
-          stacked: false,
-          axis: {
-            rotated: true,
-          },
-        },
-        data: [],
-      },
+      output: { component: 'chart', args: { type: 'line', stacked: false, axis: { rotated: true } }, data: [] },
     },
     {
       input: { 'scatter plot': [] },
-      output: {
-        component: 'chart',
-        args: { type: 'scatter', stacked: false },
-        data: [],
-      },
+      output: { component: 'chart', args: { type: 'scatter', stacked: false }, data: [] },
     },
     {
       input: { 'line diagram': [] },
-      output: {
-        component: 'chart',
-        args: { type: 'line', stacked: false },
-        data: [],
-      },
+      output: { component: 'chart', args: { type: 'line', stacked: false }, data: [] },
     },
     {
       input: { 'line graph': [] },
-      output: {
-        component: 'chart',
-        args: { type: 'line', stacked: false },
-        data: [],
-      },
+      output: { component: 'chart', args: { type: 'line', stacked: false }, data: [] },
     },
     {
       input: { 'bar chart': 'foo' },
-      output: {
-        component: 'chart',
-        args: { type: 'bar', stacked: false },
-        data: 'foo',
-      },
+      output: { component: 'chart', args: { type: 'bar', stacked: false }, data: 'foo' },
     },
     {
       input: { 'stacked bar chart': 'foo' },
-      output: {
-        component: 'chart',
-        args: { type: 'bar', stacked: true },
-        data: 'foo',
-      },
+      output: { component: 'chart', args: { type: 'bar', stacked: true }, data: 'foo' },
     },
   ]
 
   tests.forEach(({ input, output }) => {
     it(`${Object.keys(input)[0]} - ${(input as any)[Object.keys(input)[0]]}`, () => {
       const { parser } = set_up()
-      assert.deepEqual(parser(input as any), output)
+      expect(parser(input as any)).toEqual(output)
     })
   })
 })
 
 describe('yaml format - handling file', () => {
   const set_up = () => {
-    const parseSpy = sinon.spy((x: any) => x)
-    mocks.yamlParse = parseSpy
-
+    mocks.yamlParse = vi.fn((x: any) => x)
     return { parser }
   }
 
@@ -499,59 +305,43 @@ describe('yaml format - handling file', () => {
   tests.forEach(({ input, output }) => {
     it(`${Object.keys(input)[0]} - ${(input as any)[Object.keys(input)[0]]}`, () => {
       const { parser } = set_up()
-      assert.deepEqual(parser(input as any), output)
+      expect(parser(input as any)).toEqual(output)
     })
   })
 })
 
 describe('yaml format - handling URL', () => {
   const set_up = () => {
-    const parseSpy = sinon.spy((x: any) => x)
-    mocks.yamlParse = parseSpy
-
+    mocks.yamlParse = vi.fn((x: any) => x)
     return { parser }
   }
 
   const tests = [
     {
       input: { 'h1 text': 'https://example.com/text.csv' },
-      output: {
-        component: 'text',
-        args: { loader: 'csv', tagName: 'h1' },
-        data: 'https://example.com/text.csv',
-      },
+      output: { component: 'text', args: { loader: 'csv', tagName: 'h1' }, data: 'https://example.com/text.csv' },
     },
     {
       input: { 'h1 text': 'https://example.com/text.json' },
-      output: {
-        component: 'text',
-        args: { loader: 'json', tagName: 'h1' },
-        data: 'https://example.com/text.json',
-      },
+      output: { component: 'text', args: { loader: 'json', tagName: 'h1' }, data: 'https://example.com/text.json' },
     },
     {
       input: { 'h1 text': [{ 'attr:loader': 'csv' }, { data: 'https://example.com/text.json' }] },
-      output: {
-        component: 'text',
-        args: { loader: 'csv', tagName: 'h1' },
-        data: 'https://example.com/text.json',
-      },
+      output: { component: 'text', args: { loader: 'csv', tagName: 'h1' }, data: 'https://example.com/text.json' },
     },
   ]
 
   tests.forEach(({ input, output }) => {
     it(`${Object.keys(input)[0]} - ${(input as any)[Object.keys(input)[0]]}`, () => {
       const { parser } = set_up()
-      assert.deepEqual(parser(input as any), output)
+      expect(parser(input as any)).toEqual(output)
     })
   })
 })
 
 describe('yaml format - attr: syntax', () => {
   const set_up = () => {
-    const parseSpy = sinon.spy((x: any) => x)
-    mocks.yamlParse = parseSpy
-
+    mocks.yamlParse = vi.fn((x: any) => x)
     return { parser }
   }
 
@@ -617,7 +407,7 @@ describe('yaml format - attr: syntax', () => {
   tests.forEach(({ input, output }) => {
     it(`${Object.keys(input)[0]} - ${(Object.values(input)[0] as any[]).map(Object.keys)}`, () => {
       const { parser } = set_up()
-      assert.deepEqual(parser(input as any), output)
+      expect(parser(input as any)).toEqual(output)
     })
   })
 })
@@ -642,80 +432,49 @@ describe('integration tests', () => {
           component: 'columns',
           args: { columns: 3 },
           data: [
-            {
-              component: 'text',
-              args: { tagName: 'p' },
-              data: 'lorem ipsum',
-            },
-            {
-              component: 'text',
-              args: { tagName: 'p', foo: 'bar' },
-              data: 'x',
-            },
+            { component: 'text', args: { tagName: 'p' }, data: 'lorem ipsum' },
+            { component: 'text', args: { tagName: 'p', foo: 'bar' }, data: 'x' },
           ],
         },
       ],
     }
-
-    assert.deepEqual(parser(text), value)
+    expect(parser(text)).toEqual(value)
   })
 })
 
 describe('yaml format - dropdown component', () => {
   const set_up = (parseSpyReturns: any) => {
-    const parseSpy = sinon.stub().returns(parseSpyReturns)
-    mocks.yamlParse = parseSpy
-
+    mocks.yamlParse = vi.fn(() => parseSpyReturns)
     return { parser }
   }
 
   const tests = [
     {
       input: { 'dropdown foo=bar': [] },
-      output: {
-        component: 'dropdown',
-        args: { variable: 'foo', default: 'bar' },
-        data: [],
-      },
+      output: { component: 'dropdown', args: { variable: 'foo', default: 'bar' }, data: [] },
     },
     {
       input: { 'dropdown foo=3.14': [] },
-      output: {
-        component: 'dropdown',
-        args: { variable: 'foo', default: '3.14' },
-        data: [],
-      },
+      output: { component: 'dropdown', args: { variable: 'foo', default: '3.14' }, data: [] },
     },
     {
       input: { 'dropdown name3=3.14': [] },
-      output: {
-        component: 'dropdown',
-        args: { variable: 'name3', default: '3.14' },
-        data: [],
-      },
+      output: { component: 'dropdown', args: { variable: 'name3', default: '3.14' }, data: [] },
     },
     {
       input: { 'dropdown name3=3.14': 42 },
-      output: {
-        component: 'dropdown',
-        args: { variable: 'name3', default: '3.14' },
-        data: 42,
-      },
+      output: { component: 'dropdown', args: { variable: 'name3', default: '3.14' }, data: 42 },
     },
     {
       input: { 'dropdown chart=pie': 42 },
-      output: {
-        component: 'dropdown',
-        args: { variable: 'chart', default: 'pie' },
-        data: 42,
-      },
+      output: { component: 'dropdown', args: { variable: 'chart', default: 'pie' }, data: 42 },
     },
   ]
 
   tests.forEach(({ input, output }) => {
     it(`${Object.keys(input)[0]} - ${(input as any)[Object.keys(input)[0]]}`, () => {
       const { parser } = set_up(input)
-      assert.deepEqual(parser(''), output)
+      expect(parser('')).toEqual(output)
     })
   })
 })

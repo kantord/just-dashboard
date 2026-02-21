@@ -37,7 +37,7 @@
     "@types/yamljs": "^0.2.34",
     "@vitejs/plugin-react": "^5.1.4",
     "@vitest/coverage-v8": "^4.0.18",
-    "jsdom": "^14.0.0",
+    "jsdom": "^28.1.0",
     "semantic-release": "^15.13.3",
     "typescript": "^5.9.3",
     "vite": "^6.3.5",

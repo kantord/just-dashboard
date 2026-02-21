@@ -7,5 +7,6 @@ export const required =
 export const regexp =
   (arg_name: string, expression: RegExp) =>
   (args: Record<string, unknown>): void => {
-    if (!(args[arg_name] as string).match(expression)) throw new Error(`Argument '${arg_name}' is invalid`)
+    const value = args[arg_name]
+    if (typeof value !== 'string' || !value.match(expression)) throw new Error(`Argument '${arg_name}' is invalid`)
   }

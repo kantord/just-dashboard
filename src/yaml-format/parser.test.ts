@@ -1,17 +1,24 @@
 import { vi } from 'vitest'
 
+type ParseFn = (input: string) => unknown
+
 const mocks = vi.hoisted(() => ({
-  yamlParse: vi.fn() as any,
+  yamlParse: vi.fn() as unknown as ParseFn,
 }))
 
 vi.mock('yaml', () => ({
-  default: { parse: (...args: any[]) => mocks.yamlParse(...args) },
+  default: { parse: (input: string) => mocks.yamlParse(input) },
 }))
 
 import parser, { error_message } from './parser'
 
+interface TestCase {
+  input: Record<string, unknown>
+  output: Record<string, unknown>
+}
+
 describe('yaml format - parser', () => {
-  const set_up = ({ parseSpyReturns, parseSpyThrows }: { parseSpyReturns?: any; parseSpyThrows?: string }) => {
+  const set_up = ({ parseSpyReturns, parseSpyThrows }: { parseSpyReturns?: unknown; parseSpyThrows?: string }) => {
     if (parseSpyThrows) {
       mocks.yamlParse = vi.fn(() => {
         throw new Error(parseSpyThrows)
@@ -30,7 +37,7 @@ describe('yaml format - parser', () => {
   it('should display error thrown by safeLoad', () => {
     const error = 'foo bar baz!'
     const { parser, error_message } = set_up({ parseSpyThrows: error })
-    expect(parser('')).toEqual(error_message(`Error: ${error}`))
+    expect(parser('')).toEqual(error_message(error))
   })
 
   it('should not display error for valid input', () => {
@@ -42,7 +49,7 @@ describe('yaml format - parser', () => {
 
   it('yaml is only parsed if input is a string', () => {
     const { parser, parseSpy } = set_up({ parseSpyReturns: [] })
-    parser({ 'h1 text': '' } as any)
+    parser({ 'h1 text': '' })
     expect(parseSpy).not.toHaveBeenCalled()
   })
 
@@ -59,11 +66,11 @@ describe('yaml format - parser', () => {
 
 describe('yaml format - root component', () => {
   const set_up = () => {
-    mocks.yamlParse = vi.fn((x: any) => x)
+    mocks.yamlParse = vi.fn((x: unknown) => x)
     return { parser }
   }
 
-  const tests = [
+  const tests: TestCase[] = [
     {
       input: { 'dashboard "Foo"': [] },
       output: { component: 'root', args: { title: 'Foo' }, data: [] },
@@ -102,27 +109,27 @@ describe('yaml format - root component', () => {
   ]
 
   tests.forEach(({ input, output }) => {
-    it(`${Object.keys(input)[0]} - ${(input as any)[Object.keys(input)[0]].length}`, () => {
+    it(`${Object.keys(input)[0]} - ${(Object.values(input)[0] as unknown[]).length}`, () => {
       const { parser } = set_up()
-      expect(parser(input as any)).toEqual(output)
+      expect(parser(input)).toEqual(output)
     })
   })
 })
 
 describe('yaml format - text component', () => {
-  const set_up = (parseSpyReturns: any) => {
+  const set_up = (parseSpyReturns: unknown) => {
     mocks.yamlParse = vi.fn(() => parseSpyReturns)
     return { parser }
   }
 
-  const tests = [
+  const tests: TestCase[] = [
     { input: { 'h1 text': [] }, output: { component: 'text', args: { tagName: 'h1' }, data: [] } },
     { input: { 'p text': [] }, output: { component: 'text', args: { tagName: 'p' }, data: [] } },
     { input: { 'p text': 'foo' }, output: { component: 'text', args: { tagName: 'p' }, data: 'foo' } },
   ]
 
   tests.forEach(({ input, output }) => {
-    it(`${Object.keys(input)[0]} - ${(input as any)[Object.keys(input)[0]]}`, () => {
+    it(`${Object.keys(input)[0]} - ${String(Object.values(input)[0])}`, () => {
       const { parser } = set_up(input)
       expect(parser('')).toEqual(output)
     })
@@ -131,11 +138,11 @@ describe('yaml format - text component', () => {
 
 describe('yaml format - board component', () => {
   const set_up = () => {
-    mocks.yamlParse = vi.fn((x: any) => x)
+    mocks.yamlParse = vi.fn((x: unknown) => x)
     return { parser }
   }
 
-  const tests = [
+  const tests: TestCase[] = [
     { input: { board: [] }, output: { component: 'board', data: [] } },
     {
       input: { board: [{ board: [] }] },
@@ -148,20 +155,20 @@ describe('yaml format - board component', () => {
   ]
 
   tests.forEach(({ input, output }) => {
-    it(`${Object.keys(input)[0]} - ${(input as any)[Object.keys(input)[0]].length}`, () => {
+    it(`${Object.keys(input)[0]} - ${(Object.values(input)[0] as unknown[]).length}`, () => {
       const { parser } = set_up()
-      expect(parser(input as any)).toEqual(output)
+      expect(parser(input)).toEqual(output)
     })
   })
 })
 
 describe('yaml format - rows component', () => {
   const set_up = () => {
-    mocks.yamlParse = vi.fn((x: any) => x)
+    mocks.yamlParse = vi.fn((x: unknown) => x)
     return { parser }
   }
 
-  const tests = [
+  const tests: TestCase[] = [
     { input: { rows: [] }, output: { component: 'rows', data: [] } },
     {
       input: { rows: [{ rows: [] }] },
@@ -174,20 +181,20 @@ describe('yaml format - rows component', () => {
   ]
 
   tests.forEach(({ input, output }) => {
-    it(`${Object.keys(input)[0]} - ${(input as any)[Object.keys(input)[0]].length}`, () => {
+    it(`${Object.keys(input)[0]} - ${(Object.values(input)[0] as unknown[]).length}`, () => {
       const { parser } = set_up()
-      expect(parser(input as any)).toEqual(output)
+      expect(parser(input)).toEqual(output)
     })
   })
 })
 
 describe('yaml format - columns component', () => {
   const set_up = () => {
-    mocks.yamlParse = vi.fn((x: any) => x)
+    mocks.yamlParse = vi.fn((x: unknown) => x)
     return { parser }
   }
 
-  const tests = [
+  const tests: TestCase[] = [
     { input: { columns: [] }, output: { component: 'columns', data: [] } },
     {
       input: { columns: [{ columns: [] }] },
@@ -215,20 +222,20 @@ describe('yaml format - columns component', () => {
   ]
 
   tests.forEach(({ input, output }) => {
-    it(`${Object.keys(input)[0]} - ${(input as any)[Object.keys(input)[0]].length}`, () => {
+    it(`${Object.keys(input)[0]} - ${(Object.values(input)[0] as unknown[]).length}`, () => {
       const { parser } = set_up()
-      expect(parser(input as any)).toEqual(output)
+      expect(parser(input)).toEqual(output)
     })
   })
 })
 
 describe('yaml format - chart component', () => {
   const set_up = () => {
-    mocks.yamlParse = vi.fn((x: any) => x)
+    mocks.yamlParse = vi.fn((x: unknown) => x)
     return { parser }
   }
 
-  const tests = [
+  const tests: TestCase[] = [
     { input: { 'pie chart': [] }, output: { component: 'chart', args: { type: 'pie', stacked: false }, data: [] } },
     { input: { 'bar chart': [] }, output: { component: 'chart', args: { type: 'bar', stacked: false }, data: [] } },
     {
@@ -262,20 +269,20 @@ describe('yaml format - chart component', () => {
   ]
 
   tests.forEach(({ input, output }) => {
-    it(`${Object.keys(input)[0]} - ${(input as any)[Object.keys(input)[0]]}`, () => {
+    it(`${Object.keys(input)[0]} - ${String(Object.values(input)[0])}`, () => {
       const { parser } = set_up()
-      expect(parser(input as any)).toEqual(output)
+      expect(parser(input)).toEqual(output)
     })
   })
 })
 
 describe('yaml format - handling file', () => {
   const set_up = () => {
-    mocks.yamlParse = vi.fn((x: any) => x)
+    mocks.yamlParse = vi.fn((x: unknown) => x)
     return { parser }
   }
 
-  const tests = [
+  const tests: TestCase[] = [
     {
       input: { 'h1 text': 'file://example.com/text.csv' },
       output: {
@@ -303,20 +310,20 @@ describe('yaml format - handling file', () => {
   ]
 
   tests.forEach(({ input, output }) => {
-    it(`${Object.keys(input)[0]} - ${(input as any)[Object.keys(input)[0]]}`, () => {
+    it(`${Object.keys(input)[0]} - ${String(Object.values(input)[0])}`, () => {
       const { parser } = set_up()
-      expect(parser(input as any)).toEqual(output)
+      expect(parser(input)).toEqual(output)
     })
   })
 })
 
 describe('yaml format - handling URL', () => {
   const set_up = () => {
-    mocks.yamlParse = vi.fn((x: any) => x)
+    mocks.yamlParse = vi.fn((x: unknown) => x)
     return { parser }
   }
 
-  const tests = [
+  const tests: TestCase[] = [
     {
       input: { 'h1 text': 'https://example.com/text.csv' },
       output: { component: 'text', args: { loader: 'csv', tagName: 'h1' }, data: 'https://example.com/text.csv' },
@@ -332,20 +339,20 @@ describe('yaml format - handling URL', () => {
   ]
 
   tests.forEach(({ input, output }) => {
-    it(`${Object.keys(input)[0]} - ${(input as any)[Object.keys(input)[0]]}`, () => {
+    it(`${Object.keys(input)[0]} - ${String(Object.values(input)[0])}`, () => {
       const { parser } = set_up()
-      expect(parser(input as any)).toEqual(output)
+      expect(parser(input)).toEqual(output)
     })
   })
 })
 
 describe('yaml format - attr: syntax', () => {
   const set_up = () => {
-    mocks.yamlParse = vi.fn((x: any) => x)
+    mocks.yamlParse = vi.fn((x: unknown) => x)
     return { parser }
   }
 
-  const tests = [
+  const tests: TestCase[] = [
     {
       input: { 'h1 text': [{ 'attr:foo': 'bar' }, { data: 'https://example.com/text.csv' }] },
       output: {
@@ -405,17 +412,17 @@ describe('yaml format - attr: syntax', () => {
   ]
 
   tests.forEach(({ input, output }) => {
-    it(`${Object.keys(input)[0]} - ${(Object.values(input)[0] as any[]).map(Object.keys)}`, () => {
+    it(`${Object.keys(input)[0]} - ${(Object.values(input)[0] as Record<string, unknown>[]).map(Object.keys)}`, () => {
       const { parser } = set_up()
-      expect(parser(input as any)).toEqual(output)
+      expect(parser(input)).toEqual(output)
     })
   })
 })
 
 describe('integration tests', () => {
   it('integration test', async () => {
-    const realYaml: any = await vi.importActual('yaml')
-    mocks.yamlParse = realYaml.default ? realYaml.default.parse : realYaml.parse
+    const realYaml = await vi.importActual<typeof import('yaml')>('yaml')
+    mocks.yamlParse = (input: string) => realYaml.parse(input)
     const text = `dashboard "asd":
     - h1 text: asd
     - 3 columns:
@@ -443,12 +450,12 @@ describe('integration tests', () => {
 })
 
 describe('yaml format - dropdown component', () => {
-  const set_up = (parseSpyReturns: any) => {
+  const set_up = (parseSpyReturns: unknown) => {
     mocks.yamlParse = vi.fn(() => parseSpyReturns)
     return { parser }
   }
 
-  const tests = [
+  const tests: TestCase[] = [
     {
       input: { 'dropdown foo=bar': [] },
       output: { component: 'dropdown', args: { variable: 'foo', default: 'bar' }, data: [] },
@@ -472,7 +479,7 @@ describe('yaml format - dropdown component', () => {
   ]
 
   tests.forEach(({ input, output }) => {
-    it(`${Object.keys(input)[0]} - ${(input as any)[Object.keys(input)[0]]}`, () => {
+    it(`${Object.keys(input)[0]} - ${String(Object.values(input)[0])}`, () => {
       const { parser } = set_up(input)
       expect(parser('')).toEqual(output)
     })

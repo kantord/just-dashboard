@@ -61,7 +61,12 @@ tests.forEach(([test_suite_name, function_name, test_sets]) =>
     ;(test_sets as unknown[][][]).forEach((test_set: unknown[][]) =>
       test_set.forEach(([input, output, state]) =>
         it(`${[stringify(input), stringify(output), stringify(state)]}`, () => {
-          expect((module as Record<string, any>)[function_name as string](input, state)).toEqual(output)
+          expect(
+            (module as Record<string, (input: unknown, state: unknown) => unknown>)[function_name as string](
+              input,
+              state,
+            ),
+          ).toEqual(output)
         }),
       ),
     )

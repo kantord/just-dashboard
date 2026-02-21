@@ -9,11 +9,11 @@ const validators = [required('title')]
 
 export function Root({ args = {}, data }: ComponentProps) {
   const { variables } = useDashboard()
-  const formatted = format_value({ ...args }, variables) as Record<string, unknown>
+  const formatted = format_value({ ...args }, variables)
 
   for (const v of validators) v(formatted)
 
-  const title = formatted.title as string
+  const title = typeof formatted.title === 'string' ? formatted.title : ''
   const children = (data ?? []) as ComponentDef[]
 
   useEffect(() => {

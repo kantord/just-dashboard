@@ -5,8 +5,8 @@ import { DashboardRenderer } from '../DashboardRenderer'
 
 export function Columns({ args = {}, data }: ComponentProps) {
   const { variables } = useDashboard()
-  const formatted = format_value({ ...args }, variables) as Record<string, unknown>
-  const columnCount = (formatted.columns as number) ?? 2
+  const formatted = format_value({ ...args }, variables)
+  const columnCount = typeof formatted.columns === 'number' ? formatted.columns : 2
   const children = (data ?? []) as ComponentDef[]
 
   return (

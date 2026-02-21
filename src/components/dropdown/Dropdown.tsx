@@ -21,20 +21,29 @@ const validators = [
 
 export function Dropdown({ args = {}, data }: ComponentProps) {
   const { variables, fileLoader, setVariable, initVariable } = useDashboard()
-  const formatted = format_value({ ...args }, variables) as Record<string, unknown>
+  const formatted = format_value({ ...args }, variables)
 
   for (const v of validators) v(formatted)
 
-  const variableName = formatted.variable as string
-  const defaultValue = formatted.default as string
+  const variableName = typeof formatted.variable === 'string' ? formatted.variable : ''
+  const defaultValue = typeof formatted.default === 'string' ? formatted.default : ''
 
   const formattedData = format_value(data, variables)
   const {
     data: loaded,
     loading,
     error,
-  } = useExternalData(formattedData, formatted.loader as string | undefined, fileLoader, !!formatted.is_file)
-  const { data: queried, loading: qLoading, error: qError } = useQuery(loaded, formatted.query as string | undefined)
+  } = useExternalData(
+    formattedData,
+    typeof formatted.loader === 'string' ? formatted.loader : undefined,
+    fileLoader,
+    !!formatted.is_file,
+  )
+  const {
+    data: queried,
+    loading: qLoading,
+    error: qError,
+  } = useQuery(loaded, typeof formatted.query === 'string' ? formatted.query : undefined)
 
   const items = (queried as DropdownItem[] | null) ?? []
   const currentValue = variables[variableName]
@@ -53,12 +62,13 @@ export function Dropdown({ args = {}, data }: ComponentProps) {
   }, [currentValue, items, variableName, setVariable])
 
   if (loading || qLoading) return <Spinner />
-  if (error || qError) return <ErrorMessage message={(error || qError)!} />
+  if (error) return <ErrorMessage message={error} />
+  if (qError) return <ErrorMessage message={qError} />
 
   return (
     <select
       className="ds--select"
-      value={(currentValue as string) ?? ''}
+      value={typeof currentValue === 'string' ? currentValue : ''}
       onChange={(e) => setVariable(variableName, e.target.value)}
     >
       {items.map((item) => (

@@ -38,7 +38,7 @@ function createMark(type: string, data: Record<string, unknown>[], stacked: bool
 export function Chart({ args = {}, data }: ComponentProps) {
   const ref = useRef<HTMLDivElement>(null)
   const { variables, fileLoader } = useDashboard()
-  const formatted = format_value({ ...args }, variables) as Record<string, unknown>
+  const formatted = format_value({ ...args }, variables)
 
   for (const v of validators) v(formatted)
 
@@ -47,18 +47,29 @@ export function Chart({ args = {}, data }: ComponentProps) {
     data: loaded,
     loading,
     error,
-  } = useExternalData(formattedData, formatted.loader as string | undefined, fileLoader, !!formatted.is_file)
-  const { data: queried, loading: qLoading, error: qError } = useQuery(loaded, formatted.query as string | undefined)
+  } = useExternalData(
+    formattedData,
+    typeof formatted.loader === 'string' ? formatted.loader : undefined,
+    fileLoader,
+    !!formatted.is_file,
+  )
+  const {
+    data: queried,
+    loading: qLoading,
+    error: qError,
+  } = useQuery(loaded, typeof formatted.query === 'string' ? formatted.query : undefined)
 
   useEffect(() => {
     if (!ref.current || queried == null) return
     ref.current.innerHTML = ''
-    const plotData = queried as Record<string, unknown>[]
-    const rotated = !!(formatted.axis && (formatted.axis as Record<string, unknown>).rotated)
-    const mark = createMark(formatted.type as string, plotData, !!formatted.stacked, rotated)
+    const plotData = (Array.isArray(queried) ? queried : []) as Record<string, unknown>[]
+    const axisConfig =
+      typeof formatted.axis === 'object' && formatted.axis !== null ? (formatted.axis as Record<string, unknown>) : null
+    const rotated = !!axisConfig?.rotated
+    const chartType = typeof formatted.type === 'string' ? formatted.type : 'bar'
+    const mark = createMark(chartType, plotData, !!formatted.stacked, rotated)
     const plotOptions: Record<string, unknown> = { marks: [mark] }
-    if (formatted.axis) {
-      const axisConfig = formatted.axis as Record<string, unknown>
+    if (axisConfig) {
       if (axisConfig.x) plotOptions.x = axisConfig.x
       if (axisConfig.y) plotOptions.y = axisConfig.y
     }
@@ -66,7 +77,8 @@ export function Chart({ args = {}, data }: ComponentProps) {
   }, [queried, formatted.type, formatted.stacked, formatted.axis])
 
   if (loading || qLoading) return <Spinner />
-  if (error || qError) return <ErrorMessage message={(error || qError)!} />
+  if (error) return <ErrorMessage message={error} />
+  if (qError) return <ErrorMessage message={qError} />
 
   return <div ref={ref} className="ds--chart" />
 }

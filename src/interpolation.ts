@@ -12,7 +12,9 @@ const format_array = (input: unknown[], state: State): unknown[] => {
   return input.map((item) => format_value(item, state))
 }
 
-const format_value = (input: unknown, state: State): unknown => {
+function format_value(input: Record<string, unknown>, state: State): Record<string, unknown>
+function format_value(input: unknown, state: State): unknown
+function format_value(input: unknown, state: State): unknown {
   if (input === null) return null
   if (Array.isArray(input)) return format_array(input, state)
   if (typeof input === 'string') return format_string(input, state)

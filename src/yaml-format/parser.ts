@@ -1,10 +1,5 @@
 import YAML from 'yaml'
-
-interface ComponentDef {
-  component: string
-  args?: Record<string, unknown>
-  data?: unknown
-}
+import type { ComponentDef } from '../types'
 
 type RuleHandler = (match: RegExpMatchArray, value: unknown) => ComponentDef
 type Rule = [RegExp[], RuleHandler]
@@ -44,7 +39,7 @@ const rules: Rule[] = [
     [/([1-9]+) columns/],
     (match, value) => ({
       component: 'columns',
-      args: { columns: (match[1] as unknown as number) * 1 },
+      args: { columns: Number(match[1]) },
       data: (value as unknown[]).map(parser),
     }),
   ],
@@ -120,7 +115,7 @@ const handle_files = (component: ComponentDef): ComponentDef => {
 }
 
 const handle_attr_syntax = (component: ComponentDef): ComponentDef => {
-  if ((component.data as any[]).map === undefined) return component
+  if (!Array.isArray(component.data)) return component
   const attrs = (component.data as Record<string, unknown>[]).filter((x) => Object.keys(x)[0].match(/attr:.*/))
   if (attrs.length === 0) return component
 
@@ -162,9 +157,9 @@ const parser = (input: unknown): ComponentDef => {
       }
     }
 
-    return yaml_contents as unknown as ComponentDef
+    return yaml_contents as ComponentDef
   } catch (error) {
-    return error_message((error as Error).toString())
+    return error_message(error instanceof Error ? error.message : String(error))
   }
 }
 

@@ -3,6 +3,12 @@ import type { FileLoader } from '../types'
 
 type LoaderName = 'csv' | 'json' | 'tsv' | 'text'
 
+const LOADER_NAMES = new Set<string>(['csv', 'json', 'tsv', 'text'])
+
+function isLoaderName(value: string): value is LoaderName {
+  return LOADER_NAMES.has(value)
+}
+
 function parseCsv(text: string): Record<string, string>[] {
   const lines = text.trim().split('\n')
   if (lines.length === 0) return []
@@ -61,7 +67,7 @@ export function useExternalData(
       return
     }
 
-    const source = data as string
+    const source = typeof data === 'string' ? data : String(data)
     setLoading(true)
     setError(null)
 
@@ -73,7 +79,7 @@ export function useExternalData(
           return
         }
         try {
-          setLoadedData(parseData(rawText, loader as LoaderName))
+          setLoadedData(parseData(rawText, isLoaderName(loader) ? loader : 'text'))
         } catch (e) {
           setError(String(e))
         }
@@ -83,7 +89,7 @@ export function useExternalData(
       fetch(source)
         .then((res) => res.text())
         .then((text) => {
-          setLoadedData(parseData(text, loader as LoaderName))
+          setLoadedData(parseData(text, isLoaderName(loader) ? loader : 'text'))
           setLoading(false)
         })
         .catch((e) => {

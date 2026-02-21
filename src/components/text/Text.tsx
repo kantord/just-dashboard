@@ -11,7 +11,7 @@ const validators = [required('tagName'), regexp('tagName', /^[A-Za-z]([A-Za-z0-9
 
 export function Text({ args = {}, data }: ComponentProps) {
   const { variables, fileLoader } = useDashboard()
-  const formatted = format_value({ ...args }, variables) as Record<string, unknown>
+  const formatted = format_value({ ...args }, variables)
 
   for (const v of validators) v(formatted)
 
@@ -20,18 +20,28 @@ export function Text({ args = {}, data }: ComponentProps) {
     data: loaded,
     loading,
     error,
-  } = useExternalData(formattedData, formatted.loader as string | undefined, fileLoader, !!formatted.is_file)
-  const { data: queried, loading: qLoading, error: qError } = useQuery(loaded, formatted.query as string | undefined)
+  } = useExternalData(
+    formattedData,
+    typeof formatted.loader === 'string' ? formatted.loader : undefined,
+    fileLoader,
+    !!formatted.is_file,
+  )
+  const {
+    data: queried,
+    loading: qLoading,
+    error: qError,
+  } = useQuery(loaded, typeof formatted.query === 'string' ? formatted.query : undefined)
 
   if (loading || qLoading) return <Spinner />
-  if (error || qError) return <ErrorMessage message={(error || qError)!} />
+  if (error) return <ErrorMessage message={error} />
+  if (qError) return <ErrorMessage message={qError} />
 
-  const Tag = formatted.tagName as keyof React.JSX.IntrinsicElements
-  const alignProps = formatted.align ? { 'data-align': formatted.align as string } : {}
+  const Tag = (typeof formatted.tagName === 'string' ? formatted.tagName : 'div') as keyof React.JSX.IntrinsicElements
+  const alignProps = typeof formatted.align === 'string' ? { 'data-align': formatted.align } : {}
 
   return (
     <Tag className="ds--text" {...alignProps}>
-      {queried as string}
+      {String(queried)}
     </Tag>
   )
 }

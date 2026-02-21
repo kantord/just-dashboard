@@ -11,11 +11,5 @@ The preferred workflow for implementing new features or bug fixes is:
 - Refactor
 - Repeat
 
-## Commit messages
-Please use [Angular Git Commit Guidelines](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines) to write your commit messages.
-This is important because just-dashboard uses [semantic-release](https://github.com/semantic-release/semantic-release) to generate releases.
-
-I recommend trying a tool a like [commitizen](https://github.com/commitizen/cz-cli) to help with that.
-
 ## Documentation
 just-dashboard uses jsdoc to generate documentation.

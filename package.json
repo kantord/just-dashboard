@@ -2,12 +2,25 @@
   "name": "just-dashboard",
   "version": "0.0.0-development",
   "description": "",
+  "type": "module",
   "main": "dist/dashboard.js",
-  "module": "src/index.ts",
+  "module": "dist/dashboard.es.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/dashboard.es.js",
+      "require": "./dist/dashboard.js"
+    },
+    "./style.css": "./dist/just-dashboard.css"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "build": "vite build",
+    "build": "vite build && tsc -p tsconfig.build.json",
     "dev": "vite",
     "html-coverage": "vitest run --coverage",
     "lint": "biome check src",

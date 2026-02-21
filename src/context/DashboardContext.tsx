@@ -6,7 +6,6 @@ import type { FileLoader } from '../types'
 interface DashboardContextValue {
   variables: Record<string, string>
   setVariable: (name: string, value: string) => void
-  initVariable: (name: string, value: string) => void
   fileLoader?: FileLoader
 }
 
@@ -38,14 +37,8 @@ export function DashboardProvider({
     [setQueryStates],
   )
 
-  const initVariable = useCallback((_name: string, _value: string) => {
-    // no-op: nuqs handles defaults via withDefault()
-  }, [])
-
   return (
-    <DashboardContext.Provider value={{ variables, setVariable, initVariable, fileLoader }}>
-      {children}
-    </DashboardContext.Provider>
+    <DashboardContext.Provider value={{ variables, setVariable, fileLoader }}>{children}</DashboardContext.Provider>
   )
 }
 

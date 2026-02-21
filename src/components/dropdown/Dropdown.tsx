@@ -20,13 +20,12 @@ const validators = [
 ]
 
 export function Dropdown({ args = {}, data }: ComponentProps) {
-  const { variables, fileLoader, setVariable, initVariable } = useDashboard()
+  const { variables, fileLoader, setVariable } = useDashboard()
   const formatted = format_value({ ...args }, variables)
 
   for (const v of validators) v(formatted)
 
   const variableName = typeof formatted.variable === 'string' ? formatted.variable : ''
-  const defaultValue = typeof formatted.default === 'string' ? formatted.default : ''
 
   const formattedData = format_value(data, variables)
   const {
@@ -47,10 +46,6 @@ export function Dropdown({ args = {}, data }: ComponentProps) {
 
   const items = (queried as DropdownItem[] | null) ?? []
   const currentValue = variables[variableName]
-
-  useEffect(() => {
-    initVariable(variableName, defaultValue)
-  }, [variableName, defaultValue, initVariable])
 
   useEffect(() => {
     if (items.length === 0) return

@@ -39,22 +39,6 @@ describe('DashboardContext', () => {
       expect(result.current.variables.theme).toBe('dark')
     })
 
-    it('initVariable is a no-op', () => {
-      const { result } = renderHook(() => useDashboard(), {
-        wrapper: ({ children }) => (
-          <NuqsTestingAdapter>
-            <DashboardProvider variableDefs={[{ name: 'theme', defaultValue: 'dark' }]}>{children}</DashboardProvider>
-          </NuqsTestingAdapter>
-        ),
-      })
-
-      act(() => {
-        result.current.initVariable('theme', 'light')
-      })
-
-      expect(result.current.variables.theme).toBe('dark')
-    })
-
     it('fileLoader is passed through', () => {
       const mockFileLoader: FileLoader = vi.fn()
 

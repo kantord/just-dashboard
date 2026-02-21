@@ -45,6 +45,7 @@
     "type": "git",
     "url": "https://github.com/kantord/dashboard.git"
   },
+  "packageManager": "pnpm@10.28.2",
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild",

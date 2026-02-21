@@ -1,14 +1,17 @@
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
+import { NuqsTestingAdapter } from 'nuqs/adapters/testing'
 import { DashboardProvider } from '../../context/DashboardContext'
 import { Root } from './Root'
 
 describe('Root', () => {
   it('sets document.title', () => {
     render(
-      <DashboardProvider>
-        <Root args={{ title: 'My Dashboard' }} data={[]} />
-      </DashboardProvider>,
+      <NuqsTestingAdapter>
+        <DashboardProvider>
+          <Root args={{ title: 'My Dashboard' }} data={[]} />
+        </DashboardProvider>
+      </NuqsTestingAdapter>,
     )
 
     expect(document.title).toBe('My Dashboard')
@@ -16,15 +19,17 @@ describe('Root', () => {
 
   it('renders children in ds--wrapper divs', () => {
     render(
-      <DashboardProvider>
-        <Root
-          args={{ title: 'Test' }}
-          data={[
-            { component: 'text', args: { tagName: 'p' }, data: 'child one' },
-            { component: 'text', args: { tagName: 'p' }, data: 'child two' },
-          ]}
-        />
-      </DashboardProvider>,
+      <NuqsTestingAdapter>
+        <DashboardProvider>
+          <Root
+            args={{ title: 'Test' }}
+            data={[
+              { component: 'text', args: { tagName: 'p' }, data: 'child one' },
+              { component: 'text', args: { tagName: 'p' }, data: 'child two' },
+            ]}
+          />
+        </DashboardProvider>
+      </NuqsTestingAdapter>,
     )
 
     expect(screen.getByText('child one')).toBeInTheDocument()
@@ -37,9 +42,11 @@ describe('Root', () => {
   it('throws when title is missing', () => {
     expect(() =>
       render(
-        <DashboardProvider>
-          <Root args={{}} data={[]} />
-        </DashboardProvider>,
+        <NuqsTestingAdapter>
+          <DashboardProvider>
+            <Root args={{}} data={[]} />
+          </DashboardProvider>
+        </NuqsTestingAdapter>,
       ),
     ).toThrow()
   })

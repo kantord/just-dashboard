@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
+import { NuqsTestingAdapter } from 'nuqs/adapters/testing'
 import { DashboardProvider } from '../../context/DashboardContext'
 import { Dropdown } from './Dropdown'
 
@@ -19,9 +20,11 @@ describe('Dropdown', () => {
     ]
 
     render(
-      <DashboardProvider>
-        <Dropdown args={{ variable: 'color', default: 'a' }} data={options} />
-      </DashboardProvider>,
+      <NuqsTestingAdapter>
+        <DashboardProvider variableDefs={[{ name: 'color', defaultValue: 'a' }]}>
+          <Dropdown args={{ variable: 'color', default: 'a' }} data={options} />
+        </DashboardProvider>
+      </NuqsTestingAdapter>,
     )
 
     expect(screen.getByRole('combobox')).toBeInTheDocument()
@@ -32,9 +35,11 @@ describe('Dropdown', () => {
   it('throws when variable arg is missing', () => {
     expect(() =>
       render(
-        <DashboardProvider>
-          <Dropdown args={{ default: 'a' }} data={[]} />
-        </DashboardProvider>,
+        <NuqsTestingAdapter>
+          <DashboardProvider>
+            <Dropdown args={{ default: 'a' }} data={[]} />
+          </DashboardProvider>
+        </NuqsTestingAdapter>,
       ),
     ).toThrow()
   })

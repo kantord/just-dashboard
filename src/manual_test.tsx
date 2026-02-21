@@ -1,3 +1,4 @@
+import { NuqsAdapter } from 'nuqs/adapters/react'
 import { createRoot } from 'react-dom/client'
 import { Dashboard } from './Dashboard'
 import type { ComponentDef, FileLoader } from './types'
@@ -52,4 +53,8 @@ dashboard "Cereals":
 `) as ComponentDef
 
 const root = createRoot(document.getElementById('app')!)
-root.render(<Dashboard definition={definition} fileLoader={fileLoader} />)
+root.render(
+  <NuqsAdapter>
+    <Dashboard definition={definition} fileLoader={fileLoader} />
+  </NuqsAdapter>,
+)

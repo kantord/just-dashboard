@@ -11,11 +11,12 @@ export default defineConfig({
       fileName: (format) => format === 'umd' ? 'dashboard.js' : 'dashboard.es.js',
     },
     rollupOptions: {
-      external: ['react', 'react-dom'],
+      external: ['react', 'react-dom', 'nuqs', /^nuqs\//],
       output: {
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
+          nuqs: 'nuqs',
         },
       },
     },

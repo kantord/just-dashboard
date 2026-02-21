@@ -1,51 +1,49 @@
-import { createContext, useCallback, useContext, useReducer } from 'react'
+import { parseAsString, useQueryStates } from 'nuqs'
+import { createContext, useCallback, useContext, useMemo } from 'react'
+import type { VariableDef } from '../extractVariableDefs'
 import type { FileLoader } from '../types'
 
-interface DashboardState {
-  variables: Record<string, unknown>
-}
-
-type Action =
-  | { type: 'SET_VARIABLE'; name: string; value: unknown }
-  | { type: 'INIT_VARIABLE'; name: string; value: unknown }
-  | { type: 'RESET' }
-
-function reducer(state: DashboardState, action: Action): DashboardState {
-  switch (action.type) {
-    case 'SET_VARIABLE':
-      return { ...state, variables: { ...state.variables, [action.name]: action.value } }
-    case 'INIT_VARIABLE':
-      if (state.variables[action.name] !== undefined) return state
-      return { ...state, variables: { ...state.variables, [action.name]: action.value } }
-    case 'RESET':
-      return { variables: {} }
-    default:
-      return state
-  }
-}
-
 interface DashboardContextValue {
-  variables: Record<string, unknown>
-  setVariable: (name: string, value: unknown) => void
-  initVariable: (name: string, value: unknown) => void
+  variables: Record<string, string>
+  setVariable: (name: string, value: string) => void
+  initVariable: (name: string, value: string) => void
   fileLoader?: FileLoader
 }
 
 const DashboardContext = createContext<DashboardContextValue | null>(null)
 
-export function DashboardProvider({ children, fileLoader }: { children: React.ReactNode; fileLoader?: FileLoader }) {
-  const [state, dispatch] = useReducer(reducer, { variables: {} })
+export function DashboardProvider({
+  children,
+  fileLoader,
+  variableDefs = [],
+}: {
+  children: React.ReactNode
+  fileLoader?: FileLoader
+  variableDefs?: VariableDef[]
+}) {
+  const parsers = useMemo(() => {
+    const p: Record<string, ReturnType<typeof parseAsString.withDefault>> = {}
+    for (const def of variableDefs) {
+      p[def.name] = parseAsString.withDefault(def.defaultValue)
+    }
+    return p
+  }, [variableDefs])
 
-  const setVariable = useCallback((name: string, value: unknown) => {
-    dispatch({ type: 'SET_VARIABLE', name, value })
-  }, [])
+  const [variables, setQueryStates] = useQueryStates(parsers)
 
-  const initVariable = useCallback((name: string, value: unknown) => {
-    dispatch({ type: 'INIT_VARIABLE', name, value })
+  const setVariable = useCallback(
+    (name: string, value: string) => {
+      setQueryStates({ [name]: value })
+    },
+    [setQueryStates],
+  )
+
+  const initVariable = useCallback((_name: string, _value: string) => {
+    // no-op: nuqs handles defaults via withDefault()
   }, [])
 
   return (
-    <DashboardContext.Provider value={{ variables: state.variables, setVariable, initVariable, fileLoader }}>
+    <DashboardContext.Provider value={{ variables, setVariable, initVariable, fileLoader }}>
       {children}
     </DashboardContext.Provider>
   )

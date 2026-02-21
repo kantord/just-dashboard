@@ -29,4 +29,4 @@ const format_object = (input: Record<string, unknown>, state: State): Record<str
   )
 }
 
-export { format_string, format_array, format_value, format_object }
+export { format_value }

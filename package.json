@@ -26,7 +26,8 @@
     "lint": "biome check src",
     "lint:fix": "biome check --write src",
     "coverage": "vitest run --coverage",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "knip": "knip"
   },
   "keywords": [],
   "author": "",
@@ -50,6 +51,7 @@
     "@vitejs/plugin-react": "^5.1.4",
     "@vitest/coverage-v8": "^4.0.18",
     "jsdom": "^28.1.0",
+    "knip": "^5.85.0",
     "nuqs": "^2.0.0",
     "typescript": "^5.9.3",
     "vite": "^6.3.5",
